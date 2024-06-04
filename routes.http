@@ -1,0 +1,41 @@
+###getting all users
+
+GET http://localhost:3000/users
+
+### finding one user
+
+GET http://localhost:3000/users/665c0b3c00ef4a2d2a34d84c
+
+
+###creating new user
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+        "first_name":"GB",
+        "last_name":"Test User",
+        "phone_number":7234567891,
+        "password":"k0n.12,3><45'6fgh7",
+        "dob":"2023-12-2"
+}
+
+### login user
+
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "credential":"7234567891",
+    "password":"k0n.12,3><45'6fgh7"
+}
+
+### Delete user
+DELETE http://localhost:3000/users/665c0b3c00ef4a2d2a34d84c
+
+### update specified fields
+PATCH http://localhost:3000/users/665ed5ca6be24d4721b818d7
+Content-Type: application/json
+
+{
+     "phone_number":"+237673436870"
+}
