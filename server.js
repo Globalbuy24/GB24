@@ -15,11 +15,11 @@ const loginRouter=require('./routes/auth/login')
 const registerRouter=require('./routes/auth/register')
 const usersRouter=require('./routes/users')
 
+
 // routes
 app.use('/login',loginRouter)
 app.use('/register',registerRouter)
 app.use('/users',usersRouter)
-
 
 
 app.listen(3000,()=>console.log('Server Started'))

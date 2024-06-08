@@ -1,10 +1,10 @@
 const express=require('express')
 const router =express.Router()
 const User=require('../models/user')
-
+const authenticate=require('../middleware/currentUser')
 
 //read all users
-router.get('/',async (req,res)=>{
+router.get('/',authenticate,async (req,res)=>{
     try
     {
         const users= await User.find()
@@ -16,11 +16,11 @@ router.get('/',async (req,res)=>{
     }
 })
 //read one user
-router.get('/:id',getUser,(req,res)=>{
+router.get('/:id',authenticate,getUser,(req,res)=>{
    res.json(res.user)
 })
 //update one user
-router.patch('/:id',getUser,async(req,res)=>{
+router.patch('/:id',authenticate,getUser,async(req,res)=>{
     if(req.body.phone_number !=null)
     {
         res.user.phone_number.number=req.body.phone_number
@@ -42,7 +42,7 @@ router.patch('/:id',getUser,async(req,res)=>{
     }
 })
 //delete one user
-router.delete('/:id',getUser,async (req,res)=>{
+router.delete('/:id',authenticate,getUser,async (req,res)=>{
   try
   {
         await res.user.deleteOne();

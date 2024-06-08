@@ -12,8 +12,7 @@ const UserSchema=new mongoose.Schema({
             type:String,
             required:true
         },
-        email:{
-            
+        
             email:{
             type:String,
             required:false,
@@ -28,18 +27,17 @@ const UserSchema=new mongoose.Schema({
               }
             
             },
-            is_verified:{type:Boolean,default:false}
-        },
         phone_number:{
-            number:{
             type:String,
-            default:''},
-            is_verified:{type:Boolean,default:false}
+            sparse:true,
+            default:''
         },
+        num_is_verified:{type:Boolean,default:false},
+        email_is_verified:{type:Boolean,default:false}
+        ,
         password:{
             type:String,
             required:true,
-            unique:true
         },
         dob:{
             type:Date,
@@ -121,37 +119,7 @@ UserSchema.pre('save',async function(next){
         const error = new Error('At least one of email or phone number is required');
         return next(error);
     }
-    if(this.email !=null || this.phone_number!=null)
-    {
-        
-        this.constructor.find(
-            {
-              $or: [
-                { email: this.email },
-                { phone_number: this.phone_number }
-              ]
-            }
-          )
-          .then(users => {
-            if (users.length > 0) {
-              if (users.some(user => user.email === this.email)) {
-                const error = new Error('Email already exists');
-                return next(error);
-              }
-          
-              if (users.some(user => user.phone_number === this.phone_number)) {
-                const error = new Error('Phone number already exists');
-                return next(error);
-              }
-            }
-          
-            
-          })
-          .catch(error => {
-            return next(error);
-          });
-    }
-                
+     
     next();
 })
 
