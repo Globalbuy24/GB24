@@ -1,10 +1,12 @@
 ###getting all users
 
 GET http://localhost:3000/users
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsImVtYWlsIjoibkBnLmMiLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiZG9iIjoiMjAyMy0xMi0wMVQyMzowMDowMC4wMDBaIiwiaXNfdmVyaWZpZWQiOmZhbHNlLCJsb3lhbHR5X3BvaW50cyI6MCwiYWRkcmVzcyI6eyJjb3VudHJ5IjoiQ2FtZXJvb24ifSwic2V0dGluZ3MiOnsibm90aWZpY2F0aW9uX3R5cGVzIjpbXSwidGhlbWUiOiJsaWdodCJ9LCJwYXltZW50X21ldGhvZHMiOltdLCJfaWQiOiI2NjY0MjMxNDQzZDE5OGJhYjA2NmM0ZjciLCJwaW4iOjEwMTQ4fSwiaWF0IjoxNzE3ODM4NjEyLCJleHAiOjE3MTc4ODE4MTJ9.E7tVhgSOg21aeRABJcBYjtoL5kc9e8DKkddeZCJ9A64
 
 ### finding one user
 
-GET http://localhost:3000/users/665c0b3c00ef4a2d2a34d84c
+GET http://localhost:3000/users/6664211211c4a713bc21308d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsImVtYWlsIjoibkBnLmMiLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiZG9iIjoiMjAyMy0xMi0wMVQyMzowMDowMC4wMDBaIiwiaXNfdmVyaWZpZWQiOmZhbHNlLCJsb3lhbHR5X3BvaW50cyI6MCwiYWRkcmVzcyI6eyJjb3VudHJ5IjoiQ2FtZXJvb24ifSwic2V0dGluZ3MiOnsibm90aWZpY2F0aW9uX3R5cGVzIjpbXSwidGhlbWUiOiJsaWdodCJ9LCJwYXltZW50X21ldGhvZHMiOltdLCJfaWQiOiI2NjY0MjMxNDQzZDE5OGJhYjA2NmM0ZjciLCJwaW4iOjEwMTQ4fSwiaWF0IjoxNzE3ODM4NjEyLCJleHAiOjE3MTc4ODE4MTJ9.E7tVhgSOg21aeRABJcBYjtoL5kc9e8DKkddeZCJ9A64
 
 
 ###creating new user
@@ -14,8 +16,8 @@ Content-Type: application/json
 {
         "first_name":"GB",
         "last_name":"Test User",
-        "phone_number":7234567891,
-        "password":"k0n.12,3><45'6fgh7",
+        "email":"n@g.c",
+        "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"
 }
 
@@ -25,15 +27,20 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"7234567891",
-    "password":"k0n.12,3><45'6fgh7"
+    "credential":"n@g.c",
+    "password":"k0n.12,3><45'6fgh8"
 }
 
 ### Delete user
-DELETE http://localhost:3000/users/665c0b3c00ef4a2d2a34d84c
+DELETE http://localhost:3000/users/6664211211c4a713bc21308d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsImVtYWlsIjoibkBnLmMiLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiZG9iIjoiMjAyMy0xMi0wMVQyMzowMDowMC4wMDBaIiwiaXNfdmVyaWZpZWQiOmZhbHNlLCJsb3lhbHR5X3BvaW50cyI6MCwiYWRkcmVzcyI6eyJjb3VudHJ5IjoiQ2FtZXJvb24ifSwic2V0dGluZ3MiOnsibm90aWZpY2F0aW9uX3R5cGVzIjpbXSwidGhlbWUiOiJsaWdodCJ9LCJwYXltZW50X21ldGhvZHMiOltdLCJfaWQiOiI2NjY0MjMxNDQzZDE5OGJhYjA2NmM0ZjciLCJwaW4iOjEwMTQ4fSwiaWF0IjoxNzE3ODM4NjEyLCJleHAiOjE3MTc4ODE4MTJ9.E7tVhgSOg21aeRABJcBYjtoL5kc9e8DKkddeZCJ9A64
+
 
 ### update specified fields
 PATCH http://localhost:3000/users/665ed5ca6be24d4721b818d7
+Authorization: Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsImVtYWlsIjoibkBnLmMiLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiZG9iIjoiMjAyMy0xMi0wMVQyMzowMDowMC4wMDBaIiwiaXNfdmVyaWZpZWQiOmZhbHNlLCJsb3lhbHR5X3BvaW50cyI6MCwiYWRkcmVzcyI6eyJjb3VudHJ5IjoiQ2FtZXJvb24ifSwic2V0dGluZ3MiOnsibm90aWZpY2F0aW9uX3R5cGVzIjpbXSwidGhlbWUiOiJsaWdodCJ9LCJwYXltZW50X21ldGhvZHMiOltdLCJfaWQiOiI2NjY0MjMxNDQzZDE5OGJhYjA2NmM0ZjciLCJwaW4iOjEwMTQ4fSwiaWF0IjoxNzE3ODM4NjEyLCJleHAiOjE3MTc4ODE4MTJ9.E7tVhgSOg21aeRABJcBYjtoL5kc9e8DKkddeZCJ9A64
+
+
 Content-Type: application/json
 
 {

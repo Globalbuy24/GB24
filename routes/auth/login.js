@@ -11,7 +11,7 @@ router.post('/', async(req, res) => {
         
        if(credential!='' && password!='')
         {
-            let user=await User.findOne({$or:[{'email.email':credential},{'phone_number.number':credential}]})
+            let user=await User.findOne({$or:[{'email':credential},{'phone_number':credential}]})
             if(user!=null)
             {
                 if(bcrypt.compareSync(password, user.password))
@@ -21,10 +21,13 @@ router.post('/', async(req, res) => {
                     const token=jwt.sign({
                         data: user
                       }, jwt_secret, { expiresIn: '12h' });
-                    
-                      user.token = token;
+                      
+                      console.log("Password Match")
+                      //user.token = token;
                       await user.save();
-                    res.status(200).json({user})
+                      console.log("user saved")
+
+                     res.status(200).json({user})
                 }
                 else
                 {
