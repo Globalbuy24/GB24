@@ -5,19 +5,19 @@ const User=require('../../models/user')
 const jwt = require('jsonwebtoken')
 
 router.post('/',async(req,res)=>{
-   
+    
+    const resolvedReferralCode = await generateRefCode();
     const user=new User({
         first_name:req.body.first_name,
         last_name:req.body.last_name,
         email:req.body.email,
         phone_number:req.body.phone_number,
         password:req.body.password,
-        dob:req.body.dob
+        dob:req.body.dob,
+        referal_code:resolvedReferralCode
     })
     try
     {
-
-
 
         if(req.body.email!=null || req.body.phone_number!=null)
             {
@@ -64,5 +64,29 @@ router.post('/',async(req,res)=>{
         res.status(400).json({message:error.message})
     }
 })
+
+    async function generateRefCode() {
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        const codeLength = 6;
+        let referralCode = '';
+      
+        for (let i = 0; i < codeLength; i++) {
+          const randomIndex = Math.floor(Math.random() * characters.length);
+          referralCode += characters[randomIndex];
+        }
+        userExist=await User.findOne({referal_code:referralCode})
+        
+        if(!userExist)
+        {
+            return referralCode;
+        }
+        else
+        {
+            generateRefCode()
+        }
+       
+        
+}
+
 
 module.exports=router
