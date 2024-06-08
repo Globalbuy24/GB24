@@ -55,11 +55,15 @@ const UserSchema=new mongoose.Schema({
             type:Number,
             default:0
         },
-        address:{
-                street: { type: String },
-                city: { type: String },
-                country: { type: String ,default:'Cameroon'}
-        },
+        referal_code:{type:String},
+        addresses: [
+            {
+              _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+              street: { type: String },
+              city: { type: String },
+              country: { type: String}
+            }
+        ],
         settings:{
             notification_types:[{type:String,default:'all'}],
             language:{type:String},
