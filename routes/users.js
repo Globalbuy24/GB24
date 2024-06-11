@@ -178,7 +178,62 @@ router.delete('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, re
   });
 
 
+//get user notification
+router.get('/:id/notifications', authenticate, getUser, async (req, res) => {
+  try {
+    res.json(res.user.notifications)
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
 
+})
+//add new user notification
+router.post('/:id/notifications', authenticate, getUser, async (req, res) => {
+  const newNotification={
+    _id: new mongoose.Types.ObjectId(),
+    type:req.body.type,
+    message:req.body.message,
+    created_at:new Date()
+  }
+  try {
+     res.user.notifications.push(newNotification)
+     const updatedUser=await res.user.save()
+     res.json(updatedUser)
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
+//delete user notification
+router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     
+     const notificationId = req.params.nId;
+       
+     const notificationToDelete = res.user.notifications.find((notification) => notification.id === notificationId);
+     if(!notificationToDelete)
+     {
+         res.status(404).json({ error: 'Notification not found' });
+         return;
+     }
+     notificationToDelete.deleteOne()
+
+     const updatedUser = await res.user.save();
+     res.json(updatedUser);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
 
 
 

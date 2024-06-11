@@ -97,11 +97,12 @@ const UserSchema=new mongoose.Schema({
         },
 
         payment_methods:[{type:String}],
-        notifications:{
+        notifications:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
             type:{type:String},
             message:{type:String},
             created_at:{type:Date}
-        }
+        }]
 })
 
 UserSchema.pre('save',async function(next){

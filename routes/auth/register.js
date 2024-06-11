@@ -3,6 +3,7 @@ const express=require('express')
 const router =express.Router()
 const User=require('../../models/user')
 const jwt = require('jsonwebtoken')
+const mongoose=require('mongoose')
 
 router.post('/',async(req,res)=>{
     
@@ -14,7 +15,7 @@ router.post('/',async(req,res)=>{
         phone_number:req.body.phone_number,
         password:req.body.password,
         dob:req.body.dob,
-        referal_code:resolvedReferralCode
+        referal_code:resolvedReferralCode,
     })
     try
     {
@@ -54,7 +55,15 @@ router.post('/',async(req,res)=>{
         const token=jwt.sign({
         data: user
         }, jwt_secret, { expiresIn: '12h' });
-         
+
+        const welcomeNotification = {
+          _id: new mongoose.Types.ObjectId(),
+          type: 'welcome',
+          message: `GB24 welcomes you, ${req.body.first_name} ${req.body.last_name}. Enjoy your ride with us.`,
+          created_at:new Date()
+        };
+        
+        user.notifications.push(welcomeNotification); 
         user.token = token;
         const newUser=await user.save()
         res.status(201).json(newUser)
