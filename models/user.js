@@ -69,7 +69,31 @@ const UserSchema=new mongoose.Schema({
             language:{type:String},
             theme:{type:String,default:'light'}
         },
-        orders:{
+
+        basket:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+            delivery_method:
+            {
+                name:{type:String},
+                charge_per_product:{type:Number,default:0.00}
+            },
+            products:
+            [{
+                url:{type:String,unique:true},
+                source:{type:String},
+                name:{type:String},
+                colour:{type:String},
+                length:{type:Number},
+                width:{type:Number},
+                height:{type:Number},
+                price:{type:Number},
+                created_at:{type:Date},
+                updated_at:{type:Date},
+            }],
+            
+        }],
+
+        orders:[{
             id:{type:Number},
             delivery_details:
             {
@@ -85,6 +109,7 @@ const UserSchema=new mongoose.Schema({
             products:
             {
                 url:{type:String},
+                source:{type:String},
                 name:{type:String},
                 colour:{type:String},
                 length:{type:Number},
@@ -93,8 +118,8 @@ const UserSchema=new mongoose.Schema({
                 price:{type:Number},
             },
             total_charge:{type:String}
-
-        },
+            
+        }],
 
         payment_methods:[{type:String}],
         notifications:[{
