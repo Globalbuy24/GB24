@@ -214,7 +214,6 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
  
   try {
      
-     
      const notificationId = req.params.nId;
        
      const notificationToDelete = res.user.notifications.find((notification) => notification.id === notificationId);
@@ -236,6 +235,68 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
 })
 
 
+//Add product to basket
+
+
+
+router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
+  const url=req.body.orderURL
+  var  userUrlExist=false
+  var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
+  const source=domain.charAt(0).toUpperCase()+domain.slice(1)
+  const newBasket={
+    _id: new mongoose.Types.ObjectId(),
+    delivery_method:{name:'Air Freight'},
+     products:[{
+      url: new URL(req.body.orderURL),
+      source:source,
+      created_at:new Date(),
+     }]
+  }
+ 
+  try {
+
+    function urlsMatch(url, url2) {
+      const parsedUrl1 = new URL(url);
+      const parsedUrl2 = new URL(url2);
+    
+      // Compare origin (protocol, hostname, port)
+      return (
+        parsedUrl1.origin === parsedUrl2.origin &&
+        parsedUrl1.pathname === parsedUrl2.pathname &&
+        parsedUrl1.search === parsedUrl2.search
+      );
+    }
+    
+   await res.user.basket.forEach((basketItem) => {
+      basketItem.products.forEach((product) => {
+        console.log(req.body.orderURL)
+            if (urlsMatch(req.body.orderURL, product.url)) {
+              userUrlExist=true
+              //res.status(400).json({message:"A basket exists with that url"});
+             
+            }
+      });
+    });
+    console.log(userUrlExist);
+    console.log(req.body.orderURL);
+   if(!userUrlExist)
+    {
+      res.user.basket.push(newBasket)
+      const updatedUser=await res.user.save()
+      res.json(updatedUser)
+    }
+    else{
+      res.status(400).json({message:"A basket exists with that url"});
+    }
+    
+    }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
 
 
 
@@ -245,7 +306,7 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
 
 
 
-
+////////////////////////////////////////////////
 
 async function getUser(req,res,next)
 {   let user
