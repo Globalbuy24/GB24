@@ -25,7 +25,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"2345678",
+    "credential":"ee@gmail.com",
     "password":"k0n.12,3><45'6fgh8"
 }
 
@@ -138,4 +138,24 @@ Content-Type: application/json
 
 {
      
+}
+### ADMIN END POINTS
+
+POST http://localhost:3000/admin/
+Content-Type: application/json
+
+{
+     "first_name":"Admin",
+     "last_name":"Mock",
+     "email":"ee@gmail.com",
+     "password":"k0n.12,3><45'6fgh8"
+}
+
+###
+POST http://localhost:3000/admin/login
+Content-Type: application/json
+
+{
+     "credential":"ee@gmail.com",
+     "password":"k0n.12,3><45'6fgh8"
 }

@@ -22,10 +22,10 @@ router.post('/', async(req, res) => {
                         data: user
                       }, jwt_secret, { expiresIn: '12h' });
                       
-                      console.log("Password Match")
+                      //console.log("Password Match")
                       //user.token = token;
-                      await user.save();
-                      console.log("user saved")
+                      //await user.save();
+                      //console.log("user saved")
 
                      res.status(200).json({user})
                 }
