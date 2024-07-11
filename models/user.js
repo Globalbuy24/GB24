@@ -75,21 +75,23 @@ const UserSchema=new mongoose.Schema({
             delivery_method:
             {
                 name:{type:String},
-                charge_per_product:{type:Number,default:0.00}
+                charge_per_product:{type:String,default:"0.00"}
             },
-            products:
-            [{
-                url:{type:String,unique:true},
+            product:
+            {
+                url:{type:String},
                 source:{type:String},
                 name:{type:String},
                 colour:{type:String},
-                length:{type:Number},
-                width:{type:Number},
-                height:{type:Number},
-                price:{type:Number},
+                length:{type:String},
+                width:{type:String},
+                weight:{type:String},
+                height:{type:String},
+                price:{type:String},
+                quantity:{type:String},
                 created_at:{type:Date},
                 updated_at:{type:Date},
-            }],
+            },
             
         }],
 
@@ -107,16 +109,16 @@ const UserSchema=new mongoose.Schema({
                 charge_per_product:{type:Number}
             },
             products:
-            {
+            [{
                 url:{type:String},
                 source:{type:String},
                 name:{type:String},
                 colour:{type:String},
-                length:{type:Number},
-                width:{type:Number},
-                height:{type:Number},
-                price:{type:Number},
-            },
+                length:{type:String},
+                width:{type:String},
+                height:{type:String},
+                price:{type:String},
+            }],
             total_charge:{type:String}
             
         }],

@@ -141,16 +141,17 @@ Content-Type: application/json
      
 }
 ### add to basket
-POST http://localhost:3000/users/668ea0f8549f7eaf1fa6f92a/newBasket
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5IiwibnVtX2lzX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWxfaXNfdmVyaWZpZWQiOmZhbHNlLCJwYXNzd29yZCI6Imswbi4xMiwzPjw0NSc2ZmdoOCIsImRvYiI6IjIwMjMtMTItMDFUMjM6MDA6MDAuMDAwWiIsImlzX3ZlcmlmaWVkIjpmYWxzZSwibG95YWx0eV9wb2ludHMiOjAsInJlZmVyYWxfY29kZSI6IllFUVFEVSIsInNldHRpbmdzIjp7Im5vdGlmaWNhdGlvbl90eXBlcyI6W10sInRoZW1lIjoibGlnaHQifSwicGF5bWVudF9tZXRob2RzIjpbXSwiX2lkIjoiNjY4ZWEwZjg1NDlmN2VhZjFmYTZmOTJhIiwicGluIjo5OTM5NCwiYWRkcmVzc2VzIjpbXSwiYmFza2V0IjpbXSwib3JkZXJzIjpbXSwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjA2MjMzNTIsImV4cCI6MTcyMDY2NjU1Mn0.AY1u0qHeTkaJsxoQrYRokdREef0vQ3sVdbcbBbWN-34
+POST http://localhost:3000/users/668fe2622edfdba5a3853a2a/newBasket
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5IiwibnVtX2lzX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWxfaXNfdmVyaWZpZWQiOmZhbHNlLCJwYXNzd29yZCI6Imswbi4xMiwzPjw0NSc2ZmdoOCIsImRvYiI6IjIwMjMtMTItMDFUMjM6MDA6MDAuMDAwWiIsImlzX3ZlcmlmaWVkIjpmYWxzZSwibG95YWx0eV9wb2ludHMiOjAsInJlZmVyYWxfY29kZSI6IkxIMUEzTCIsInNldHRpbmdzIjp7Im5vdGlmaWNhdGlvbl90eXBlcyI6W10sInRoZW1lIjoibGlnaHQifSwicGF5bWVudF9tZXRob2RzIjpbXSwiX2lkIjoiNjY4ZmUyNjIyZWRmZGJhNWEzODUzYTJhIiwicGluIjo2MzQ0NiwiYWRkcmVzc2VzIjpbXSwiYmFza2V0IjpbXSwib3JkZXJzIjpbXSwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjA3MDU2MzQsImV4cCI6MTcyMDc0ODgzNH0.twcPf-eO-rDxkuwbYrZp3Mrh7y_CLxLm7tTYj0Z5RlE
 Content-Type: application/json
 
 {
      //"orderURL":"https://www.ebay.com/itm/266384827922"
-     "orderURL":"https://www.amazon.com/JINGCHENGMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1_1_sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1"
+     "orderURL":"https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
+     "quantity":"5"
 }
 
-### ADMIN END POINTSorderURL
+### ADMIN END POINTS
 
 POST http://localhost:3000/admin/
 Content-Type: application/json
@@ -170,3 +171,19 @@ Content-Type: application/json
      "credential":"ee@gmail.com",
      "password":"k0n.12,3><45'6fgh8"
 }
+###
+POST http://localhost:3000/admin/668fe2622edfdba5a3853a2a/updateUserBasket/668fe8745e5586c88273556d
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5IiwibnVtX2lzX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWxfaXNfdmVyaWZpZWQiOmZhbHNlLCJwYXNzd29yZCI6Imswbi4xMiwzPjw0NSc2ZmdoOCIsImRvYiI6IjIwMjMtMTItMDFUMjM6MDA6MDAuMDAwWiIsImlzX3ZlcmlmaWVkIjpmYWxzZSwibG95YWx0eV9wb2ludHMiOjAsInJlZmVyYWxfY29kZSI6IkxIMUEzTCIsInNldHRpbmdzIjp7Im5vdGlmaWNhdGlvbl90eXBlcyI6W10sInRoZW1lIjoibGlnaHQifSwicGF5bWVudF9tZXRob2RzIjpbXSwiX2lkIjoiNjY4ZmUyNjIyZWRmZGJhNWEzODUzYTJhIiwicGluIjo2MzQ0NiwiYWRkcmVzc2VzIjpbXSwiYmFza2V0IjpbXSwib3JkZXJzIjpbXSwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjA3MDU2MzQsImV4cCI6MTcyMDc0ODgzNH0.twcPf-eO-rDxkuwbYrZp3Mrh7y_CLxLm7tTYj0Z5RlE
+Content-Type: application/json
+
+{
+     "name":"Car",
+     "colour":"Black",
+     "length":"12",
+     "width":"23",
+     "weight":"40",
+     "height":"12",
+     "price":"12000 XAF"
+     
+}
+

@@ -238,20 +238,20 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
 //Add product to basket
 
 
-
 router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
-  const url=req.body.orderURL
+  
   var  userUrlExist=false
   var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
   const source=domain.charAt(0).toUpperCase()+domain.slice(1)
   const newBasket={
     _id: new mongoose.Types.ObjectId(),
     delivery_method:{name:'Air Freight'},
-     products:[{
+     product:{
       url: new URL(req.body.orderURL),
       source:source,
+      quantity:req.body.quantity,
       created_at:new Date(),
-     }]
+     }
   }
  
   try {
@@ -269,14 +269,12 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
     }
     
    await res.user.basket.forEach((basketItem) => {
-      basketItem.products.forEach((product) => {
-        console.log(req.body.orderURL)
-            if (urlsMatch(req.body.orderURL, product.url)) {
+    const url=basketItem.product.url||"https://www.gb24.com"
+        console.log(url)
+            if (urlsMatch(req.body.orderURL, url)) {
               userUrlExist=true
               //res.status(400).json({message:"A basket exists with that url"});
-             
             }
-      });
     });
     console.log(userUrlExist);
     console.log(req.body.orderURL);

@@ -1,9 +1,11 @@
 const express=require('express')
 const router =express.Router()
 const Admin=require('../models/admin')
+const User=require('../models/user')
 const jwt = require('jsonwebtoken')
 const bcrypt=require('bcrypt')
 const mongoose=require('mongoose')
+const authenticate=require('../middleware/currentUser')
 
 router.post('/',async(req, res) => {
     
@@ -120,5 +122,45 @@ router.post('/login',async(req,res)=>{
     }
 
 })
+
+// update basket
+router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
+    const userId=req.params.uId;
+    const basketId=req.params.bId;
+    const user=await User.findOne({'_id':userId})
+    const basket=user.basket.find((basket)=>basket.id===basketId)
+    //console.log(basket)
+
+    const data={
+      source:basket.product.source,
+      name:req.body.name,
+      colour:req.body.colour,
+      length:req.body.length,
+      width:req.body.width,
+      weight:req.body.weight,
+      height:req.body.height,
+      price:req.body.price,
+      quantity:req.body.quantity,
+      updated_at:new Date(),
+      created_at:basket.product.created_at,
+      url:basket.product.url
+    }
+    if(req.body.weight>50)
+    {
+        basket.delivery_method.name="Sea Freight"
+        basket.delivery_method.charge_per_product="5 euro"
+    }
+    else if(req.body.weight<=50)
+    {
+        basket.delivery_method.name="Air Freight"
+        basket.delivery_method.charge_per_product="2 euro"
+    }
+
+    basket.product=data
+    const updatedUser=await user.save();
+    res.json(updatedUser)
+});
+
+
 
 module.exports=router
