@@ -296,6 +296,19 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
 
 })
 
+// Get user's basket
+
+router.get('/:id/basket', authenticate, getUser, async (req, res) => {
+     try{
+      
+      userBasket=res.user.basket
+      res.json(userBasket);
+     }
+     catch(error)
+     {
+       res.status(400).json({message:error})
+     }
+});
 
 
 
