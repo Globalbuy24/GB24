@@ -133,14 +133,14 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
 
     const data={
       source:basket.product.source,
-      name:req.body.name,
-      colour:req.body.colour,
-      length:req.body.length,
-      width:req.body.width,
-      weight:req.body.weight,
-      height:req.body.height,
-      price:req.body.price,
-      quantity:req.body.quantity,
+      name:req.body.name||basket.product.name,
+      colour:req.body.colour||basket.product.colour,
+      length:req.body.length||basket.product.length,
+      width:req.body.width||basket.product.width,
+      weight:req.body.weight||basket.product.weight,
+      height:req.body.height||basket.product.height,
+      price:req.body.price||basket.product.price,
+      quantity:req.body.quantity||basket.product.quantity,
       updated_at:new Date(),
       created_at:basket.product.created_at,
       url:basket.product.url
