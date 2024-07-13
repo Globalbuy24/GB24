@@ -151,6 +151,15 @@ Content-Type: application/json
      "quantity":"5"
 }
 
+### Display user basket
+GET http://localhost:3000/users/668fe2622edfdba5a3853a2a/basket
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5MyIsIm51bV9pc192ZXJpZmllZCI6ZmFsc2UsImVtYWlsX2lzX3ZlcmlmaWVkIjpmYWxzZSwicGFzc3dvcmQiOiJrMG4uMTIsMz48NDUnNmZnaDgiLCJkb2IiOiIyMDIzLTEyLTAxVDIzOjAwOjAwLjAwMFoiLCJpc192ZXJpZmllZCI6ZmFsc2UsImxveWFsdHlfcG9pbnRzIjowLCJyZWZlcmFsX2NvZGUiOiIxSEdBNTQiLCJzZXR0aW5ncyI6eyJub3RpZmljYXRpb25fdHlwZXMiOltdLCJ0aGVtZSI6ImxpZ2h0In0sInBheW1lbnRfbWV0aG9kcyI6W10sIl9pZCI6IjY2OTIzMzY1MTFlNGM2Zjk4MDUwNzM4ZiIsInBpbiI6NDY1MTIsImFkZHJlc3NlcyI6W10sImJhc2tldCI6W10sIm9yZGVycyI6W10sIm5vdGlmaWNhdGlvbnMiOltdfSwiaWF0IjoxNzIwODU3NDQ1LCJleHAiOjE3MjA5MDA2NDV9.WGMA5XJcReRpwPP4xcQ0J5pP_7MFNxRO4sxICqK8b_8
+Content-Type: application/json
+
+{
+    
+}
+
 ### Edit order by user
 
 
@@ -165,7 +174,7 @@ Content-Type: application/json
      
 }
 
-
+### Complete order by user
 
 
 ### ADMIN END POINTS
