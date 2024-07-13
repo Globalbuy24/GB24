@@ -310,6 +310,28 @@ router.get('/:id/basket', authenticate, getUser, async (req, res) => {
      }
 });
 
+//Complete order by user
+router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
+     
+    const newOrder={
+    _id: new mongoose.Types.ObjectId(),
+    delivery_details:req.body.delivery_details,
+    delivery_method:req.body.delivery_method,
+    products:req.body.products,
+    total_charge:req.body.total_charge,
+    created_at:new Date()
+    }
+  
+     try{
+          await res.user.orders.push(newOrder)
+          const updatedUser= await res.user.save()
+          res.status(201).json(updatedUser)
+     }
+     catch(error)
+     {
+       res.status(400).json({message:error})
+     }
+})
 
 
 

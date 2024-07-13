@@ -151,7 +151,7 @@ Content-Type: application/json
      "quantity":"5"
 }
 
-### Display user basket
+### Display/Get user basket
 GET http://localhost:3000/users/668fe2622edfdba5a3853a2a/basket
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5MyIsIm51bV9pc192ZXJpZmllZCI6ZmFsc2UsImVtYWlsX2lzX3ZlcmlmaWVkIjpmYWxzZSwicGFzc3dvcmQiOiJrMG4uMTIsMz48NDUnNmZnaDgiLCJkb2IiOiIyMDIzLTEyLTAxVDIzOjAwOjAwLjAwMFoiLCJpc192ZXJpZmllZCI6ZmFsc2UsImxveWFsdHlfcG9pbnRzIjowLCJyZWZlcmFsX2NvZGUiOiIxSEdBNTQiLCJzZXR0aW5ncyI6eyJub3RpZmljYXRpb25fdHlwZXMiOltdLCJ0aGVtZSI6ImxpZ2h0In0sInBheW1lbnRfbWV0aG9kcyI6W10sIl9pZCI6IjY2OTIzMzY1MTFlNGM2Zjk4MDUwNzM4ZiIsInBpbiI6NDY1MTIsImFkZHJlc3NlcyI6W10sImJhc2tldCI6W10sIm9yZGVycyI6W10sIm5vdGlmaWNhdGlvbnMiOltdfSwiaWF0IjoxNzIwODU3NDQ1LCJleHAiOjE3MjA5MDA2NDV9.WGMA5XJcReRpwPP4xcQ0J5pP_7MFNxRO4sxICqK8b_8
 Content-Type: application/json
@@ -175,7 +175,45 @@ Content-Type: application/json
 }
 
 ### Complete order by user
+POST http://localhost:3000/users/668fe2622edfdba5a3853a2a/newOrder
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5MyIsIm51bV9pc192ZXJpZmllZCI6ZmFsc2UsImVtYWlsX2lzX3ZlcmlmaWVkIjpmYWxzZSwicGFzc3dvcmQiOiJrMG4uMTIsMz48NDUnNmZnaDgiLCJkb2IiOiIyMDIzLTEyLTAxVDIzOjAwOjAwLjAwMFoiLCJpc192ZXJpZmllZCI6ZmFsc2UsImxveWFsdHlfcG9pbnRzIjowLCJyZWZlcmFsX2NvZGUiOiIxSEdBNTQiLCJzZXR0aW5ncyI6eyJub3RpZmljYXRpb25fdHlwZXMiOltdLCJ0aGVtZSI6ImxpZ2h0In0sInBheW1lbnRfbWV0aG9kcyI6W10sIl9pZCI6IjY2OTIzMzY1MTFlNGM2Zjk4MDUwNzM4ZiIsInBpbiI6NDY1MTIsImFkZHJlc3NlcyI6W10sImJhc2tldCI6W10sIm9yZGVycyI6W10sIm5vdGlmaWNhdGlvbnMiOltdfSwiaWF0IjoxNzIwODU3NDQ1LCJleHAiOjE3MjA5MDA2NDV9.WGMA5XJcReRpwPP4xcQ0J5pP_7MFNxRO4sxICqK8b_8
+Content-Type: application/json
 
+{
+     "delivery_details":{
+          "street":"xxxxx",
+          "city":"California",
+          "country":"United states"
+     },
+     "delivery_method": {
+      "name": "Air Freight",
+      "charge_per_product": "2 euro"
+    },
+     "products":[
+     {
+      "url": "https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
+      "source": "Aliexpress",
+      "name": "Car",
+      "colour": "Red",
+      "length": "12",
+      "width": "23",
+      "weight": "40",
+      "height": "12",
+      "price": "12000 XAF",
+      "quantity": "20"
+    },
+    {
+      "url": "https://www.amazon.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
+      "source": "Amazon",
+      "name": "Car",
+      "colour": "Black",
+      "length": "12",
+      "height": "12",
+      "price": "12000 XAF"
+    }
+     ],
+     "total_charge":"3600 XAF"
+}
 
 ### ADMIN END POINTS
 

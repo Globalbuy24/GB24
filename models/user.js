@@ -96,7 +96,7 @@ const UserSchema=new mongoose.Schema({
         }],
 
         orders:[{
-            id:{type:Number},
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
             delivery_details:
             {
                 street: { type: String },
@@ -106,7 +106,7 @@ const UserSchema=new mongoose.Schema({
             delivery_method:
             {
                 name:{type:String},
-                charge_per_product:{type:Number}
+                charge_per_product:{type:String}
             },
             products:
             [{
@@ -116,11 +116,12 @@ const UserSchema=new mongoose.Schema({
                 colour:{type:String},
                 length:{type:String},
                 width:{type:String},
+                weight:{type:String},
                 height:{type:String},
                 price:{type:String},
             }],
-            total_charge:{type:String}
-            
+            total_charge:{type:String},
+            created_at:{type:Date}
         }],
 
         payment_methods:[{type:String}],
