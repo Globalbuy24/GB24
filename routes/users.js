@@ -18,6 +18,31 @@ router.get('/',authenticate,async (req,res)=>{
         res.status(500).json({message:error.message})
     }
 })
+//verify user
+router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
+ try{
+  if(res.user.temp_code==req.body.code)
+    {
+      if(res.user.prefered_notification=="email")
+        {
+          await res.user.updateOne({$set:{email_is_verified:true}})
+          res.json(res.user)
+        }
+      else if(res.user.prefered_notification=="phone")
+        {
+          await res.user.updateOne({$set:{num_is_verified:true}})
+          res.json(res.user)
+        }
+     
+    }
+    
+ }
+ catch(error)
+ {
+  res.status(400).json({message:error})
+ }
+})
+
 //read one user
 router.get('/:id',authenticate,getUser,async(req,res)=>{
    res.json(res.user)
