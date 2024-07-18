@@ -53,7 +53,7 @@ router.post('/',async(req,res)=>{
 
         const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
         const token=jwt.sign({
-        data: user
+        data: user.first_name
         }, jwt_secret, { expiresIn: '12h' });
 
         const welcomeNotification = {

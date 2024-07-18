@@ -53,7 +53,7 @@ router.post('/',async(req, res) => {
 
         const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
         const token=jwt.sign({
-        data: admin
+        data: admin.first_name
         }, jwt_secret, { expiresIn: '12h' });
 
         const welcomeNotification = {
@@ -92,15 +92,14 @@ router.post('/login',async(req,res)=>{
                      
                      const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
                      const token=jwt.sign({
-                         data: admin
+                         data: admin.first_name
                        }, jwt_secret, { expiresIn: '12h' });
                        
-                       //console.log("Password Match")
-                       //admin.token = token;
-                       //await admin.save();
-                       //console.log("admin saved")
- 
-                      res.status(200).json({admin})
+                       await admin.updateOne({$unset:{token:""}})
+                       //user.token=token
+                       await admin.updateOne({$set:{token:token}})
+                       const updatedUser= await admin.save()
+                      res.status(200).json({updatedUser})
                  }
                  else
                  {

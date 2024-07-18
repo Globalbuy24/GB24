@@ -55,7 +55,12 @@ router.delete('/:id',authenticate,getUser,async (req,res)=>{
         res.status(500).json({message:error.message})
   } 
 })
+//logout user 
+router.post('/logout/:id',getUser,async(req,res)=>{
+  await res.user.updateOne({$unset:{token:""}})
+  res.json(res.user)
 
+})
 //user pin auto update
 router.patch('/:id/updatePin',authenticate,getUser,async(req,res)=>{
     res.user.pin = newPin();
