@@ -23,12 +23,7 @@ router.post('/', async(req, res) => {
                         data: user.first_name
                       }, jwt_secret, { expiresIn: '15m' });
                       
-                      //console.log("Password Match")
-                      //user.token = token;
-                      //await user.save();
-                      //console.log("user saved")
-                      //const updatedUser= await removeToken(user)
-                      //const updatedUser2= await createNewToken(updatedUser)
+                      
                       await user.updateOne({$unset:{token:""}})
                      //user.token=token
                      await user.updateOne({$set:{token:token}})
@@ -55,23 +50,5 @@ router.post('/', async(req, res) => {
     res.status(400).json({message:error})
    }
   });
-  //
-  async function createNewToken(user) {
-    const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
-    const token=jwt.sign({
-        data: user
-      }, jwt_secret, { expiresIn: '12h' });
-      
-      //console.log("Password Match")
-     // user.updateOne({},[{$unset:{token:""}},])
-      user.token=token;
-      const newUser=await user.save();
-      //console.log("user saved")
-      return newUser
-  }
-  async function removeToken(user) {
-    await User.updateOne({id:user.id},{$unset:{token:""}})
-    const newUser=await user.save();
-    return newUser
-  }
+  
 module.exports=router

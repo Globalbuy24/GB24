@@ -31,6 +31,16 @@ Content-Type: application/json
     "password":"k0n.12,3><45'6fgh8"
 }
 
+### verify user
+
+POST http://localhost:3000/users/verify/6699198aea6ace8fbf3afeed
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjEzMTEzMTcsImV4cCI6MTcyMTMxMjIxN30.qt0tZX8Tjj5lE6jVQZ16ULYluHptftw435jcI90aelY
+Content-Type: application/json
+
+{
+     "code":"952063"
+}
+
 ### Sending user code 
 POST http://localhost:3000/users/getCode/6699198aea6ace8fbf3afeed
 Content-Type: application/json
