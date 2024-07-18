@@ -4,6 +4,7 @@ const router =express.Router()
 const User=require('../../models/user')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
+const mailer=require('../../middleware/mailer')
 
 router.post('/',async(req,res)=>{
     
@@ -17,6 +18,18 @@ router.post('/',async(req,res)=>{
         dob:req.body.dob,
         referal_code:resolvedReferralCode,
     })
+    function newTempCode() {
+      var code = "";
+      var digits = "0123456789";
+     
+      for (var i = 0; i < 6; i++) {
+        var randomIndex = Math.floor(Math.random() * digits.length);
+        code += digits[randomIndex];
+      }
+    
+      return code;
+    }
+    
     try
     {
 
@@ -62,7 +75,30 @@ router.post('/',async(req,res)=>{
           message: `GB24 welcomes you, ${req.body.first_name} ${req.body.last_name}. Enjoy your ride with us.`,
           created_at:new Date()
         };
-        
+        if(req.body.phone_number!=null)
+          {
+              user.prefered_notification="phone"
+              user.temp_code=newTempCode()
+              const temp_code=user.temp_code
+              //send sms
+          }
+        else if(req.body.email!=null)
+          {
+            user.prefered_notification="email"
+            user.temp_code=newTempCode()
+            const temp_code=user.temp_code
+            //send email
+            const html=`
+             <p> Your verification code is : <strong>${temp_code} </strong></p>
+            `
+            await mailer.sendMail({
+              from:'noreply@globalbuy24.com',
+              to:req.body.email,
+              subject:'Verification code',
+              html:html
+            })
+
+          }
         user.notifications.push(welcomeNotification); 
         user.token = token;
         const newUser=await user.save()
@@ -93,8 +129,7 @@ router.post('/',async(req,res)=>{
         {
             generateRefCode()
         }
-       
-        
+      
 }
 
 

@@ -16,7 +16,7 @@ Content-Type: application/json
 {
         "first_name":"GB",
         "last_name":"Test User",
-        "phone_number":"234567893",
+        "email":"ee23@gmail.com",
         "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"
 }
@@ -27,9 +27,18 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"234567893",
+    "credential":"ee23@gmail.com",
     "password":"k0n.12,3><45'6fgh8"
 }
+
+### Sending user code 
+POST http://localhost:3000/users/getCode/6699198aea6ace8fbf3afeed
+Content-Type: application/json
+
+{
+
+}
+
 ### logout user
 POST http://localhost:3000/users/logout/66969f7c30c89bd31c453035
 Content-Type: application/json

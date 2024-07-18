@@ -4,6 +4,7 @@ const User=require('../models/user')
 const Admin=require('../models/admin')
 const authenticate=require('../middleware/currentUser')
 const mongoose = require('mongoose');
+const mailer=require('../middleware/mailer')
 
 //read all users
 router.get('/',authenticate,async (req,res)=>{
@@ -55,6 +56,53 @@ router.delete('/:id',authenticate,getUser,async (req,res)=>{
         res.status(500).json({message:error.message})
   } 
 })
+
+//
+
+router.post('/getCode/:id',getUser,async(req,res)=>{
+  function newTempCode() {
+    var code = "";
+    var digits = "0123456789";
+   
+    for (var i = 0; i < 6; i++) {
+      var randomIndex = Math.floor(Math.random() * digits.length);
+      code += digits[randomIndex];
+    }
+  
+    return code;
+  }
+  
+  
+
+  if(res.user.prefered_notification=="email")
+  {
+    const temp_code=newTempCode()
+   await res.user.updateOne({$set:{temp_code:temp_code}})
+    //send email
+
+    const html=`
+    <p> Your verification code is : <strong>${temp_code} </strong></p>
+   `
+   await mailer.sendMail({
+     from:'noreply@globalbuy24.com',
+     to:res.user.email,
+     subject:'Verification code',
+     html:html
+   })
+   res.sendStatus(204)
+  }
+  else if(res.user.prefered_notification=="phone")
+  {
+    const temp_code=newTempCode()
+    await res.user.updateOne({$set:{temp_code:temp_code}})
+      //send sms
+      res.sendStatus(204)
+  }
+
+  
+
+})
+
 //logout user 
 router.post('/logout/:id',getUser,async(req,res)=>{
   await res.user.updateOne({$unset:{token:""}})
@@ -302,7 +350,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       res.user.basket.push(newBasket)
       const updatedUser=await res.user.save()
 
-      //alert all admins of new basket created
+      //alert all type1 admins of new basket created
       const admins=await Admin.find({})
       admins.forEach((admin)=>{
           if(admin.type=="type1")
