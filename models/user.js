@@ -75,7 +75,7 @@ const UserSchema=new mongoose.Schema({
             delivery_method:
             {
                 name:{type:String},
-                charge_per_product:{type:String,default:"0.00"}
+                delivery_fee:{type:String,default:"0.00"}
             },
             product:
             {
@@ -106,7 +106,7 @@ const UserSchema=new mongoose.Schema({
             delivery_method:
             {
                 name:{type:String},
-                charge_per_product:{type:String}
+                delivery_fee:{type:String}
             },
             products:
             [{
@@ -120,7 +120,7 @@ const UserSchema=new mongoose.Schema({
                 height:{type:String},
                 price:{type:String},
             }],
-            total_charge:{type:String},
+            total_amount:{type:String},
             created_at:{type:Date}
         }],
 

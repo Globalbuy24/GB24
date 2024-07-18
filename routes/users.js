@@ -1,6 +1,7 @@
 const express=require('express')
 const router =express.Router()
 const User=require('../models/user')
+const Admin=require('../models/admin')
 const authenticate=require('../middleware/currentUser')
 const mongoose = require('mongoose');
 
@@ -280,8 +281,31 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
     console.log(req.body.orderURL);
    if(!userUrlExist)
     {
+      const basketCreatedNotification = {
+        _id: new mongoose.Types.ObjectId(),
+        type: 'basketCreated',
+        message: ` Your basket has been created successfully`,
+        created_at:new Date()
+      };
+      const basketCreatedByUserNotification = {
+        _id: new mongoose.Types.ObjectId(),
+        type: 'basketCreated',
+        message: ` A new order has been created`,
+        created_at:new Date()
+      };
+      res.user.notifications.push(basketCreatedNotification)
       res.user.basket.push(newBasket)
       const updatedUser=await res.user.save()
+
+      //alert all admins of new basket created
+      const admins=await Admin.find({})
+      admins.forEach((admin)=>{
+          if(admin.type=="type1")
+            {
+              admin.notifications.push(basketCreatedByUserNotification)
+              admin.save()
+            }
+      })
       res.json(updatedUser)
     }
     else{
@@ -321,8 +345,15 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     total_charge:req.body.total_charge,
     created_at:new Date()
     }
-  
+    const newOrderNotification = {
+      _id: new mongoose.Types.ObjectId(),
+      type: 'newOrder',
+      message: ` Your order has been placed successfully`,
+      created_at:new Date()
+    };
+    
      try{
+         res.user.notifications.push(newOrderNotification)
           await res.user.orders.push(newOrder)
           const updatedUser= await res.user.save()
           res.status(201).json(updatedUser)
