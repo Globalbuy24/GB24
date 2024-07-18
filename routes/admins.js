@@ -13,6 +13,7 @@ router.post('/',async(req, res) => {
         first_name:req.body.first_name,
         last_name:req.body.last_name,
         email:req.body.email,
+        type:req.body.type,
         phone_number:req.body.phone_number,
         password:req.body.password,
     })
@@ -145,18 +146,25 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
       created_at:basket.product.created_at,
       url:basket.product.url
     }
-    if(req.body.weight>50)
+    if(req.body.weight>23)
     {
         basket.delivery_method.name="Sea Freight"
-        basket.delivery_method.charge_per_product="5 euro"
+        basket.delivery_method.delivery_fee="5 euro"
     }
-    else if(req.body.weight<=50)
+    else if(req.body.weight<=23)
     {
         basket.delivery_method.name="Air Freight"
-        basket.delivery_method.charge_per_product="2 euro"
+        basket.delivery_method.delivery_fee="2 euro"
     }
 
     basket.product=data
+    const basketUpdatedNotification = {
+      _id: new mongoose.Types.ObjectId(),
+      type: 'basketUpdated',
+      message: ` Your basket has been updated successfully,verify everything you need`,
+      created_at:new Date()
+    };
+    user.notifications.push(basketUpdatedNotification)
     const updatedUser=await user.save();
     res.json(updatedUser)
 });

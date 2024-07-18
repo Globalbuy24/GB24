@@ -26,7 +26,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"23456789",
+    "credential":"234567893",
     "password":"k0n.12,3><45'6fgh8"
 }
 
@@ -141,13 +141,13 @@ Content-Type: application/json
      
 }
 ### add to basket
-POST http://localhost:3000/users/668fe2622edfdba5a3853a2a/newBasket
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5IiwibnVtX2lzX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWxfaXNfdmVyaWZpZWQiOmZhbHNlLCJwYXNzd29yZCI6Imswbi4xMiwzPjw0NSc2ZmdoOCIsImRvYiI6IjIwMjMtMTItMDFUMjM6MDA6MDAuMDAwWiIsImlzX3ZlcmlmaWVkIjpmYWxzZSwibG95YWx0eV9wb2ludHMiOjAsInJlZmVyYWxfY29kZSI6IkxIMUEzTCIsInNldHRpbmdzIjp7Im5vdGlmaWNhdGlvbl90eXBlcyI6W10sInRoZW1lIjoibGlnaHQifSwicGF5bWVudF9tZXRob2RzIjpbXSwiX2lkIjoiNjY4ZmUyNjIyZWRmZGJhNWEzODUzYTJhIiwicGluIjo2MzQ0NiwiYWRkcmVzc2VzIjpbXSwiYmFza2V0IjpbXSwib3JkZXJzIjpbXSwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjA3MDU2MzQsImV4cCI6MTcyMDc0ODgzNH0.twcPf-eO-rDxkuwbYrZp3Mrh7y_CLxLm7tTYj0Z5RlE
+POST http://localhost:3000/users/66969f7c30c89bd31c453035/newBasket
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJBZG1pbiIsImxhc3RfbmFtZSI6Ik1vY2siLCJ0eXBlIjoidHlwZTEiLCJlbWFpbCI6ImVlMUBnbWFpbC5jb20iLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiX2lkIjoiNjY5OGRhMzRlOGQ3NTUxMzVkOTdjNWI2Iiwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjEyOTMzNjQsImV4cCI6MTcyMTMzNjU2NH0.eld5PDDftoyM3Hc5SWZ-1ikE3k0ZpLg59zxtAu06XF4
 Content-Type: application/json
 
 {
-     //"orderURL":"https://www.ebay.com/itm/266384827922"
-     "orderURL":"https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
+     "orderURL":"https://www.ebay.com/itm/266384827922",
+     //"orderURL":"https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
      "quantity":"5"
 }
 
@@ -160,11 +160,11 @@ Content-Type: application/json
     
 }
 
-### Edit order by user
+### Edit basket by user
 
 
-POST http://localhost:3000/admin/668fe2622edfdba5a3853a2a/updateUserBasket/668fe8745e5586c88273556d
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5MyIsIm51bV9pc192ZXJpZmllZCI6ZmFsc2UsImVtYWlsX2lzX3ZlcmlmaWVkIjpmYWxzZSwicGFzc3dvcmQiOiJrMG4uMTIsMz48NDUnNmZnaDgiLCJkb2IiOiIyMDIzLTEyLTAxVDIzOjAwOjAwLjAwMFoiLCJpc192ZXJpZmllZCI6ZmFsc2UsImxveWFsdHlfcG9pbnRzIjowLCJyZWZlcmFsX2NvZGUiOiIxSEdBNTQiLCJzZXR0aW5ncyI6eyJub3RpZmljYXRpb25fdHlwZXMiOltdLCJ0aGVtZSI6ImxpZ2h0In0sInBheW1lbnRfbWV0aG9kcyI6W10sIl9pZCI6IjY2OTIzMzY1MTFlNGM2Zjk4MDUwNzM4ZiIsInBpbiI6NDY1MTIsImFkZHJlc3NlcyI6W10sImJhc2tldCI6W10sIm9yZGVycyI6W10sIm5vdGlmaWNhdGlvbnMiOltdfSwiaWF0IjoxNzIwODU3NDQ1LCJleHAiOjE3MjA5MDA2NDV9.WGMA5XJcReRpwPP4xcQ0J5pP_7MFNxRO4sxICqK8b_8
+POST http://localhost:3000/admin/66969f7c30c89bd31c453035/updateUserBasket/6696a00130c89bd31c45303c
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5MyIsIm51bV9pc192ZXJpZmllZCI6ZmFsc2UsImVtYWlsX2lzX3ZlcmlmaWVkIjpmYWxzZSwicGFzc3dvcmQiOiJrMG4uMTIsMz48NDUnNmZnaDgiLCJkb2IiOiIyMDIzLTEyLTAxVDIzOjAwOjAwLjAwMFoiLCJpc192ZXJpZmllZCI6ZmFsc2UsImxveWFsdHlfcG9pbnRzIjowLCJyZWZlcmFsX2NvZGUiOiI0QjlTVkciLCJzZXR0aW5ncyI6eyJub3RpZmljYXRpb25fdHlwZXMiOltdLCJ0aGVtZSI6ImxpZ2h0In0sInBheW1lbnRfbWV0aG9kcyI6W10sIl9pZCI6IjY2OTY5ZjdjMzBjODliZDMxYzQ1MzAzNSIsInBpbiI6ODM2NzAsImFkZHJlc3NlcyI6W10sImJhc2tldCI6W10sIm9yZGVycyI6W10sIm5vdGlmaWNhdGlvbnMiOltdfSwiaWF0IjoxNzIxMTQ3MjYwLCJleHAiOjE3MjExOTA0NjB9.GmJid8yik7aiyh0GeJZfelbBJb1zaCoNWD8J7rvwKm4
 Content-Type: application/json
 
 {
@@ -175,8 +175,8 @@ Content-Type: application/json
 }
 
 ### Complete order by user
-POST http://localhost:3000/users/668fe2622edfdba5a3853a2a/newOrder
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5MyIsIm51bV9pc192ZXJpZmllZCI6ZmFsc2UsImVtYWlsX2lzX3ZlcmlmaWVkIjpmYWxzZSwicGFzc3dvcmQiOiJrMG4uMTIsMz48NDUnNmZnaDgiLCJkb2IiOiIyMDIzLTEyLTAxVDIzOjAwOjAwLjAwMFoiLCJpc192ZXJpZmllZCI6ZmFsc2UsImxveWFsdHlfcG9pbnRzIjowLCJyZWZlcmFsX2NvZGUiOiIxSEdBNTQiLCJzZXR0aW5ncyI6eyJub3RpZmljYXRpb25fdHlwZXMiOltdLCJ0aGVtZSI6ImxpZ2h0In0sInBheW1lbnRfbWV0aG9kcyI6W10sIl9pZCI6IjY2OTIzMzY1MTFlNGM2Zjk4MDUwNzM4ZiIsInBpbiI6NDY1MTIsImFkZHJlc3NlcyI6W10sImJhc2tldCI6W10sIm9yZGVycyI6W10sIm5vdGlmaWNhdGlvbnMiOltdfSwiaWF0IjoxNzIwODU3NDQ1LCJleHAiOjE3MjA5MDA2NDV9.WGMA5XJcReRpwPP4xcQ0J5pP_7MFNxRO4sxICqK8b_8
+POST http://localhost:3000/users/66969f7c30c89bd31c453035/newOrder
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJBZG1pbiIsImxhc3RfbmFtZSI6Ik1vY2siLCJ0eXBlIjoidHlwZTEiLCJlbWFpbCI6ImVlMUBnbWFpbC5jb20iLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiX2lkIjoiNjY5OGRhMzRlOGQ3NTUxMzVkOTdjNWI2Iiwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjEyOTMzNjQsImV4cCI6MTcyMTMzNjU2NH0.eld5PDDftoyM3Hc5SWZ-1ikE3k0ZpLg59zxtAu06XF4
 Content-Type: application/json
 
 {
@@ -187,7 +187,7 @@ Content-Type: application/json
      },
      "delivery_method": {
       "name": "Air Freight",
-      "charge_per_product": "2 euro"
+      "delivery_fee": "2 euro"
     },
      "products":[
      {
@@ -212,7 +212,7 @@ Content-Type: application/json
       "price": "12000 XAF"
     }
      ],
-     "total_charge":"3600 XAF"
+     "total_amount":"36000 XAF"
 }
 
 ### ADMIN END POINTS
@@ -223,7 +223,8 @@ Content-Type: application/json
 {
      "first_name":"Admin",
      "last_name":"Mock",
-     "email":"ee@gmail.com",
+     "type":"type1",
+     "email":"ee1@gmail.com",
      "password":"k0n.12,3><45'6fgh8"
 }
 
@@ -236,8 +237,8 @@ Content-Type: application/json
      "password":"k0n.12,3><45'6fgh8"
 }
 ###
-POST http://localhost:3000/admin/668fe2622edfdba5a3853a2a/updateUserBasket/668fe8745e5586c88273556d
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5IiwibnVtX2lzX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWxfaXNfdmVyaWZpZWQiOmZhbHNlLCJwYXNzd29yZCI6Imswbi4xMiwzPjw0NSc2ZmdoOCIsImRvYiI6IjIwMjMtMTItMDFUMjM6MDA6MDAuMDAwWiIsImlzX3ZlcmlmaWVkIjpmYWxzZSwibG95YWx0eV9wb2ludHMiOjAsInJlZmVyYWxfY29kZSI6IkxIMUEzTCIsInNldHRpbmdzIjp7Im5vdGlmaWNhdGlvbl90eXBlcyI6W10sInRoZW1lIjoibGlnaHQifSwicGF5bWVudF9tZXRob2RzIjpbXSwiX2lkIjoiNjY4ZmUyNjIyZWRmZGJhNWEzODUzYTJhIiwicGluIjo2MzQ0NiwiYWRkcmVzc2VzIjpbXSwiYmFza2V0IjpbXSwib3JkZXJzIjpbXSwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjA3MDU2MzQsImV4cCI6MTcyMDc0ODgzNH0.twcPf-eO-rDxkuwbYrZp3Mrh7y_CLxLm7tTYj0Z5RlE
+POST http://localhost:3000/admin/66969f7c30c89bd31c453035/updateUserBasket/6696a00130c89bd31c45303c
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJBZG1pbiIsImxhc3RfbmFtZSI6Ik1vY2siLCJ0eXBlIjoidHlwZTEiLCJlbWFpbCI6ImVlMUBnbWFpbC5jb20iLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiX2lkIjoiNjY5OGRhMzRlOGQ3NTUxMzVkOTdjNWI2Iiwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjEyOTMzNjQsImV4cCI6MTcyMTMzNjU2NH0.eld5PDDftoyM3Hc5SWZ-1ikE3k0ZpLg59zxtAu06XF4
 Content-Type: application/json
 
 {
@@ -245,7 +246,7 @@ Content-Type: application/json
      "colour":"Black",
      "length":"12",
      "width":"23",
-     "weight":"40",
+     "weight":"60",
      "height":"12",
      "price":"12000 XAF"
      
