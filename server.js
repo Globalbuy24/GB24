@@ -16,12 +16,10 @@ const registerRouter=require('./routes/auth/register')
 const usersRouter=require('./routes/users')
 const adminsRouter=require('./routes/admins')
 
-
 // routes
 app.use('/login',loginRouter)
 app.use('/register',registerRouter)
 app.use('/users',usersRouter)
 app.use('/admin',adminsRouter)
-
 
 app.listen(3000,()=>console.log('Server Started'))
