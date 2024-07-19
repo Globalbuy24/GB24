@@ -1,8 +1,7 @@
 ###getting all users
 
 GET http://localhost:3000/users
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2NzgiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiZG9iIjoiMjAyMy0xMi0wMVQyMzowMDowMC4wMDBaIiwiaXNfdmVyaWZpZWQiOmZhbHNlLCJsb3lhbHR5X3BvaW50cyI6MCwicmVmZXJhbF9jb2RlIjoiUjA4MU1WIiwic2V0dGluZ3MiOnsibm90aWZpY2F0aW9uX3R5cGVzIjpbXSwidGhlbWUiOiJsaWdodCJ9LCJwYXltZW50X21ldGhvZHMiOltdLCJfaWQiOiI2NjY4NGMxOTgzNzY0MGNlYTI0ZTVkOGEiLCJwaW4iOjk3MzMzLCJhZGRyZXNzZXMiOltdLCJub3RpZmljYXRpb25zIjpbXX0sImlhdCI6MTcxODExMTI1NywiZXhwIjoxNzE4MTU0NDU3fQ.RT6xjkzIDHQIt2uhKhHP2VNZrVoI4pShvpqfjGj7DSE
-
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE0MDk1MDcsImV4cCI6MTcyMTQ1MjcwN30.sWRyTElc152PDQLCUlJMBBv2eb2YYKjUGdX61rkjHb8
 ### finding one user
 
 GET http://localhost:3000/users/668e6b59e614d161858b5cb6
@@ -19,6 +18,14 @@ Content-Type: application/json
         "email":"ee23@gmail.com",
         "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"
+}
+### google auth
+
+GET http://localhost:3000/register/auth/google
+Content-Type: application/json
+
+{
+
 }
 
 ### login user

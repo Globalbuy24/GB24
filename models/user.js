@@ -4,6 +4,8 @@ const bcrypt=require('bcrypt')
 
 const UserSchema=new mongoose.Schema({
         token:{type:String},
+        googleId:{type:String},
+        provider:{type:String},
         first_name:{
             type:String,
             required:true
@@ -39,11 +41,11 @@ const UserSchema=new mongoose.Schema({
         ,
         password:{
             type:String,
-            required:true,
+            
         },
         dob:{
             type:Date,
-            required:true
+            
         },
 
         pin:{

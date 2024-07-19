@@ -1,10 +1,21 @@
 //create new user
 const express=require('express')
+const session = require('express-session');
+require('../../routes/auth/google')
 const router =express.Router()
+const passport =require('passport')
 const User=require('../../models/user')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
 const mailer=require('../../middleware/mailer')
+
+router.use(session({
+  secret: 'gb24',
+  resave: false,
+  saveUninitialized: true
+}));
+router.use(passport.initialize());
+router.use(passport.session());
 
 router.post('/',async(req,res)=>{
     
@@ -91,6 +102,17 @@ router.post('/',async(req,res)=>{
             const html=`
              <p> Your verification code is : <strong>${temp_code} </strong></p>
             `
+            const welcomehtml=`
+             <p>
+             GB24 welcomes you,<strong> ${req.body.first_name} ${req.body.last_name}</strong>. Enjoy your ride with us.
+             </p>
+            `
+            await mailer.sendMail({
+              from:'noreply@globalbuy24.com',
+              to:req.body.email,
+              subject:'Welcome to GlobalBuy24',
+              html:welcomehtml
+            })
             await mailer.sendMail({
               from:'noreply@globalbuy24.com',
               to:req.body.email,
@@ -131,6 +153,29 @@ router.post('/',async(req,res)=>{
         }
       
 }
+
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['email', 'profile'] })
+);
+
+router.get('/google/callback',
+  passport.authenticate('google',
+    {
+      successRedirect:'/register/google/sucess',
+      failureRedirect:'register/loginFailed'
+    }
+));
+
+router.get('/google/sucess', (req, res) => {
+  res.json(req.user)
+});
+
+router.get('/loginFailed', (req, res) => {
+  res.status(400).json({message:"Something went wrong"});
+});
+
+
+
 
 
 module.exports=router
