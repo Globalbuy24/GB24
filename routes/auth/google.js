@@ -50,6 +50,7 @@ passport.use(new GoogleStrategy({
           referal_code: resolvedReferralCode,
           provider: profile.provider,
           email_is_verified: true,
+          is_verified:true,
           token:token
         });
         const welcomeNotification = {

@@ -2,6 +2,7 @@
 const express=require('express')
 const session = require('express-session');
 require('../../routes/auth/google')
+require('../../routes/auth/facebook')
 const router =express.Router()
 const passport =require('passport')
 const User=require('../../models/user')
@@ -153,7 +154,7 @@ router.post('/',async(req,res)=>{
         }
       
 }
-
+//google oauth
 router.get('/auth/google',
   passport.authenticate('google', { scope: ['email', 'profile'] })
 );
@@ -170,6 +171,18 @@ router.get('/google/sucess', (req, res) => {
   res.json(req.user)
 });
 
+//facebook oauth
+router.get('/auth/facebook',
+  passport.authenticate('facebook'));
+  
+router.get('/facebook/callback',
+  passport.authenticate('facebook', { failureRedirect: '/login' }),
+  function(req, res) {
+   
+    res.json(req.user);
+  });
+
+//oauth login failed
 router.get('/loginFailed', (req, res) => {
   res.status(400).json({message:"Something went wrong"});
 });

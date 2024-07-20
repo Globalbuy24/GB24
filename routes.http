@@ -1,7 +1,7 @@
 ###getting all users
 
 GET http://localhost:3000/users
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE0MDk1MDcsImV4cCI6MTcyMTQ1MjcwN30.sWRyTElc152PDQLCUlJMBBv2eb2YYKjUGdX61rkjHb8
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE0NjMwODEsImV4cCI6MTcyMTUwNjI4MX0.KhK6edsRcnM_3r5xLtBI89WNI-2AriwXLKZ69yaUaKg
 ### finding one user
 
 GET http://localhost:3000/users/668e6b59e614d161858b5cb6
@@ -15,13 +15,21 @@ Content-Type: application/json
 {
         "first_name":"GB",
         "last_name":"Test User",
-        "email":"ee23@gmail.com",
+        "email":"ee12113@gmail.com",
         "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"
 }
 ### google auth
 
 GET http://localhost:3000/register/auth/google
+Content-Type: application/json
+
+{
+
+}
+### facebook auth
+
+GET http://localhost:3000/register/auth/facebook
 Content-Type: application/json
 
 {
@@ -40,12 +48,12 @@ Content-Type: application/json
 
 ### verify user
 
-POST http://localhost:3000/users/verify/6699198aea6ace8fbf3afeed
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjEzMTEzMTcsImV4cCI6MTcyMTMxMjIxN30.qt0tZX8Tjj5lE6jVQZ16ULYluHptftw435jcI90aelY
+POST http://localhost:3000/users/verify/669b75d7a31b1da96bdee303
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE0NjMwODEsImV4cCI6MTcyMTUwNjI4MX0.KhK6edsRcnM_3r5xLtBI89WNI-2AriwXLKZ69yaUaKg
 Content-Type: application/json
 
 {
-     "code":"952063"
+     "code":"194255"
 }
 
 ### Sending user code 

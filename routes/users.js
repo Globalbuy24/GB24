@@ -25,16 +25,21 @@ router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
     {
       if(res.user.prefered_notification=="email")
         {
-          await res.user.updateOne({$set:{email_is_verified:true}})
-          res.json(res.user)
+          await res.user.updateOne({$set:{email_is_verified:true,is_verified:true}})
+          const updatedUser=await User.findById(res.user.id)
+          res.json(updatedUser)
         }
       else if(res.user.prefered_notification=="phone")
         {
-          await res.user.updateOne({$set:{num_is_verified:true}})
-          res.json(res.user)
+           await res.user.updateOne({$set:{num_is_verified:true,is_verified:true}})
+           const updatedUser=await User.findById(res.user.id)
+          res.json(updatedUser)
         }
      
     }
+  else{
+    res.status(400).json({message:"Something went wrong"})
+  }
     
  }
  catch(error)
