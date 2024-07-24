@@ -4,8 +4,8 @@ GET http://localhost:3000/users
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE4MTkwMzcsImV4cCI6MTcyMTgxOTkzN30.xpUoYArTkk2z5-PSvvbUWinfVWoqbu7HSnG0WhNCGHg
 ### finding one user
 
-GET http://localhost:3000/users/668e6b59e614d161858b5cb6
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsInBob25lX251bWJlciI6IjIzNDU2Nzg5IiwibnVtX2lzX3ZlcmlmaWVkIjpmYWxzZSwiZW1haWxfaXNfdmVyaWZpZWQiOmZhbHNlLCJwYXNzd29yZCI6Imswbi4xMiwzPjw0NSc2ZmdoOCIsImRvYiI6IjIwMjMtMTItMDFUMjM6MDA6MDAuMDAwWiIsImlzX3ZlcmlmaWVkIjpmYWxzZSwibG95YWx0eV9wb2ludHMiOjAsInJlZmVyYWxfY29kZSI6IlVWQk1LNCIsInNldHRpbmdzIjp7Im5vdGlmaWNhdGlvbl90eXBlcyI6W10sInRoZW1lIjoibGlnaHQifSwicGF5bWVudF9tZXRob2RzIjpbXSwiX2lkIjoiNjY4ZTZiNTllNjE0ZDE2MTg1OGI1Y2I2IiwicGluIjozMzg0MCwiYWRkcmVzc2VzIjpbXSwibm90aWZpY2F0aW9ucyI6W119LCJpYXQiOjE3MjA2MDk2MjUsImV4cCI6MTcyMDY1MjgyNX0.7Z6tV8LtGzSzy0WxJs4Q-bKr6A91NGt5G1tE1K93zxw
+GET http://localhost:3000/users/669b71299d6f4c2d8ba3ae26
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE4MjcxOTEsImV4cCI6MTcyMTg3MDM5MX0.MesFf0PIr1YuYqQonE6WbP25Y1pZred9YWkgTSn3R6M
 
 
 ###creating new user
@@ -254,6 +254,29 @@ Content-Type: application/json
     }
      ],
      "total_amount":"36000 XAF"
+}
+
+### Referrals post
+
+GET http://localhost:3000/referral/SAQJ5G
+Content-Type: application/json
+
+{
+
+}
+
+### Referrals post
+
+POST http://localhost:3000/referral/SAQJ5G
+Content-Type: application/json
+
+{
+
+       "first_name":"GB",
+        "last_name":"Test User",
+        "email":"ee173@gmail.com",
+        "password":"k0n.12,3><45'6fgh8",
+        "dob":"2023-12-2"
 }
 
 ### ADMIN END POINTS
