@@ -1,7 +1,7 @@
 ###getting all users
 
 GET http://localhost:3000/users
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE0NjMwODEsImV4cCI6MTcyMTUwNjI4MX0.KhK6edsRcnM_3r5xLtBI89WNI-2AriwXLKZ69yaUaKg
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE4MTkwMzcsImV4cCI6MTcyMTgxOTkzN30.xpUoYArTkk2z5-PSvvbUWinfVWoqbu7HSnG0WhNCGHg
 ### finding one user
 
 GET http://localhost:3000/users/668e6b59e614d161858b5cb6
@@ -48,12 +48,12 @@ Content-Type: application/json
 
 ### verify user
 
-POST http://localhost:3000/users/verify/669b75d7a31b1da96bdee303
+POST http://localhost:3000/users/verify/669b76da188e194e7f089450
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE0NjMwODEsImV4cCI6MTcyMTUwNjI4MX0.KhK6edsRcnM_3r5xLtBI89WNI-2AriwXLKZ69yaUaKg
 Content-Type: application/json
 
 {
-     "code":"194255"
+     "code":"520150"
 }
 
 ### Sending user code 
@@ -293,3 +293,12 @@ Content-Type: application/json
      
 }
 
+### System defaults by admin
+POST http://localhost:3000/admin/system_default
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MjE4MTg4MjQsImV4cCI6MTcyMTg2MjAyNH0.zViaMOwbzpwu8bj13XoO46d_n8zUuR3s915vi38WVjY
+Content-Type: application/json
+
+{
+     "amount":"200",
+     "category":"purchase"
+}
