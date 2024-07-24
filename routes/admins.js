@@ -2,6 +2,7 @@ const express=require('express')
 const router =express.Router()
 const Admin=require('../models/admin')
 const User=require('../models/user')
+const SystemDefault=require('../models/system_default')
 const jwt = require('jsonwebtoken')
 const bcrypt=require('bcrypt')
 const mongoose=require('mongoose')
@@ -169,5 +170,38 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
 });
 
 
+// Adding system defaults
+router.post('/system_default', authenticate, async (req, res) => {
+  try {
+    let system_default = await SystemDefault.findOne({}); // Use findOne instead of find for a single document
+
+    if (!system_default) {
+      const newSystemDefault = new SystemDefault();
+      system_default = await newSystemDefault.save();
+    }
+
+    if (req.body.category.toLowerCase() === "air freight") {
+      system_default.delivery_fee.air_freight = req.body.amount;
+    } else if (req.body.category.toLowerCase() === "sea freight") {
+      system_default.delivery_fee.sea_freight = req.body.amount;
+    } 
+    else if(req.body.category.toLowerCase() === "referals")
+      {
+        system_default.loyalty_points.referals = req.body.amount;
+      }
+    else if(req.body.category.toLowerCase() === "purchase")
+      {
+        system_default.loyalty_points.purchase = req.body.amount;
+      }
+    else {
+      return res.status(400).json({ message: "Invalid category provided" });
+    }
+
+    const update = await system_default.save();
+    res.json(update);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
 module.exports=router
