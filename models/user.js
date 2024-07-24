@@ -61,6 +61,7 @@ const UserSchema=new mongoose.Schema({
             default:0
         },
         referal_code:{type:String},
+        referred_by:{type:String},
         addresses: [
             {
               _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
