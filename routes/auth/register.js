@@ -90,15 +90,17 @@ router.post('/',async(req,res)=>{
         if(req.body.phone_number!=null)
           {
               user.prefered_notification="phone"
-              user.temp_code=newTempCode()
-              const temp_code=user.temp_code
+              user.temp.code=newTempCode()
+              user.temp.created_at=new Date()
+              const temp_code=user.temp.code
               //send sms
           }
         else if(req.body.email!=null)
           {
             user.prefered_notification="email"
-            user.temp_code=newTempCode()
-            const temp_code=user.temp_code
+            user.temp.code=newTempCode()
+            user.temp.created_at=new Date()
+            const temp_code=user.temp.code
             //send email
             const html=`
              <p> Your verification code is : <strong>${temp_code} </strong></p>

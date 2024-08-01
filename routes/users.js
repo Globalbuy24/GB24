@@ -18,23 +18,39 @@ router.get('/',authenticate,async (req,res)=>{
         res.status(500).json({message:error.message})
     }
 })
+
 //verify user
 router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
+
+  function codeIsValid(dateToCompare) {
+    const currentDate = new Date();
+    const diffInMilliseconds = currentDate - dateToCompare;
+    const diffInMinutes = diffInMilliseconds / (1000 * 60);
+
+    return Math.abs(diffInMinutes) < 2;
+}
+
  try{
-  if(res.user.temp_code==req.body.code)
+  if(res.user.temp.code==req.body.code)
     {
-      if(res.user.prefered_notification=="email")
-        {
-          await res.user.updateOne({$set:{email_is_verified:true,is_verified:true}})
-          const updatedUser=await User.findById(res.user.id)
-          res.json(updatedUser)
-        }
-      else if(res.user.prefered_notification=="phone")
-        {
-           await res.user.updateOne({$set:{num_is_verified:true,is_verified:true}})
-           const updatedUser=await User.findById(res.user.id)
-          res.json(updatedUser)
-        }
+     if(codeIsValid(res.user.temp.created_at))
+      {
+        if(res.user.prefered_notification=="email")
+          {
+            await res.user.updateOne({$set:{email_is_verified:true,is_verified:true}})
+            const updatedUser=await User.findById(res.user.id)
+            res.json(updatedUser)
+          }
+        else if(res.user.prefered_notification=="phone")
+          {
+             await res.user.updateOne({$set:{num_is_verified:true,is_verified:true}})
+             const updatedUser=await User.findById(res.user.id)
+            res.json(updatedUser)
+          }
+      }
+      else{
+        res.status(400).json({message:"code expired"})
+      }
      
     }
   else{
@@ -87,7 +103,7 @@ router.delete('/:id',authenticate,getUser,async (req,res)=>{
   } 
 })
 
-//
+// get OTP code which lasts 5mins
 
 router.post('/getCode/:id',getUser,async(req,res)=>{
   function newTempCode() {
@@ -107,7 +123,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
   if(res.user.prefered_notification=="email")
   {
     const temp_code=newTempCode()
-   await res.user.updateOne({$set:{temp_code:temp_code}})
+   await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
     //send email
 
     const html=`
@@ -124,7 +140,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
   else if(res.user.prefered_notification=="phone")
   {
     const temp_code=newTempCode()
-    await res.user.updateOne({$set:{temp_code:temp_code}})
+    await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
       //send sms
       res.sendStatus(204)
   }
