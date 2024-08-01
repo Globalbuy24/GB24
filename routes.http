@@ -42,22 +42,22 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"ee23@gmail.com",
+    "credential":"ee12113@gmail.com",
     "password":"k0n.12,3><45'6fgh8"
 }
 
 ### verify user
 
 POST http://localhost:3000/users/verify/669b76da188e194e7f089450
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjE0NjMwODEsImV4cCI6MTcyMTUwNjI4MX0.KhK6edsRcnM_3r5xLtBI89WNI-2AriwXLKZ69yaUaKg
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjI1MTM4NzMsImV4cCI6MTcyMjU1NzA3M30.ihvqCAKelG2cPJvu8QiToOezQ7izfJ-5asxG2x3dZMo
 Content-Type: application/json
 
 {
-     "code":"520150"
+     "code":"369708"
 }
 
 ### Sending user code 
-POST http://localhost:3000/users/getCode/6699198aea6ace8fbf3afeed
+POST http://localhost:3000/users/getCode/66ab79d176717540c1888a4f
 Content-Type: application/json
 
 {

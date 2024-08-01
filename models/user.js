@@ -36,7 +36,7 @@ const UserSchema=new mongoose.Schema({
             default:''
         },
         prefered_notification:{type:String},
-        temp_code:{type:String},
+        temp:{code:{type:String},created_at:{type:Date}},
         num_is_verified:{type:Boolean,default:false},
         email_is_verified:{type:Boolean,default:false}
         ,
