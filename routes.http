@@ -318,10 +318,10 @@ Content-Type: application/json
 
 ### System defaults by admin
 POST http://localhost:3000/admin/system_default
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MjE4MTg4MjQsImV4cCI6MTcyMTg2MjAyNH0.zViaMOwbzpwu8bj13XoO46d_n8zUuR3s915vi38WVjY
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MjI1MTA2ODEsImV4cCI6MTcyMjU1Mzg4MX0.1FUALbqWAg0RdZVx93GsKugd4-RZ7K3VcB75P7HfmPE
 Content-Type: application/json
 
 {
-     "amount":"200",
-     "category":"purchase"
+     "product":"nnnnnnnn",
+     "category":"prohibited"
 }

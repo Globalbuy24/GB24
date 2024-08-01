@@ -189,10 +189,15 @@ router.post('/system_default', authenticate, async (req, res) => {
       {
         system_default.loyalty_points.referals = req.body.amount;
       }
+    
     else if(req.body.category.toLowerCase() === "purchase")
       {
         system_default.loyalty_points.purchase = req.body.amount;
       }
+      else if(req.body.category.toLowerCase() === "prohibited")
+        {
+          system_default.prohibited.product.push(req.body.product);
+        }
     else {
       return res.status(400).json({ message: "Invalid category provided" });
     }
