@@ -83,11 +83,11 @@ router.post('/login',async(req,res)=>{
         
         if(credential!='' && password!='')
          {
-            console.log("cred good")
+            //console.log("cred good")
              let admin=await Admin.findOne({$or:[{'email':credential},{'phone_number':credential}]})
              if(admin!=null)
              {
-                console.log("Admin Exists")
+                //console.log("Admin Exists")
                  if(bcrypt.compareSync(password, admin.password))
                  {
                      
@@ -126,12 +126,14 @@ router.post('/login',async(req,res)=>{
 
 // update basket
 router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
+  
     const userId=req.params.uId;
     const basketId=req.params.bId;
     const user=await User.findOne({'_id':userId})
     const basket=user.basket.find((basket)=>basket.id===basketId)
     //console.log(basket)
-
+   try{
+   
     const data={
       source:basket.product.source,
       name:req.body.name||basket.product.name,
@@ -167,6 +169,11 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
     user.notifications.push(basketUpdatedNotification)
     const updatedUser=await user.save();
     res.json(updatedUser)
+   }
+   catch(error)
+   {
+     res.status(400).json({message:error})
+   }
 });
 
 

@@ -5,6 +5,9 @@ const Admin=require('../models/admin')
 const authenticate=require('../middleware/currentUser')
 const mongoose = require('mongoose');
 const mailer=require('../middleware/mailer')
+const https = require('follow-redirects').https;
+const fs = require('fs');
+
 
 //read all users
 router.get('/',authenticate,async (req,res)=>{
@@ -106,6 +109,7 @@ router.delete('/:id',authenticate,getUser,async (req,res)=>{
 // get OTP code which lasts 5mins
 
 router.post('/getCode/:id',getUser,async(req,res)=>{
+
   function newTempCode() {
     var code = "";
     var digits = "0123456789";
@@ -119,7 +123,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
   }
   
   
-
+  try{
   if(res.user.prefered_notification=="email")
   {
     const temp_code=newTempCode()
@@ -135,17 +139,65 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
      subject:'Verification code',
      html:html
    })
-   res.sendStatus(204)
+   res.json({message:"code sent successfully"})
   }
   else if(res.user.prefered_notification=="phone")
   {
     const temp_code=newTempCode()
     await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
+
       //send sms
-      res.sendStatus(204)
+       var options = {
+          'method': 'POST',
+          'hostname': 'vvn8np.api.infobip.com',
+          'path': '/sms/2/text/advanced',
+          'headers': {
+              'Authorization': 'App 7423850e235a5ee716d199e09b38062c-26cbd0e7-1598-4ca6-89cf-35cad5c9047d',
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          'maxRedirects': 20
+      };
+      
+      const sms = https.request(options, function (res) {
+          var chunks = [];
+      
+          res.on("data", function (chunk) {
+              chunks.push(chunk);
+          });
+      
+          res.on("end", function (chunk) {
+              var body = Buffer.concat(chunks);
+              console.log(body.toString());
+          });
+      
+          res.on("error", function (error) {
+              console.error(error);
+          });
+      });
+
+      var postData = JSON.stringify({
+        "messages": [
+            {
+                "destinations": [{"to":res.user.phone_number}],
+                "from": "GlobalBuy24",
+                "text": "Your verification code is: "+temp_code
+            }
+        ]
+    });
+    
+    sms.write(postData);
+    
+    sms.end();
+
+          res.json({message:"code sent successfully"})
   }
 
-  
+}
+catch(error)
+{
+  res.status(500).json({message:error})
+}
 
 })
 
