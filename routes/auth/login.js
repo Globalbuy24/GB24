@@ -4,7 +4,13 @@ const User=require('../../models/user')
 const bcrypt=require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+/**
+ * login user
+ */
 router.post('/', async(req, res) => {
+    /**
+     * credential , can be email or phone number
+     */
     const credential=req.body.credential
     const password=req.body.password
    try{
@@ -25,7 +31,7 @@ router.post('/', async(req, res) => {
                       
                       
                       await user.updateOne({$unset:{token:""}})
-                     //user.token=token
+                     
                      await user.updateOne({$set:{token:token}})
                       const updatedUser= await user.save()
                       res.status(200).json({updatedUser})

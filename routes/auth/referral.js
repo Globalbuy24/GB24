@@ -10,6 +10,8 @@ const SystemDefault=require('../../models/system_default')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
 const mailer=require('../../middleware/mailer')
+const https = require('follow-redirects').https;
+const fs = require('fs');
 
 router.get('/:id',async(req,res)=>{
     
@@ -30,7 +32,9 @@ router.get('/:id',async(req,res)=>{
     }
 })
 
-
+/**
+ * register user using referal link,which contains a referal code
+ */
 router.post('/:id',async(req,res)=>{
     const referal_code=req.params.id
     const referalUser= await User.findOne({referal_code:referal_code})
@@ -46,6 +50,10 @@ router.post('/:id',async(req,res)=>{
         dob:req.body.dob,
         referal_code:resolvedReferralCode,
     })
+    /**
+     * 
+     * @returns random temporal code, used to verify users
+     */
     function newTempCode() {
       var code = "";
       var digits = "0123456789";
@@ -108,14 +116,63 @@ router.post('/:id',async(req,res)=>{
               user.prefered_notification="phone"
               user.temp_code=newTempCode()
               const temp_code=user.temp_code
-              //send sms
+              
+              /**
+               * send sms if user registered with a phone number
+               */
+              var options = {
+                'method': 'POST',
+                'hostname': 'vvn8np.api.infobip.com',
+                'path': '/sms/2/text/advanced',
+                'headers': {
+                    'Authorization': 'App 7423850e235a5ee716d199e09b38062c-26cbd0e7-1598-4ca6-89cf-35cad5c9047d',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                'maxRedirects': 20
+            };
+            
+            const sms = https.request(options, function (res) {
+                var chunks = [];
+            
+                res.on("data", function (chunk) {
+                    chunks.push(chunk);
+                });
+            
+                res.on("end", function (chunk) {
+                    var body = Buffer.concat(chunks);
+                    console.log(body.toString());
+                });
+            
+                res.on("error", function (error) {
+                    console.error(error);
+                });
+            });
+
+              var postData = JSON.stringify({
+                "messages": [
+                    {
+                        "destinations": [{"to":req.body.phone_number}],
+                        "from": "GlobalBuy24",
+                        "text": "Your verification code is: "+temp_code
+                    }
+                ]
+            });
+            
+            sms.write(postData);
+            
+            sms.end();
+            
           }
         else if(req.body.email!=null)
           {
             user.prefered_notification="email"
             user.temp_code=newTempCode()
             const temp_code=user.temp_code
-            //send email
+        
+             /**
+               * send email if user registered with an email
+               */
             const html=`
              <p> Your verification code is : <strong>${temp_code} </strong></p>
             `
@@ -140,7 +197,14 @@ router.post('/:id',async(req,res)=>{
           }
         user.referred_by=referalUser.id
 
-        //reward referral
+        /**
+         * reward referral based on loyalty points placed by admins
+         * @typedef {Object} referralNotification
+         * @property {string} _id
+         * @property {string} type
+         * @property {string} message
+         * @property {string} created_at
+         */
         referalUser.loyalty_points+=system_default.loyalty_points.referals
         const referralNotification = {
             _id: new mongoose.Types.ObjectId(),
@@ -151,7 +215,9 @@ router.post('/:id',async(req,res)=>{
         referalUser.notifications.push(referralNotification)
         await referalUser.save()
 
-        //send email if they can recieve emails
+        /**
+         * send email if they can recieve emails(prefered notification is email)
+         */
        if(referalUser.prefered_notification=="email")
         {
             const referral=`
@@ -178,6 +244,10 @@ router.post('/:id',async(req,res)=>{
     }
 })
 
+/**
+ * 
+ * @returns a random referal code not found in the database
+ */
 async function generateRefCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const codeLength = 6;

@@ -9,6 +9,9 @@ const User=require('../../models/user')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
 const mailer=require('../../middleware/mailer')
+//const sms=require('../../middleware/sms')
+const https = require('follow-redirects').https;
+const fs = require('fs');
 
 router.use(session({
   secret: 'gb24',
@@ -18,6 +21,9 @@ router.use(session({
 router.use(passport.initialize());
 router.use(passport.session());
 
+/**
+ * Creating new user
+ */
 router.post('/',async(req,res)=>{
     
     const resolvedReferralCode = await generateRefCode();
@@ -30,6 +36,10 @@ router.post('/',async(req,res)=>{
         dob:req.body.dob,
         referal_code:resolvedReferralCode,
     })
+    /**
+     * 
+     * @returns a temporal code to be sent to the admin
+     */
     function newTempCode() {
       var code = "";
       var digits = "0123456789";
@@ -44,7 +54,10 @@ router.post('/',async(req,res)=>{
     
     try
     {
-
+/**
+ *  Check if user inputted email or phone number
+ * The check if the phone number or email already exist
+ */
         if(req.body.email!=null || req.body.phone_number!=null)
             {
                 
@@ -81,6 +94,14 @@ router.post('/',async(req,res)=>{
         data: user.first_name
         }, jwt_secret, { expiresIn: '12h' });
 
+        /**
+         * Create a default welcome notification to the user
+         * @typedef {Object} welcomeNotification
+         * @property {string} _id
+         * @property {string} type
+         * @property {string} message
+         * @property {string} created_at
+         */
         const welcomeNotification = {
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
@@ -93,7 +114,53 @@ router.post('/',async(req,res)=>{
               user.temp.code=newTempCode()
               user.temp.created_at=new Date()
               const temp_code=user.temp.code
-              //send sms
+             
+              /**
+               * Send an sms to user if they added a phone number and not email
+               */
+              var options = {
+                'method': 'POST',
+                'hostname': 'vvn8np.api.infobip.com',
+                'path': '/sms/2/text/advanced',
+                'headers': {
+                    'Authorization': 'App 7423850e235a5ee716d199e09b38062c-26cbd0e7-1598-4ca6-89cf-35cad5c9047d',
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                'maxRedirects': 20
+            };
+            
+            const sms = https.request(options, function (res) {
+                var chunks = [];
+            
+                res.on("data", function (chunk) {
+                    chunks.push(chunk);
+                });
+            
+                res.on("end", function (chunk) {
+                    var body = Buffer.concat(chunks);
+                    console.log(body.toString());
+                });
+            
+                res.on("error", function (error) {
+                    console.error(error);
+                });
+            });
+
+              var postData = JSON.stringify({
+                "messages": [
+                    {
+                        "destinations": [{"to":req.body.phone_number}],
+                        "from": "GlobalBuy24",
+                        "text": "Your verification code is: "+temp_code
+                    }
+                ]
+            });
+            
+            sms.write(postData);
+            
+            sms.end();
+            
           }
         else if(req.body.email!=null)
           {
@@ -101,7 +168,10 @@ router.post('/',async(req,res)=>{
             user.temp.code=newTempCode()
             user.temp.created_at=new Date()
             const temp_code=user.temp.code
-            //send email
+            
+              /**
+               * Send an email to user if they added an email not a phone number
+               */
             const html=`
              <p> Your verification code is : <strong>${temp_code} </strong></p>
             `
@@ -134,7 +204,10 @@ router.post('/',async(req,res)=>{
         res.status(400).json({message:error.message})
     }
 })
-
+/**
+ * 
+ * @returns a random referal code,not found in the database
+ */
     async function generateRefCode() {
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         const codeLength = 6;
@@ -156,11 +229,16 @@ router.post('/',async(req,res)=>{
         }
       
 }
-//google oauth
+/**
+ * google oauth
+ */
 router.get('/auth/google',
   passport.authenticate('google', { scope: ['email', 'profile'] })
 );
 
+/**
+ * google oauth callback end point
+ */
 router.get('/google/callback',
   passport.authenticate('google',
     {
@@ -169,14 +247,21 @@ router.get('/google/callback',
     }
 ));
 
+/**
+ * google oauth success end point
+ */
 router.get('/google/sucess', (req, res) => {
   res.json(req.user)
 });
 
-//facebook oauth
+/**
+ * facebook oauth
+ */
 router.get('/auth/facebook',
   passport.authenticate('facebook'));
-  
+/**
+ * facebook oauth callback endpoint
+ */
 router.get('/facebook/callback',
   passport.authenticate('facebook', { failureRedirect: '/login' }),
   function(req, res) {
@@ -184,7 +269,12 @@ router.get('/facebook/callback',
     res.json(req.user);
   });
 
-//oauth login failed
+
+
+/**
+ * oauth login failed ,general endpoint for both  google and facebook
+ */
+
 router.get('/loginFailed', (req, res) => {
   res.status(400).json({message:"Something went wrong"});
 });

@@ -5,8 +5,13 @@ const Admin=require('../models/admin')
 const authenticate=require('../middleware/currentUser')
 const mongoose = require('mongoose');
 const mailer=require('../middleware/mailer')
+const https = require('follow-redirects').https;
+const fs = require('fs');
 
-//read all users
+/**
+ * Read and return all users 
+ */
+
 router.get('/',authenticate,async (req,res)=>{
     try
     {
@@ -19,9 +24,18 @@ router.get('/',authenticate,async (req,res)=>{
     }
 })
 
-//verify user
+
+/**
+ * Verifies user using a code
+ */
+
 router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
 
+  /**
+   * 
+   * @param {*} dateToCompare The time the code was sent
+   * @returns false if the difference in time is more than 2 minutes
+   */
   function codeIsValid(dateToCompare) {
     const currentDate = new Date();
     const diffInMilliseconds = currentDate - dateToCompare;
@@ -64,11 +78,18 @@ router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
  }
 })
 
-//read one user
+/**
+ * Read and display on particular user
+ */
+
 router.get('/:id',authenticate,getUser,async(req,res)=>{
    res.json(res.user)
 })
-//update one user
+
+/**
+ * updates a users profile information
+ */
+
 router.patch('/:id',authenticate,getUser,async(req,res)=>{
     if(req.body.phone_number !=null)
     {
@@ -90,6 +111,10 @@ router.patch('/:id',authenticate,getUser,async(req,res)=>{
         res.status(400).json({message:error.message})
     }
 })
+
+/**
+ * Delete a particular user based on their id
+ */
 //delete one user
 router.delete('/:id',authenticate,getUser,async (req,res)=>{
   try
@@ -103,9 +128,17 @@ router.delete('/:id',authenticate,getUser,async (req,res)=>{
   } 
 })
 
-// get OTP code which lasts 5mins
+/**
+ * get OTP code which lasts 2mins
+ */
+
 
 router.post('/getCode/:id',getUser,async(req,res)=>{
+
+  /**
+   * 
+   * @returns temporal code to user
+   */
   function newTempCode() {
     var code = "";
     var digits = "0123456789";
@@ -119,12 +152,16 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
   }
   
   
+  try{
+    /**
+    * Send user email based on their prefered notification
+    */
 
   if(res.user.prefered_notification=="email")
   {
     const temp_code=newTempCode()
    await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
-    //send email
+   
 
     const html=`
     <p> Your verification code is : <strong>${temp_code} </strong></p>
@@ -135,27 +172,86 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
      subject:'Verification code',
      html:html
    })
-   res.sendStatus(204)
+   res.json({message:"code sent successfully"})
   }
+    /**
+    * Send user sms based on their prefered notification
+    */
+
   else if(res.user.prefered_notification=="phone")
   {
     const temp_code=newTempCode()
     await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
-      //send sms
-      res.sendStatus(204)
+
+      
+       var options = {
+          'method': 'POST',
+          'hostname': 'vvn8np.api.infobip.com',
+          'path': '/sms/2/text/advanced',
+          'headers': {
+              'Authorization': 'App 7423850e235a5ee716d199e09b38062c-26cbd0e7-1598-4ca6-89cf-35cad5c9047d',
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+          },
+          'maxRedirects': 20
+      };
+      
+      const sms = https.request(options, function (res) {
+          var chunks = [];
+      
+          res.on("data", function (chunk) {
+              chunks.push(chunk);
+          });
+      
+          res.on("end", function (chunk) {
+              var body = Buffer.concat(chunks);
+              console.log(body.toString());
+          });
+      
+          res.on("error", function (error) {
+              console.error(error);
+          });
+      });
+
+      var postData = JSON.stringify({
+        "messages": [
+            {
+                "destinations": [{"to":res.user.phone_number}],
+                "from": "GlobalBuy24",
+                "text": "Your verification code is: "+temp_code
+            }
+        ]
+    });
+    
+    sms.write(postData);
+    
+    sms.end();
+
+          res.json({message:"code sent successfully"})
   }
 
-  
+}
+catch(error)
+{
+  res.status(500).json({message:error})
+}
 
 })
 
-//logout user 
+   /**
+    * Logout user and return their profile, this typically unsets their token
+    */
+
 router.post('/logout/:id',getUser,async(req,res)=>{
   await res.user.updateOne({$unset:{token:""}})
   res.json(res.user)
 
 })
-//user pin auto update
+
+   /**
+    * user pin auto update based on user's id
+    */
+
 router.patch('/:id/updatePin',authenticate,getUser,async(req,res)=>{
     res.user.pin = newPin();
     const updatedUser = await res.user.save()
@@ -163,15 +259,28 @@ router.patch('/:id/updatePin',authenticate,getUser,async(req,res)=>{
  })
 
 
-//read one user
+
+/**
+ * read one user pin
+ */
 router.get('/:id/pin',authenticate,getUser,async(req,res)=>{
     res.json(res.user.pin)
  })
 
 
- //user add address
+/**
+ *  user add address
+ */
  router.post('/:id/deliveryAddress', authenticate, getUser, async (req, res) => {
     
+  /**
+   * @typedef {Object} newAddress
+   * @property {string} street
+   * @property {string} city
+   * @property {string} street
+   * @property {string} country
+   * @property {string} _id
+   */
     const newAddress = {
       street: req.body.street,
       city: req.body.city,
@@ -193,7 +302,9 @@ router.get('/:id/pin',authenticate,getUser,async(req,res)=>{
 
 
 
-//get all delivery addresses
+/**
+ * get all delivery addresses for a particular user
+ */
 router.get('/:id/deliveryAddress', authenticate, getUser, async (req, res) => {
     
     
@@ -205,7 +316,10 @@ router.get('/:id/deliveryAddress', authenticate, getUser, async (req, res) => {
     }
   });
 
-// get one delivery address for a particular user
+
+/**
+ *  get one delivery address for a particular user
+ */
 
 router.get('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) => {
     
@@ -224,7 +338,9 @@ router.get('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) 
     }
   });
 
-//  update any existing field from the addresses
+/**
+ *  update any existing field from the addresses
+ */ 
 router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) => {
     
     try {
@@ -238,7 +354,10 @@ router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res
           return;
         }
       
-        // Get the existing city value
+        
+        /**
+         * Get the existing city value
+         */
         const oldCity = addressToUpdate.city;
         const oldStreet = addressToUpdate.street;
         const oldCountry = addressToUpdate.country;
@@ -255,7 +374,10 @@ router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res
     }
   });
 
-//  delete individual addresses
+
+/**
+ *  delete individual addresses
+ */
 
 router.delete('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) => {
     
@@ -278,7 +400,10 @@ router.delete('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, re
   });
 
 
-//get user notification
+
+/**
+ * get user notification for a particular user id
+ */
 router.get('/:id/notifications', authenticate, getUser, async (req, res) => {
   try {
     res.json(res.user.notifications)
@@ -289,8 +414,19 @@ router.get('/:id/notifications', authenticate, getUser, async (req, res) => {
   }
 
 })
-//add new user notification
+
+/**
+ * add new user notification
+ */
 router.post('/:id/notifications', authenticate, getUser, async (req, res) => {
+
+    /**
+   * @typedef {Object} newNotification
+   * @property {string} type
+   * @property {string} message
+   * @property {string} created_at
+   * @property {string} _id
+   */
   const newNotification={
     _id: new mongoose.Types.ObjectId(),
     type:req.body.type,
@@ -309,7 +445,10 @@ router.post('/:id/notifications', authenticate, getUser, async (req, res) => {
 
 })
 
-//delete user notification
+
+/**
+ * delete user notification
+ */
 router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res) => {
  
   try {
@@ -335,14 +474,16 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
 })
 
 
-//Add product to basket
-
+/**
+ * Add product to users basket
+ */
 
 router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
   
   var  userUrlExist=false
   var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
   const source=domain.charAt(0).toUpperCase()+domain.slice(1)
+  
   const newBasket={
     _id: new mongoose.Types.ObjectId(),
     delivery_method:{name:'Air Freight'},
@@ -355,6 +496,12 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
   }
  
   try {
+    /**
+     * 
+     * @param {*} url 
+     * @param {*} url2 
+     * @returns true if url and url2 are the same
+     */
 
     function urlsMatch(url, url2) {
       const parsedUrl1 = new URL(url);
@@ -370,16 +517,29 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
     
    await res.user.basket.forEach((basketItem) => {
     const url=basketItem.product.url||"https://www.gb24.com"
-        console.log(url)
+        //console.log(url)
+        /**
+         * check is the url sent by the user already exists in the system
+         */
             if (urlsMatch(req.body.orderURL, url)) {
               userUrlExist=true
               //res.status(400).json({message:"A basket exists with that url"});
             }
     });
-    console.log(userUrlExist);
-    console.log(req.body.orderURL);
+
+ /**
+  * if url doesnt exist, then the new url is added to the system
+  */
    if(!userUrlExist)
     {
+      /**
+       * @typedef {Object} basketCreatedNotification
+       * @typedef {Object} basketCreatedByUserNotification
+       * @property {String} _id
+       * @property {String} type
+       * @property {String} message
+       * @property {String} created_at
+       */
       const basketCreatedNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'basketCreated',
@@ -396,7 +556,9 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       res.user.basket.push(newBasket)
       const updatedUser=await res.user.save()
 
-      //alert all type1 admins of new basket created
+     /**
+      *  alert all type1 admins of new basket created
+      */
       const admins=await Admin.find({})
       admins.forEach((admin)=>{
           if(admin.type=="type1")
@@ -419,7 +581,11 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
 
 })
 
-// Get user's basket
+
+
+/**
+ * Get user's basket
+ */
 
 router.get('/:id/basket', authenticate, getUser, async (req, res) => {
      try{
@@ -433,9 +599,12 @@ router.get('/:id/basket', authenticate, getUser, async (req, res) => {
      }
 });
 
-//Complete order by user
+/**
+ * Complete order by user
+ */
 router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      
+ 
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
     delivery_details:req.body.delivery_details,
@@ -471,6 +640,13 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
 
 ////////////////////////////////////////////////
 
+/**
+ * 
+ * @param {*} req from user ,use the parameter called id , then search for a user with that id
+ * @param {*} res 
+ * @param {*} next since this is a middleware, the next passes everything in the middle to a function that uses it
+ * @returns any errors encountered
+ */
 async function getUser(req,res,next)
 {   let user
     try
@@ -488,6 +664,11 @@ async function getUser(req,res,next)
     res.user=user
     next()
 }
+
+/**
+ * 
+ * @returns a new random pin to users
+ */
 function newPin() {
     return Math.floor(Math.random() * 90000) + 10000; 
 }

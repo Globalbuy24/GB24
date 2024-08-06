@@ -15,7 +15,8 @@ Content-Type: application/json
 {
         "first_name":"GB",
         "last_name":"Test User",
-        "email":"ee12113@gmail.com",
+        "phone_number":"+237673436870",
+       // "email":"ee12113@gmail.com",
         "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"
 }
@@ -42,22 +43,22 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"ee12113@gmail.com",
+    "credential":"+237673436870",
     "password":"k0n.12,3><45'6fgh8"
 }
 
 ### verify user
 
-POST http://localhost:3000/users/verify/669b76da188e194e7f089450
+POST http://localhost:3000/users/verify/66ab79d176717540c1888a4f
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjI1MTM4NzMsImV4cCI6MTcyMjU1NzA3M30.ihvqCAKelG2cPJvu8QiToOezQ7izfJ-5asxG2x3dZMo
 Content-Type: application/json
 
 {
-     "code":"369708"
+     "code":"209274"
 }
 
 ### Sending user code 
-POST http://localhost:3000/users/getCode/66ab79d176717540c1888a4f
+POST http://localhost:3000/users/getCode/66b1211cf98a2403b44af271
 Content-Type: application/json
 
 {
