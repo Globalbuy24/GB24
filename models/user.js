@@ -4,6 +4,9 @@ const bcrypt=require('bcrypt')
 
 const UserSchema=new mongoose.Schema({
         token:{type:String},
+        googleId:{type:String},
+        facebookId:{type:String},
+        provider:{type:String},
         first_name:{
             type:String,
             required:true
@@ -12,8 +15,7 @@ const UserSchema=new mongoose.Schema({
             type:String,
             required:true
         },
-        email:{
-            
+        
             email:{
             type:String,
             required:false,
@@ -28,22 +30,23 @@ const UserSchema=new mongoose.Schema({
               }
             
             },
-            is_verified:{type:Boolean,default:false}
-        },
         phone_number:{
-            number:{
             type:String,
-            default:''},
-            is_verified:{type:Boolean,default:false}
+            sparse:true,
+            default:''
         },
+        prefered_notification:{type:String},
+        temp:{code:{type:String},created_at:{type:Date}},
+        num_is_verified:{type:Boolean,default:false},
+        email_is_verified:{type:Boolean,default:false}
+        ,
         password:{
             type:String,
-            required:true,
-            unique:true
+            
         },
         dob:{
             type:Date,
-            required:true
+            
         },
 
         pin:{
@@ -57,18 +60,49 @@ const UserSchema=new mongoose.Schema({
             type:Number,
             default:0
         },
-        address:{
-                street: { type: String },
-                city: { type: String },
-                country: { type: String ,default:'Cameroon'}
-        },
+        referal_code:{type:String},
+        referred_by:{type:String},
+        addresses: [
+            {
+              _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+              street: { type: String },
+              city: { type: String },
+              country: { type: String}
+            }
+        ],
         settings:{
             notification_types:[{type:String,default:'all'}],
             language:{type:String},
             theme:{type:String,default:'light'}
         },
-        orders:{
-            id:{type:Number},
+
+        basket:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+            delivery_method:
+            {
+                name:{type:String},
+                delivery_fee:{type:String,default:"0.00"}
+            },
+            product:
+            {
+                url:{type:String},
+                source:{type:String},
+                name:{type:String},
+                colour:{type:String},
+                length:{type:String},
+                width:{type:String},
+                weight:{type:String},
+                height:{type:String},
+                price:{type:String},
+                quantity:{type:String},
+                created_at:{type:Date},
+                updated_at:{type:Date},
+            },
+            
+        }],
+
+        orders:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
             delivery_details:
             {
                 street: { type: String },
@@ -78,28 +112,31 @@ const UserSchema=new mongoose.Schema({
             delivery_method:
             {
                 name:{type:String},
-                charge_per_product:{type:Number}
+                delivery_fee:{type:String}
             },
             products:
-            {
+            [{
                 url:{type:String},
+                source:{type:String},
                 name:{type:String},
                 colour:{type:String},
-                length:{type:Number},
-                width:{type:Number},
-                height:{type:Number},
-                price:{type:Number},
-            },
-            total_charge:{type:String}
-
-        },
+                length:{type:String},
+                width:{type:String},
+                weight:{type:String},
+                height:{type:String},
+                price:{type:String},
+            }],
+            total_amount:{type:String},
+            created_at:{type:Date}
+        }],
 
         payment_methods:[{type:String}],
-        notifications:{
+        notifications:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
             type:{type:String},
             message:{type:String},
             created_at:{type:Date}
-        }
+        }]
 })
 
 UserSchema.pre('save',async function(next){
@@ -121,37 +158,7 @@ UserSchema.pre('save',async function(next){
         const error = new Error('At least one of email or phone number is required');
         return next(error);
     }
-    if(this.email !=null || this.phone_number!=null)
-    {
-        
-        this.constructor.find(
-            {
-              $or: [
-                { email: this.email },
-                { phone_number: this.phone_number }
-              ]
-            }
-          )
-          .then(users => {
-            if (users.length > 0) {
-              if (users.some(user => user.email === this.email)) {
-                const error = new Error('Email already exists');
-                return next(error);
-              }
-          
-              if (users.some(user => user.phone_number === this.phone_number)) {
-                const error = new Error('Phone number already exists');
-                return next(error);
-              }
-            }
-          
-            
-          })
-          .catch(error => {
-            return next(error);
-          });
-    }
-                
+     
     next();
 })
 

@@ -6,26 +6,40 @@ require('../../routes/auth/facebook')
 const router =express.Router()
 const passport =require('passport')
 const User=require('../../models/user')
+const SystemDefault=require('../../models/system_default')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
 const mailer=require('../../middleware/mailer')
-//const sms=require('../../middleware/sms')
 const https = require('follow-redirects').https;
 const fs = require('fs');
 
-router.use(session({
-  secret: 'gb24',
-  resave: false,
-  saveUninitialized: true
-}));
-router.use(passport.initialize());
-router.use(passport.session());
+router.get('/:id',async(req,res)=>{
+    
+    const userAgent = req.headers['user-agent'];
+
+    // Check if the request is coming from a mobile device
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
+        // Redirect to custom URL scheme
+        res.redirect('globalbuy24://referral?id=SAQJ5G');
+    } else {
+        // Redirect to app store based on the platform
+        const platform = userAgent.includes('Android') ? 'android' : 'ios';
+        if (platform === 'android') {
+            res.redirect('https://play.google.com/store/apps/details?id=yourapp.package.name');
+        } else {
+            res.redirect('https://apps.apple.com/app/yourappname/id123456789');
+        }
+    }
+})
 
 /**
- * Creating new user
+ * register user using referal link,which contains a referal code
  */
-router.post('/',async(req,res)=>{
-    
+router.post('/:id',async(req,res)=>{
+    const referal_code=req.params.id
+    const referalUser= await User.findOne({referal_code:referal_code})
+    const system_default=await SystemDefault.findOne({})   
+
     const resolvedReferralCode = await generateRefCode();
     const user=new User({
         first_name:req.body.first_name,
@@ -38,7 +52,7 @@ router.post('/',async(req,res)=>{
     })
     /**
      * 
-     * @returns a temporal code to be sent to the admin
+     * @returns random temporal code, used to verify users
      */
     function newTempCode() {
       var code = "";
@@ -54,10 +68,7 @@ router.post('/',async(req,res)=>{
     
     try
     {
-/**
- *  Check if user inputted email or phone number
- * The check if the phone number or email already exist
- */
+
         if(req.body.email!=null || req.body.phone_number!=null)
             {
                 
@@ -94,14 +105,6 @@ router.post('/',async(req,res)=>{
         data: user.first_name
         }, jwt_secret, { expiresIn: '12h' });
 
-        /**
-         * Create a default welcome notification to the user
-         * @typedef {Object} welcomeNotification
-         * @property {string} _id
-         * @property {string} type
-         * @property {string} message
-         * @property {string} created_at
-         */
         const welcomeNotification = {
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
@@ -111,12 +114,11 @@ router.post('/',async(req,res)=>{
         if(req.body.phone_number!=null)
           {
               user.prefered_notification="phone"
-              user.temp.code=newTempCode()
-              user.temp.created_at=new Date()
-              const temp_code=user.temp.code
-             
+              user.temp_code=newTempCode()
+              const temp_code=user.temp_code
+              
               /**
-               * Send an sms to user if they added a phone number and not email
+               * send sms if user registered with a phone number
                */
               var options = {
                 'method': 'POST',
@@ -165,12 +167,11 @@ router.post('/',async(req,res)=>{
         else if(req.body.email!=null)
           {
             user.prefered_notification="email"
-            user.temp.code=newTempCode()
-            user.temp.created_at=new Date()
-            const temp_code=user.temp.code
-            
-              /**
-               * Send an email to user if they added an email not a phone number
+            user.temp_code=newTempCode()
+            const temp_code=user.temp_code
+        
+             /**
+               * send email if user registered with an email
                */
             const html=`
              <p> Your verification code is : <strong>${temp_code} </strong></p>
@@ -194,6 +195,44 @@ router.post('/',async(req,res)=>{
             })
 
           }
+        user.referred_by=referalUser.id
+
+        /**
+         * reward referral based on loyalty points placed by admins
+         * @typedef {Object} referralNotification
+         * @property {string} _id
+         * @property {string} type
+         * @property {string} message
+         * @property {string} created_at
+         */
+        referalUser.loyalty_points+=system_default.loyalty_points.referals
+        const referralNotification = {
+            _id: new mongoose.Types.ObjectId(),
+            type: 'referral',
+            message: ` You just gained ${system_default.loyalty_points.referals} loyalty points upon referral of ${req.body.first_name} ${req.body.last_name}`,
+            created_at:new Date()
+          };
+        referalUser.notifications.push(referralNotification)
+        await referalUser.save()
+
+        /**
+         * send email if they can recieve emails(prefered notification is email)
+         */
+       if(referalUser.prefered_notification=="email")
+        {
+            const referral=`
+            <p>
+            You just gained <strong>${system_default.loyalty_points.referals}</strong> loyalty points upon referral of <strong>${req.body.first_name} ${req.body.last_name}</strong>
+            </p>
+           `
+            await mailer.sendMail({
+                from:'noreply@globalbuy24.com',
+                to:referalUser.email,
+                subject:'New Referral',
+                html:referral
+              })
+    
+        }
         user.notifications.push(welcomeNotification); 
         user.token = token;
         const newUser=await user.save()
@@ -204,83 +243,32 @@ router.post('/',async(req,res)=>{
         res.status(400).json({message:error.message})
     }
 })
+
 /**
  * 
- * @returns a random referal code,not found in the database
+ * @returns a random referal code not found in the database
  */
-    async function generateRefCode() {
-        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const codeLength = 6;
-        let referralCode = '';
-      
-        for (let i = 0; i < codeLength; i++) {
-          const randomIndex = Math.floor(Math.random() * characters.length);
-          referralCode += characters[randomIndex];
-        }
-        userExist=await User.findOne({referal_code:referralCode})
-        
-        if(!userExist)
-        {
-            return referralCode;
-        }
-        else
-        {
-            generateRefCode()
-        }
-      
-}
-/**
- * google oauth
- */
-router.get('/auth/google',
-  passport.authenticate('google', { scope: ['email', 'profile'] })
-);
-
-/**
- * google oauth callback end point
- */
-router.get('/google/callback',
-  passport.authenticate('google',
-    {
-      successRedirect:'/register/google/sucess',
-      failureRedirect:'register/loginFailed'
+async function generateRefCode() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const codeLength = 6;
+    let referralCode = '';
+  
+    for (let i = 0; i < codeLength; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      referralCode += characters[randomIndex];
     }
-));
-
-/**
- * google oauth success end point
- */
-router.get('/google/sucess', (req, res) => {
-  res.json(req.user)
-});
-
-/**
- * facebook oauth
- */
-router.get('/auth/facebook',
-  passport.authenticate('facebook'));
-/**
- * facebook oauth callback endpoint
- */
-router.get('/facebook/callback',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function(req, res) {
-   
-    res.json(req.user);
-  });
-
-
-
-/**
- * oauth login failed ,general endpoint for both  google and facebook
- */
-
-router.get('/loginFailed', (req, res) => {
-  res.status(400).json({message:"Something went wrong"});
-});
-
-
-
+    userExist=await User.findOne({referal_code:referralCode})
+    
+    if(!userExist)
+    {
+        return referralCode;
+    }
+    else
+    {
+        generateRefCode()
+    }
+  
+}
 
 
 module.exports=router
