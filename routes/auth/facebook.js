@@ -53,6 +53,18 @@ passport.use(new FacebookStrategy({
                 profile.email='noemail@globalbuy.default'
                 emailExist=false
             }
+            /**
+         * @typedef {Object} newUser
+         * @property {string} facebookId -user's facebook ID
+         * @property {string} email
+         * @property {string} first_name
+         * @property {string} last_name
+         * @property {string} referal_code
+         * @property {string} provider - auth service provider
+         * @property {boolean} email_is_verified
+         * @property {boolean} is_verified
+         * @property {string} token -users token
+         */
           const newUser = new User({
             facebookId: profile.id,
             email:profile.email,
@@ -64,6 +76,14 @@ passport.use(new FacebookStrategy({
             is_verified:true,
             token:token
           });
+          
+            /**
+         * @typedef {Object} welcomeNotification - default user welcom notification
+         * @property {Object} _id
+         * @property {Object} type
+         * @property {Object} message
+         * @property {Object} created_at
+         */
           const welcomeNotification = {
             _id: new mongoose.Types.ObjectId(),
             type: 'welcome',
@@ -105,6 +125,10 @@ passport.serializeUser(function(user, done) {
   
   });
 
+  /**
+ * 
+ * @returns unique referal code ,which will be assigned to each new user
+ */
   async function generateRefCode() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const codeLength = 6;

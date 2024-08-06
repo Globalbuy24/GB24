@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
 
+/**
+ * 
+ * @param {*} req - request ,from user
+ * @param {*} res - responds, back to user
+ * @param {*} next - sent to function 
+ * @returns errors, if the token is not valid , or if the token expires
+ */
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
 

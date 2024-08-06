@@ -18,8 +18,10 @@ passport.use(new GoogleStrategy({
       const user = await User.findOne({ googleId: profile.id });
       
       if (user) {
-        // User exists, return the user data
-
+      
+        /**
+         *   User exists, return the user data
+         */
         const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
         const token=jwt.sign({
             data: user.first_name
@@ -33,8 +35,9 @@ passport.use(new GoogleStrategy({
 
         return done(null, updatedUser);
       } else {
-        // User does not exist, create a new user and return the data
-
+       /**
+        *     User does not exist, create a new user and return the data
+        */
         const resolvedReferralCode = await generateRefCode();
 
         const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
@@ -42,6 +45,18 @@ passport.use(new GoogleStrategy({
         data: profile.given_name
         }, jwt_secret, { expiresIn: '12h' });
 
+        /**
+         * @typedef {Object} newUser
+         * @property {string} googleId -user's google ID
+         * @property {string} email
+         * @property {string} first_name
+         * @property {string} last_name
+         * @property {string} referal_code
+         * @property {string} provider
+         * @property {boolean} email_is_verified
+         * @property {boolean} is_verified
+         * @property {string} token -users token
+         */
         const newUser = new User({
           googleId: profile.id,
           email: profile.email,
@@ -53,6 +68,13 @@ passport.use(new GoogleStrategy({
           is_verified:true,
           token:token
         });
+        /**
+         * @typedef {Object} welcomeNotification - default user welcom notification
+         * @property {Object} _id
+         * @property {Object} type
+         * @property {Object} message
+         * @property {Object} created_at
+         */
         const welcomeNotification = {
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
@@ -97,6 +119,11 @@ passport.deserializeUser(function(user, done) {
     done(null, user);
 
 });
+
+/**
+ * 
+ * @returns unique referal code ,which will be assigned to each new user
+ */
 
 async function generateRefCode() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

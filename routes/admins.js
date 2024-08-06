@@ -8,6 +8,9 @@ const bcrypt=require('bcrypt')
 const mongoose=require('mongoose')
 const authenticate=require('../middleware/currentUser')
 
+/**
+ * Creating a new admin 
+ */
 router.post('/',async(req, res) => {
     
     const admin=new Admin({
@@ -20,7 +23,9 @@ router.post('/',async(req, res) => {
     })
     try
     {
-
+/**
+ * Check whether the admin to be inputted a phone number or email
+ */
         if(req.body.email!=null || req.body.phone_number!=null)
             {
                 
@@ -32,7 +37,7 @@ router.post('/',async(req, res) => {
                       ]
                     }
                   )
-                    console.log(admins.length)
+                    //console.log(admins.length)
                     if (admins.length > 0) {
                         for (const admin of admins) {
                           if(admin.email!=null && admin.email === req.body.email ) {
@@ -57,6 +62,14 @@ router.post('/',async(req, res) => {
         data: admin.first_name
         }, jwt_secret, { expiresIn: '12h' });
 
+        /**
+         * Create a welcome notification for user
+         * @typedef {Object} welcomeNotification
+         * @property {string} _id
+         * @property {string} type
+         * @property {string} message
+         * @property {string} created_at
+         */
         const welcomeNotification = {
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
@@ -75,6 +88,9 @@ router.post('/',async(req, res) => {
     }
 });
 
+/**
+ * Login admin
+ */
 router.post('/login',async(req,res)=>{
     
     const credential=req.body.credential
@@ -124,7 +140,9 @@ router.post('/login',async(req,res)=>{
 
 })
 
-// update basket
+/**
+ * update user basket
+ */
 router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
   
     const userId=req.params.uId;
@@ -133,7 +151,22 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
     const basket=user.basket.find((basket)=>basket.id===basketId)
     //console.log(basket)
    try{
-   
+   /**
+    * @typedef {Object} data -basket data
+    * @property {string} source
+    * @property {string} name
+    * @property {string} colour
+    * @property {string} length
+    * @property {string} width
+    * @property {string} weight
+    * @property {string} height
+    * @property {string} price
+    *  @property {string} price
+    *  @property {string} quantity
+    *  @property {string} updated_at
+    *  @property {string} created_at
+    *  @property {string} url
+    */
     const data={
       source:basket.product.source,
       name:req.body.name||basket.product.name,
@@ -177,7 +210,10 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
 });
 
 
-// Adding system defaults
+
+/**
+ *  Adding system defaults
+ */
 router.post('/system_default', authenticate, async (req, res) => {
   try {
     let system_default = await SystemDefault.findOne({}); // Use findOne instead of find for a single document
