@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 const mailer=require('../middleware/mailer')
 const https = require('follow-redirects').https;
 const fs = require('fs');
+const user = require('../models/user')
 
 /**
  * Read and return all users 
@@ -605,8 +606,11 @@ router.get('/:id/basket', authenticate, getUser, async (req, res) => {
 router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      
  
+     const orderNumber=await newOrderNumber(res.user.id)
+   
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
+    order_num:orderNumber,
     delivery_details:req.body.delivery_details,
     delivery_method:req.body.delivery_method,
     products:req.body.products,
@@ -671,5 +675,33 @@ async function getUser(req,res,next)
  */
 function newPin() {
     return Math.floor(Math.random() * 90000) + 10000; 
+}
+
+/**
+ * 
+ * @param {*} user takes a user ,considers the user's orders
+ * @returns returns a unique order number
+ */
+async function newOrderNumber(userId) {
+  const ordernum = Math.floor(Math.random() * 9000000) + 1000000;
+  const user = await User.findById(userId);
+  const orders = user.orders;
+  let orderExist = 0;
+
+  if (orders.length > 0) {
+      orders.forEach((order) => {
+          if (order.order_num === ordernum) {
+              orderExist += 1;
+          }
+      });
+
+      if (orderExist === 0) {
+          return ordernum;
+      } else {
+          return newOrderNumber(userId);
+      }
+  } else {
+      return ordernum;
+  }
 }
 module.exports=router

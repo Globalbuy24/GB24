@@ -103,6 +103,7 @@ const UserSchema=new mongoose.Schema({
 
         orders:[{
             _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+            order_num:{type:String},
             delivery_details:
             {
                 street: { type: String },
