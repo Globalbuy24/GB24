@@ -16,8 +16,10 @@ const registerRouter=require('./routes/auth/register')
 const usersRouter=require('./routes/users')
 const adminsRouter=require('./routes/admins')
 const referralRouter=require('./routes/auth/referral')
+const homeRouter=require('./routes/home')
 
 // routes
+app.use('/',homeRouter)
 app.use('/login',loginRouter)
 app.use('/register',registerRouter)
 app.use('/users',usersRouter)
