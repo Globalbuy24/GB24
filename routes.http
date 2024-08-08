@@ -1,3 +1,5 @@
+
+GET http://localhost:3000/
 ###getting all users
 
 GET http://localhost:3000/users
@@ -218,7 +220,7 @@ Content-Type: application/json
 
 ### Complete order by user
 POST http://localhost:3000/users/66b1211cf98a2403b44af271/newOrder
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjI4ODUxNjAsImV4cCI6MTcyMjg4NjA2MH0.HknweJyCUdwaap3xe8pqEFMNq7YPojd5hIo7PWhekEw
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MjMwNTY4NzMsImV4cCI6MTcyMzEwMDA3M30.Do3Xg50wFzIbximGhUaJxOEJcym8OuzY6ALNQ1BZg-U
 Content-Type: application/json
 
 {
@@ -325,4 +327,21 @@ Content-Type: application/json
 {
      "product":"nnnnnnnn",
      "category":"prohibited"
+}
+
+
+
+#Production
+
+###creating new user
+POST https://globalbuy24-e16651ed716e.herokuapp.com/register
+Content-Type: application/json
+
+{
+        "first_name":"GB",
+        "last_name":"Test User",
+        "phone_number":"+237673436870",
+       // "email":"ee12113@gmail.com",
+        "password":"k0n.12,3><45'6fgh8",
+        "dob":"2023-12-2"
 }
