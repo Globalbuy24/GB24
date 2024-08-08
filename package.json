@@ -2,6 +2,10 @@
   "name": "api.globalbuy24.com",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": "22.2.0",
+    "npm":"10.7.0"
+  },
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"

@@ -24,4 +24,4 @@ app.use('/users',usersRouter)
 app.use('/admin',adminsRouter)
 app.use('/referral',referralRouter)
 
-app.listen(3000,()=>console.log('Server Started'))
+app.listen(process,env.PORT || 3000,()=>console.log('Server Started'))
