@@ -1,4 +1,8 @@
-require('dotenv').config()
+
+if(process.env.NODE_ENV!=='production')
+{
+    require('dotenv').config()
+}
 
 const express=require('express')
 const app=express()
@@ -16,12 +20,14 @@ const registerRouter=require('./routes/auth/register')
 const usersRouter=require('./routes/users')
 const adminsRouter=require('./routes/admins')
 const referralRouter=require('./routes/auth/referral')
+const homeRouter=require('./routes/home')
 
 // routes
+app.use('/',homeRouter)
 app.use('/login',loginRouter)
 app.use('/register',registerRouter)
 app.use('/users',usersRouter)
 app.use('/admin',adminsRouter)
 app.use('/referral',referralRouter)
 
-app.listen(3000,()=>console.log('Server Started'))
+app.listen(process.env.PORT || 3000,()=>console.log('Server Started'))
