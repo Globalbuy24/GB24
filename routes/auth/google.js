@@ -6,7 +6,7 @@ const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const mailer=require('../../middleware/mailer')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
-
+ 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
