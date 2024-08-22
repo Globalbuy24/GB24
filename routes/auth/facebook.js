@@ -22,6 +22,7 @@ passport.use(new FacebookStrategy({
     console.log(profile.id)
     try {
         const user = await User.findOne({ facebookId: profile.id });
+            
         
         if (user) {
           // User exists, return the user data
