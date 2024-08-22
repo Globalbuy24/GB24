@@ -7,7 +7,6 @@ const mailer=require('../../middleware/mailer')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
 
-//local call back :http://localhost:3000/register/google/callback
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,

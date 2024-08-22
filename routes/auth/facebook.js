@@ -6,7 +6,7 @@ const FacebookStrategy = require( 'passport-facebook' ).Strategy;
 const mailer=require('../../middleware/mailer')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
-
+ 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
@@ -23,7 +23,7 @@ passport.use(new FacebookStrategy({
     try {
         const user = await User.findOne({ facebookId: profile.id });
             
-        
+
         if (user) {
           // User exists, return the user data
   
