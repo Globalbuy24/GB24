@@ -6,11 +6,12 @@ const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const mailer=require('../../middleware/mailer')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
- 
+
+
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/register/google/callback",
+    callbackURL: "https://globalbuy24-e16651ed716e.herokuapp.com/register/google/callback",
     passReqToCallback : true
   },
   async function asyncFunction(request, accessToken, refreshToken, profile, done) {
