@@ -89,10 +89,10 @@ router.post('/',async(req,res)=>{
                       }
             }
 
-        const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
+        const jwt_secret=process.env.JWT_SECRET
         const token=jwt.sign({
         data: user.first_name
-        }, jwt_secret, { expiresIn: '12h' });
+        }, jwt_secret, { expiresIn: '168h' });
 
         /**
          * Create a default welcome notification to the user
