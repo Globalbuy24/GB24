@@ -6,11 +6,11 @@ const FacebookStrategy = require( 'passport-facebook' ).Strategy;
 const mailer=require('../../middleware/mailer')
 const jwt = require('jsonwebtoken')
 const mongoose=require('mongoose')
-
+ 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/register/facebook/callback"
+    callbackURL: "https://globalbuy24-e16651ed716e.herokuapp.com/register/facebook/callback"
   },
  async function(accessToken, refreshToken, profile, done) {
     const displayName = profile.displayName;
@@ -22,7 +22,8 @@ passport.use(new FacebookStrategy({
     console.log(profile.id)
     try {
         const user = await User.findOne({ facebookId: profile.id });
-        
+            
+
         if (user) {
           // User exists, return the user data
   

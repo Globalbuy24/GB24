@@ -20,14 +20,14 @@ router.post('/', async(req, res) => {
             let user=await User.findOne({$or:[{'email':credential},{'phone_number':credential}]})
             if(user!=null)
             {
-                const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
+                const jwt_secret=process.env.JWT_SECRET
                 if(bcrypt.compareSync(password, user.password))
                 {
                     
-                    const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
+                    const jwt_secret=process.env.JWT_SECRET
                     const token=jwt.sign({
                         data: user.first_name
-                      }, jwt_secret, { expiresIn: '15m' });
+                      }, jwt_secret, { expiresIn: '168h' });
                       
                       
                       await user.updateOne({$unset:{token:""}})
@@ -38,17 +38,17 @@ router.post('/', async(req, res) => {
                 }
                 else
                 {
-                    res.status(400).json({message:'incorrect password'})
+                    res.status(400).json({message:'Incorrect password'})
                 }
                 
             }
             else
             {
-                res.status(400).json({message:'user not found'})
+                res.status(400).json({message:'User not found'})
             }
         }
         else{
-            res.status(400).json({message:'empty input fields'})
+            res.status(400).json({message:'Empty input fields'})
         }
    }
    catch(error)
