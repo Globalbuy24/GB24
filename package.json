@@ -2,7 +2,6 @@
   "name": "api.globalbuy24.com",
   "version": "1.0.0",
   "main": "server.js",
-  
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js"
@@ -12,6 +11,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-session": "^2.1.0",
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "follow-redirects": "^1.15.6",

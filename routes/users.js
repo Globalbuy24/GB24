@@ -480,7 +480,7 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
  */
 
 router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
-  
+  console.log(req.body);
   var  userUrlExist=false
   var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
   const source=domain.charAt(0).toUpperCase()+domain.slice(1)
