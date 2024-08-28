@@ -23,10 +23,10 @@ passport.use(new GoogleStrategy({
         /**
          *   User exists, return the user data
          */
-        const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
+        const jwt_secret=process.env.JWT_SECRET
         const token=jwt.sign({
             data: user.first_name
-          }, jwt_secret, { expiresIn: '15m' });
+          }, jwt_secret, { expiresIn: '168h' });
           
           
           await user.updateOne({$unset:{token:""}})
@@ -41,10 +41,10 @@ passport.use(new GoogleStrategy({
         */
         const resolvedReferralCode = await generateRefCode();
 
-        const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
+        const jwt_secret=process.env.JWT_SECRET
         const token=jwt.sign({
         data: profile.given_name
-        }, jwt_secret, { expiresIn: '12h' });
+        }, jwt_secret, { expiresIn: '168h' });
 
         /**
          * @typedef {Object} newUser
