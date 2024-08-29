@@ -196,7 +196,7 @@ Content-Type: application/json
 
 ###
 POST http://localhost:3000/users/66cf5663f25ac37588fcaffc/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjQ4NjQwOTksImV4cCI6MTcyNTQ2ODg5OX0.Pf3sqXH4lmGk_vCrYFkNWr8NS1rTYs_QBBsnMbrtZ1o
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTcyNDkzNDAwOCwiZXhwIjoxNzI0OTM0OTA4fQ.6RR51Ik-BKWCpL_cPabOsuRoRcPtlH8H4iEjKmjveR4
 Content-Type: application/json
 
 {
@@ -207,8 +207,8 @@ Content-Type: application/json
 
 ###heroku
 
-POST https://globalbuy24-e16651ed716e.herokuapp.com/users/66c99bf69dc279b58ef006ff/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTcyNDg1OTAxMiwiZXhwIjoxNzI1NDYzODEyfQ.zdSvS5KZlKLS5y9D_2POPHL20rLPoNN5IOJlYqalOeM
+POST https://globalbuy24-e16651ed716e.herokuapp.com/users/66d066a00842471b6bbdc62f/newBasket
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTcyNDkzNDAwOCwiZXhwIjoxNzI0OTM0OTA4fQ.6RR51Ik-BKWCpL_cPabOsuRoRcPtlH8H4iEjKmjveR4
 Content-Type: application/json
 
 {
