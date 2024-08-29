@@ -482,6 +482,11 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
 router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
   console.log(req.body);
   var  userUrlExist=false
+
+  if(!req.body.orderURL)
+  {
+     res.status(400).json({message:"No Order Url available"});
+  }
   var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
   const source=domain.charAt(0).toUpperCase()+domain.slice(1)
   
