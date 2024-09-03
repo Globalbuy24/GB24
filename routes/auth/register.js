@@ -1,6 +1,6 @@
 //create new user
 const express=require('express')
-const session = require('cookie-session');
+const session = require('express-session');
 require('../../routes/auth/google')
 require('../../routes/auth/facebook')
 const router =express.Router()
@@ -12,15 +12,16 @@ const mailer=require('../../middleware/mailer')
 //const sms=require('../../middleware/sms')
 const https = require('follow-redirects').https;
 const fs = require('fs');
-
+  
 router.use(session({
   secret: 'gb24',
   resave: false,
   saveUninitialized: true
-}));
+})); 
+
 router.use(passport.initialize());
 router.use(passport.session());
-
+    
 /**
  * Creating new user
  */
