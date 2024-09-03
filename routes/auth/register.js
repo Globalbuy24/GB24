@@ -12,7 +12,7 @@ const mailer=require('../../middleware/mailer')
 //const sms=require('../../middleware/sms')
 const https = require('follow-redirects').https;
 const fs = require('fs');
-
+  
 router.use(session({
   secret: 'gb24',
   resave: false,
