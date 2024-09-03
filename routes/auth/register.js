@@ -242,8 +242,8 @@ router.get('/auth/google',
 router.get('/google/callback',
   passport.authenticate('google',
     {
-      successRedirect:'/register/google/sucess',
-      failureRedirect:'register/loginFailed'
+      successRedirect:'gb24://gb24.com/homePage',
+      failureRedirect:'gb24://gb24.com/login'
     }
 ));
 

@@ -11,7 +11,7 @@ const mongoose=require('mongoose')
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://globalbuy24-e16651ed716e.herokuapp.com/register/google/callback",
+    callbackURL: "https://globalbuy24-a3348f9c2173.herokuapp.com/register/google/callback",
     passReqToCallback : true
   },
   async function asyncFunction(request, accessToken, refreshToken, profile, done) {
