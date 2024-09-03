@@ -17,10 +17,11 @@ router.use(session({
   secret: 'gb24',
   resave: false,
   saveUninitialized: true
-}));
+})); 
+
 router.use(passport.initialize());
 router.use(passport.session());
-
+    
 /**
  * Creating new user
  */
