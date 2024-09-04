@@ -12,7 +12,7 @@ const mailer=require('../../middleware/mailer')
 //const sms=require('../../middleware/sms')
 const https = require('follow-redirects').https;
 const fs = require('fs');
-  
+
 router.use(session({
   secret: 'gb24',
   resave: false,
@@ -28,6 +28,9 @@ router.use(passport.session());
 router.post('/',async(req,res)=>{
     
     const resolvedReferralCode = await generateRefCode();
+    const initial = req.body.first_name.charAt(0).toUpperCase(); // Get the first initial
+    const defaultImage=await initialImage(initial);
+
     const user=new User({
         first_name:req.body.first_name,
         last_name:req.body.last_name,
@@ -36,6 +39,7 @@ router.post('/',async(req,res)=>{
         password:req.body.password,
         dob:req.body.dob,
         referal_code:resolvedReferralCode,
+        image:defaultImage
     })
     /**
      * 
@@ -282,6 +286,18 @@ router.get('/loginFailed', (req, res) => {
 
 
 
+// ----Initial image
 
+const initialImage = async (letter) => {
+  try {
+     if(letter.length==1)
+     {
+        const image="https://raw.githubusercontent.com/eladnava/material-letter-icons/master/dist/png/"+letter+".png"
+        return image;
+     }
+  } catch (error) {
+    res.status(400).json({message:error});
+  }
+};
 
 module.exports=router
