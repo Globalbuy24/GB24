@@ -4,6 +4,7 @@ const bcrypt=require('bcrypt')
 
 const UserSchema=new mongoose.Schema({
         token:{type:String},
+        image: { type: String},
         googleId:{type:String},
         facebookId:{type:String},
         provider:{type:String},
