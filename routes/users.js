@@ -397,7 +397,7 @@ router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res
         const oldStreet = addressToUpdate.street;
         const oldCountry = addressToUpdate.country;
         const oldDefault = addressToUpdate.isDefault;
-        if(req.body.default===true)
+        if(req.body.isDefault===true)
         {
           // reset any address with default true to default false
           res.user.addresses.forEach((address) => {
@@ -414,7 +414,7 @@ router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res
         }
         else if(res.user.addresses.length > 0)
         {
-          addressToUpdate.isDefault = req.body.default || oldDefault;
+          addressToUpdate.isDefault = req.body.isDefault || oldDefault;
         }
         
         const updatedUser = await res.user.save();
