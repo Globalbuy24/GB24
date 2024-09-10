@@ -306,8 +306,37 @@ router.get('/:id/pin',authenticate,getUser,async(req,res)=>{
       }
   });
 
+/**
+ * default user address
+ */
 
+router.get('/:id/defaultDeliveryAddress', authenticate, getUser, async (req, res) => {
 
+  try {
+    const isDefault= res.user.addresses.find((address) => address.isDefault === true);
+    res.json(isDefault);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message:error});
+  }
+})
+
+/**
+ * other user addresses
+ */
+
+router.get('/:id/otherDeliveryAddress', authenticate, getUser, async (req, res) => {
+  try {
+    // Filter addresses where isDefault is false
+    const otherAddresses = res.user.addresses.filter((address) => address.isDefault === false);
+    
+    // Send the filtered addresses back as a response
+    res.json(otherAddresses);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
 /**
  * get all delivery addresses for a particular user
  */
