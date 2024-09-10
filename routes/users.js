@@ -286,19 +286,24 @@ router.get('/:id/pin',authenticate,getUser,async(req,res)=>{
       street: req.body.street,
       city: req.body.city,
       country: req.body.country ? req.body.country : 'Cameroon',
+      isDefault:req.body.default,
       _id: new mongoose.Types.ObjectId() 
     };
-  
+
+      if(res.user.addresses.length === 0)
+      {
+        newAddress.isDefault=true
+      }
     
-    try {
-      
-      res.user.addresses.push(newAddress);
-      const updatedUser = await res.user.save();
-      res.json(updatedUser);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Server error' });
-    }
+      try {
+        
+        res.user.addresses.push(newAddress);
+        const updatedUser = await res.user.save();
+        res.json(updatedUser);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+      }
   });
 
 
@@ -362,11 +367,26 @@ router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res
         const oldCity = addressToUpdate.city;
         const oldStreet = addressToUpdate.street;
         const oldCountry = addressToUpdate.country;
+        const oldDefault = addressToUpdate.isDefault;
+        if(req.body.default===true)
+        {
+          // reset any address with default true to default false
+          res.user.addresses.forEach((address) => {
+            address.default = false;
+          });
+        }
         
         addressToUpdate.street = req.body.street||oldStreet;
         addressToUpdate.city = req.body.city || oldCity;
         addressToUpdate.country = req.body.country || oldCountry;
-      
+        if(res.user.addresses.length === 0)
+        {
+          addressToUpdate.isDefault=true
+        }
+        else if(res.user.addresses.length > 0)
+        {
+          addressToUpdate.isDefault = req.body.default || oldDefault;
+        }
         
         const updatedUser = await res.user.save();
         res.json(updatedUser);
