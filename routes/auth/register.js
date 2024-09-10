@@ -186,17 +186,19 @@ router.post('/',async(req,res)=>{
              </p>
             `
             await mailer.sendMail({
-              from:'noreply@globalbuy24.com',
+              from:'admin@globalbuy24.com',
               to:req.body.email,
               subject:'Welcome to GlobalBuy24',
               html:welcomehtml
             })
             await mailer.sendMail({
-              from:'noreply@globalbuy24.com',
+              from:'admin@globalbuy24.com',
               to:req.body.email,
               subject:'Verification code',
               html:html
             })
+          
+
 
           }
         user.notifications.push(welcomeNotification); 
