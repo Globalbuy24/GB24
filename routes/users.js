@@ -377,52 +377,50 @@ router.get('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) 
  *  update any existing field from the addresses
  */ 
 router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) => {
+  try {
+    // Reset any address with default true to default false if isDefault is true
     
-    try {
-        const addressId = req.params.dId;
-       
-        const addressToUpdate = res.user.addresses.find((address) => address.id === addressId);
-      
-        if (!addressToUpdate) {
-         
-          res.status(404).json({ error: 'Address not found' });
-          return;
-        }
-      
-        
-        /**
-         * Get the existing city value
-         */
-        const oldCity = addressToUpdate.city;
-        const oldStreet = addressToUpdate.street;
-        const oldCountry = addressToUpdate.country;
-        const oldDefault = addressToUpdate.isDefault;
-        if(req.body.isDefault===true)
-        {
-          // reset any address with default true to default false
-          res.user.addresses.forEach((address) => {
-            address.default = false;
-          });
-        }
-        
-        addressToUpdate.street = req.body.street||oldStreet;
-        addressToUpdate.city = req.body.city || oldCity;
-        addressToUpdate.country = req.body.country || oldCountry;
-        if(res.user.addresses.length === 0)
-        {
-          addressToUpdate.isDefault=true
-        }
-        else if(res.user.addresses.length > 0)
-        {
-          addressToUpdate.isDefault = req.body.isDefault || oldDefault;
-        }
-        
-        const updatedUser = await res.user.save();
-        res.json(updatedUser);
-    } catch (error) {
-      res.status(500).json({message:error});
+     res.user.addresses.map((address) => {
+        address.isDefault = false;
+        return address;
+      });
+    
+
+    const addressId = req.params.dId;
+
+    // Ensure ID comparison is done correctly (using toString())
+    const addressToUpdate = res.user.addresses.find((address) => address.id.toString() === addressId);
+
+    if (!addressToUpdate) {
+      return res.status(404).json({ error: 'Address not found' });
     }
-  });
+
+    // Get existing values
+    const oldCity = addressToUpdate.city;
+    const oldStreet = addressToUpdate.street;
+    const oldCountry = addressToUpdate.country;
+    const oldDefault = addressToUpdate.isDefault;
+
+    // Update address fields with new values or retain old ones
+    addressToUpdate.street = req.body.street || oldStreet;
+    addressToUpdate.city = req.body.city || oldCity;
+    addressToUpdate.country = req.body.country || oldCountry;
+
+    // Logic for setting isDefault
+    if (res.user.addresses.length === 0) {
+      addressToUpdate.isDefault = true;
+    } else {
+      addressToUpdate.isDefault = req.body.isDefault !== undefined ? req.body.isDefault : oldDefault;
+    }
+
+    // Save the updated user
+    const updatedUser = await res.user.save();
+    return res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating delivery address:', error); // Log the error for debugging
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 /**
