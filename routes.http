@@ -152,11 +152,20 @@ Content-Type: application/json
 }
 ### update existing delivery address
 PATCH http://localhost:3000/users/66dfee8849cdc6df83b98de6/deliveryAddress/66dff26bf41ac26e7fd94963
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTcyNDUwMDgwMywiZXhwIjoxNzI0NTAxNzAzfQ.R8bIDEkrFGk3-MlL1jguQPaJM1zludGylB7VXc7hbaE
+Content-Type: application/json
+
+{
+     "isDefault":true
+}
+###
+
+PATCH https://globalbuy24-a3348f9c2173.herokuapp.com/users/66dffb993877d80efdcb9454/deliveryAddress/66dffce73877d80efdcb945f
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjU5NTE2MjQsImV4cCI6MTcyNjU1NjQyNH0.iAmjLGMh9AZHoO0ZzUm8Jnce1avGFQQhn1Fwbaxxl3Q
 Content-Type: application/json
 
 {
-     "isDefault":"true"
+     "isDefault":true
 }
 
 ### delete individual address

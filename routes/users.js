@@ -379,12 +379,15 @@ router.get('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) 
 router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) => {
   try {
     // Reset any address with default true to default false if isDefault is true
-    
-     res.user.addresses.map((address) => {
+    if(req.body.isDefault===true)
+    {
+      res.user.addresses.map((address) => {
         address.isDefault = false;
         return address;
       });
     
+    }
+   
 
     const addressId = req.params.dId;
 
