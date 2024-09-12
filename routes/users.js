@@ -711,6 +711,27 @@ router.patch('/:id/paymentMethod/:dId', authenticate, getUser, async (req, res) 
 })
 
 /**
+ *  get one delivery address for a particular user
+ */
+
+router.get('/:id/paymentMethod/:dId', authenticate, getUser, async (req, res) => {
+    
+  try {
+      const paymentId = req.params.dId;
+      const paymentMethod =await  res.user.payment_methods.find((payment) => payment.id === paymentId);  
+      if (!paymentMethod) {
+       
+          res.status(404).json({ error: 'payment not found' });
+          return;
+        }    
+      res.json(paymentMethod);
+  } catch (error) {
+
+    res.status(500).json({message:error});
+  }
+});
+
+/**
  * delete user notification
  */
 router.delete('/:id/payment/:nId', authenticate, getUser, async (req, res) => {
