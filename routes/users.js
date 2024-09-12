@@ -524,6 +524,219 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
 
 })
 
+/**
+ * add payments to account
+ */
+
+router.post('/:id/addPayment', authenticate, getUser, async (req, res) => {
+  const { type, provider, account_name, account_number, expiry_date, cvv } = req.body;
+  // console.log(req.body);
+  if (!type || !provider || !account_name || !account_number) {
+    return res.status(400).json({ message: 'All fields are required.' });
+  }
+  const numberExist = res.user.payment_methods.find((payment) => payment.account_number.toString() === account_number);
+
+  if(numberExist)
+  {
+    return res.status(400).json({ message: 'Account number already exist' });
+  }
+  const providerLogo=await provLogo(provider);
+  const numEnding=await numEnd(account_number)
+  var isDefault=false;
+  if(res.user.payment_methods === null || 
+    (typeof res.user.payment_methods === 'object' && 
+     Object.keys(res.user.payment_methods).length === 0))
+  {
+    isDefault=true;
+  }
+  try {
+    const payment={
+      _id: new mongoose.Types.ObjectId(),
+      type:type,
+      provider:provider.toUpperCase(),
+      provider_logo:providerLogo,
+      account_name:account_name,
+      account_number:account_number,
+      number_ending:numEnding,
+      expiry_date:expiry_date||"N/A",
+      cvv:cvv||"N/A",
+      isDefault:isDefault
+    }
+  
+    res.user.payment_methods.push(payment)
+    await res.user.save()
+    res.status(201).json({ message: 'Payment method added successfully.', user });
+} catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error.' });
+}
+
+});
+
+/**
+ * get default payment details
+*/
+
+router.get('/:id/defaultPayment', authenticate, getUser, async (req, res) => {
+
+  try {
+    const isDefault= res.user.payment_methods.find((payment) => payment.isDefault === true);
+    res.json(isDefault);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({message:error});
+  }
+})
+
+
+/**
+ * get other payment methods
+*/
+
+
+router.get('/:id/otherPayment', authenticate, getUser, async (req, res) => {
+  try {
+    // Filter addresses where isDefault is false
+    const otherPayement= res.user.payment_methods.filter((payment) => payment.isDefault === false);
+    
+    // Send the filtered addresses back as a response
+    res.json(otherPayement);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * get card payment address
+*/
+
+router.get('/:id/mobilePayment', authenticate, getUser, async (req, res) => {
+  try {
+    // Filter addresses where isDefault is false
+    const mobilePayment= res.user.payment_methods.filter((payment) => payment.type == "mobile");
+    
+    // Send the filtered addresses back as a response
+    res.json(mobilePayment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * get mobile payment addresses
+*/
+
+router.get('/:id/cardPayment', authenticate, getUser, async (req, res) => {
+  try {
+    // Filter addresses where isDefault is false
+    const cardPayment= res.user.payment_methods.filter((payment) => payment.type == "card");
+    
+    // Send the filtered addresses back as a response
+    res.json(cardPayment);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
+ * upadte payment details
+*/
+router.patch('/:id/paymentMethod/:dId', authenticate, getUser, async (req, res) => {
+  try {
+    // Reset any address with default true to default false if isDefault is true
+    if(req.body.isDefault===true)
+    {
+      res.user.payment_methods.map((payment) => {
+        payment.isDefault = false;
+        return payment;
+      });
+    }
+    const numberExist = res.user.payment_methods.find((payment) => payment.account_number.toString() === req.body.account_number);
+
+    if(numberExist)
+    {
+      return res.status(400).json({ message: 'Account number already exist' });
+    }
+
+    const paymentId = req.params.dId;
+
+    // Ensure ID comparison is done correctly (using toString())
+    const paymentToUpdate = res.user.payment_methods.find((payment) => payment.id.toString() === paymentId);
+
+    if (!paymentToUpdate) {
+      return res.status(404).json({ error: 'payment not found' });
+    }
+
+    // Get existing values
+    const oldAccountName = paymentToUpdate.account_name;
+    const oldAccountNumber = paymentToUpdate.account_number;
+    const oldNumEnding = paymentToUpdate.number_ending;
+    const oldExpiry = paymentToUpdate.expiry_date;
+    const oldCvv = paymentToUpdate.cvv;
+    const oldDefault = paymentToUpdate.isDefault;
+
+    // Update payment fields with new values or retain old ones
+    paymentToUpdate.account_name=req.body.account_name||oldAccountName;
+    paymentToUpdate.account_number=req.body.account_number||oldAccountNumber;
+    if(req.body.account_number)
+    {
+      paymentToUpdate.number_ending=await numEnd(req.body.account_number);
+
+    }
+    else if(!req.body.account_number)
+    {
+      paymentToUpdate.number_ending=oldNumEnding;
+    }
+    paymentToUpdate.expiry_date=req.body.expiry_date||oldExpiry;
+    paymentToUpdate.cvv=req.body.cvv||oldCvv;
+    paymentToUpdate.isDefault=req.body.isDefault||oldDefault;
+
+    // Logic for setting isDefault
+    if (res.user.payment_methods.length === 0) {
+      paymentToUpdate.isDefault = true;
+    } else {
+      paymentToUpdate.isDefault = req.body.isDefault !== undefined ? req.body.isDefault : oldDefault;
+    }
+
+    // Save the updated user
+    const updatedUser = await res.user.save();
+    return res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating delivery payment:', error); // Log the error for debugging
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+/**
+ * delete user notification
+ */
+router.delete('/:id/payment/:nId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const paymentId = req.params.nId;
+       
+     const paymentToDelete = res.user.payment_methods.find((payment) => payment.id === paymentId);
+     if(!paymentToDelete)
+     {
+         res.status(404).json({ error: 'payment not found' });
+         return;
+     }
+     paymentToDelete.deleteOne()
+
+     const updatedUser = await res.user.save();
+     res.json(updatedUser);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
 
 /**
  * Add product to users basket
@@ -760,4 +973,42 @@ async function newOrderNumber(userId) {
       return ordernum;
   }
 }
+
+/**
+ * 
+ * @param {*} provider 
+ * @returns a matching provider logo for each provider else it returns a default logo
+ */
+async function provLogo(provider) {
+  
+  const providerLower = provider.toLowerCase();
+  
+  
+  const logoUrls = {
+      mtn: 'https://seeklogo.com/images/M/mtn-logo-A285C69508-seeklogo.com.png',
+      orange: 'https://seeklogo.com/images/O/orange-logo-A4FC5976DF-seeklogo.com.png',
+      visa: 'https://seeklogo.com/images/V/VISA-logo-A32D589D31-seeklogo.com.png',
+      master: 'https://seeklogo.com/images/M/Master_Card-logo-027CB51F96-seeklogo.com.png',
+      americanexpress: 'https://seeklogo.com/images/A/american-express-logo-EDF87C04A0-seeklogo.com.png'
+  };
+
+  return logoUrls[providerLower] || 'https://seeklogo.com/images/D/dollar-logo-F5403A8DB9-seeklogo.com.png';
+}
+
+/**
+ * 
+ * @param {*} account_number 
+ * @returns last 4 digits of the account number
+ */
+
+async function numEnd(account_number) {
+  return new Promise((resolve, reject) => {
+      
+      const accountStr = String(account_number);
+      const lastFourDigits = accountStr.slice(-4);
+
+      resolve(lastFourDigits);
+  });
+}
+
 module.exports=router

@@ -133,7 +133,18 @@ const UserSchema=new mongoose.Schema({
             created_at:{type:Date}
         }],
 
-        payment_methods:[{type:String}],
+        payment_methods:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+            type:{type:String},
+            provider:{type:String},
+            provider_logo:{type:String},
+            account_name:{type:String},
+            account_number:{type:String},
+            number_ending:{type:String},
+            expiry_date:{type:String},
+            cvv:{type:String},
+            isDefault:{type:Boolean,default:false}
+        }],
         notifications:[{
             _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
             type:{type:String},
