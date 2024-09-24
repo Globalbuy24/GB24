@@ -781,7 +781,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
      product:{
       url: new URL(req.body.orderURL),
       source:source,
-      quantity:req.body.quantity,
+      quantity:parseInt(req.body.quantity),
       created_at:new Date(),
      }
   }
@@ -891,22 +891,68 @@ router.get('/:id/basket', authenticate, getUser, async (req, res) => {
 });
 
 /**
+ * Delete particular user basket
+*/
+router.delete('/:id/basket/:nId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const basketId = req.params.nId;
+       
+     const basketToDelete = res.user.basket.find((basket) => basket.id === basketId);
+     if(!basketToDelete)
+     {
+         res.status(404).json({ error: 'basket not found' });
+         return;
+     }
+     basketToDelete.deleteOne()
+
+     const updatedUser = await res.user.save();
+     res.json(updatedUser);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
+
+/**
  * Complete order by user
  */
 router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      
  
-     const orderNumber=await newOrderNumber(res.user.id)
+    const orderNumber=await newOrderNumber(res.user.id)
+    const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
+  var itemCount=0;
+  const userProducts=[]
+   res.user.basket.forEach(item1 => {
+      req.body.basketProducts.forEach(item2=>{
+          if(item1.id==item2.id)
+          {
+            item1.product.quantity=item2.quantity;
+            userProducts.push(item1.product);
+            itemCount+=1;
+          }
+      })
+    });
+    const defaultDelivery={
+      name:"Air Freight",
+      delivery_fee:"0.00"
+    }
    
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
     order_num:orderNumber,
-    delivery_details:req.body.delivery_details,
-    delivery_method:req.body.delivery_method,
-    products:req.body.products,
-    total_charge:req.body.total_charge,
-    created_at:new Date()
+    delivery_details:userDeliveryAddress,
+    delivery_method:defaultDelivery,
+    products:userProducts,
+    created_at:new Date(),
+    items_count:itemCount
     }
+
     const newOrderNotification = {
       _id: new mongoose.Types.ObjectId(),
       type: 'newOrder',
@@ -926,11 +972,155 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      }
 })
 
+/**
+ * Get user's order which hasn't been canceled
+ */
 
+router.get('/:id/orders', authenticate, getUser, async (req, res) => {
+  try{
+    res.user.orders.forEach((item)=>{
+      if(orderExpiration(item.expires_date)=="expired")
+      {
+         item.deleteOne();
+      }
+      item.expiresIn=orderExpiration(item.expires_date);
+    })
+    await res.user.save()
+   userOrder=res.user.orders.filter((order)=>order.status!=="refunded")
+  
+   res.json(userOrder);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
 
+/**
+ * Get user's pending orders 
+ */
 
+router.get('/:id/pendingOrders', authenticate, getUser, async (req, res) => {
+  try{
+    res.user.orders.forEach((item)=>{
+      if(orderExpiration(item.expires_date)=="expired")
+      {
+         item.deleteOne();
+      }
+      item.expiresIn=orderExpiration(item.expires_date);
+    })
+    await res.user.save()
 
+   userOrder=res.user.orders.filter((order)=>order.status==="pending")
+  
+   res.json(userOrder);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
 
+/**
+ * Get user's pending orders 
+ */
+
+router.get('/:id/confirmedOrders', authenticate, getUser, async (req, res) => {
+  try{
+    res.user.orders.forEach((item)=>{
+      if(orderExpiration(item.expires_date)=="expired")
+      {
+         item.deleteOne();
+      }
+      item.expiresIn=orderExpiration(item.expires_date);
+    })
+    await res.user.save()
+
+   userOrder=res.user.orders.filter((order)=>order.status==="confirmed")
+  
+   res.json(userOrder);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
+
+/**
+ * Get user's purchased orders 
+ */
+
+router.get('/:id/purchasedOrders', authenticate, getUser, async (req, res) => {
+  try{
+   
+    res.user.orders.forEach((item)=>{
+      if(orderExpiration(item.expires_date)=="expired")
+      {
+         item.deleteOne();
+      }
+      item.expiresIn=orderExpiration(item.expires_date);
+    })
+    await res.user.save()
+
+   userOrder=res.user.orders.filter((order)=>order.status==="purchased")
+  
+   res.json(userOrder);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
+
+/**
+ * Get user's purchased and in progress orders 
+ */
+
+router.get('/:id/inprogressOrders', authenticate, getUser, async (req, res) => {
+  try{
+    res.user.orders.forEach((item)=>{
+      if(orderExpiration(item.expires_date)=="expired")
+      {
+         item.deleteOne();
+      }
+      item.expiresIn=orderExpiration(item.expires_date);
+    })
+    await res.user.save()
+
+   userOrder=res.user.orders.filter((order)=>order.status==="purchased" && order.isDelivered===false)
+  
+   res.json(userOrder);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
+
+/**
+ * Get user's purchased and delivered orders 
+ */
+
+router.get('/:id/deliveredOrders', authenticate, getUser, async (req, res) => {
+  try{
+    res.user.orders.forEach((item)=>{
+      if(orderExpiration(item.expires_date)=="expired")
+      {
+         item.deleteOne();
+      }
+      item.expiresIn=orderExpiration(item.expires_date);
+    })
+    await res.user.save()
+
+   userOrder=res.user.orders.filter((order)=>order.status==="purchased" && order.isDelivered===true)
+  
+   res.json(userOrder);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
 
 ////////////////////////////////////////////////
 
@@ -1030,6 +1220,18 @@ async function numEnd(account_number) {
 
       resolve(lastFourDigits);
   });
+}
+
+
+ function orderExpiration(expires_date) {
+    const expirationDate = new Date(expires_date);
+    const currentDate = new Date();
+    
+    const timeDifference = expirationDate - currentDate;
+    
+    const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    
+    return dayDifference >= 0 ? `${dayDifference} days` : 'expired';
 }
 
 module.exports=router
