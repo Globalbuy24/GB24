@@ -17,8 +17,8 @@ Content-Type: application/json
 {
         "first_name":"GB",
         "last_name":"Test User",
-        //"phone_number":"+237673436870",
-        "email":"kenyedil@gmail.com",
+        "phone_number":"+237673436870",
+        //"email":"kenyedil@gmail.com",
         "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"
 }
@@ -103,8 +103,8 @@ Content-Type: application/json
 }
 
 ### add new delivery address
-POST http://localhost:3000/users/66dfee8849cdc6df83b98de6/deliveryAddress
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjU5NTE2MjQsImV4cCI6MTcyNjU1NjQyNH0.iAmjLGMh9AZHoO0ZzUm8Jnce1avGFQQhn1Fwbaxxl3Q
+POST http://localhost:3000/users/66edd3e92ae495db5d122b58/deliveryAddress
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
 Content-Type: application/json
 
 {
@@ -293,22 +293,22 @@ Content-Type: application/json
 
 
 ### add to basket
-POST http://localhost:3000/users/66969f7c30c89bd31c453035/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjEzMDM1MDUsImV4cCI6MTcyMTMwMzUyMH0.fZZaipinPnKpT05Uff9Rl4xDpQ5P-Qzrw9_uM-L27qA
+POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newBasket
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
 Content-Type: application/json
 
 {
-     "orderURL":"https://www.ebay.com/itm/266384827922",
+     "orderURL":"https://www.ecom.com/itm/266384827922",
      "quantity":"5"
 }
 
 ###
-POST http://localhost:3000/users/66cf5663f25ac37588fcaffc/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTcyNDkzNDAwOCwiZXhwIjoxNzI0OTM0OTA4fQ.6RR51Ik-BKWCpL_cPabOsuRoRcPtlH8H4iEjKmjveR4
+POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newBasket
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
 Content-Type: application/json
 
 {
-  "orderURL":"https://www.ebay.com/itm/266384827922",
+  "orderURL":"https://www.bybit.com/itm/266384827922",
      //"orderURL":"https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
      "quantity":"5"
 }
@@ -316,11 +316,11 @@ Content-Type: application/json
 ###heroku
 
 POST https://globalbuy24-a3348f9c2173.herokuapp.com/users/66d35a63205f565a29ee8f5d/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoibm4iLCJpYXQiOjE3MjUxMjcyNjcsImV4cCI6MTcyNTczMjA2N30.NAQhhabT9Koae8iF-QsL3Num76FS_wzGJ_6oGdHlMs0
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
 Content-Type: application/json
 
 {
-     "orderURL":"https://www.wbay.com/itm/2663848279422",
+     "orderURL":"https://www.Sybay.com/itm/2663848279422",
      //"orderURL":"https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
      "quantity":"5"
 }
@@ -332,6 +332,15 @@ Content-Type: application/json
 
 {
     
+}
+
+###delete basket
+DELETE http://localhost:3000/users/66edd3e92ae495db5d122b58/basket/66edd4672ae495db5d122b63
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
+Content-Type: application/json
+
+{
+
 }
 
 ### Edit basket by user
@@ -349,45 +358,28 @@ Content-Type: application/json
 }
 
 ### Complete order by user
-POST http://localhost:3000/users/66b1211cf98a2403b44af271/newOrder
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MjMwNTY4NzMsImV4cCI6MTcyMzEwMDA3M30.Do3Xg50wFzIbximGhUaJxOEJcym8OuzY6ALNQ1BZg-U
+POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newOrder
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
 Content-Type: application/json
 
 {
-     "delivery_details":{
-          "street":"xxxxx",
-          "city":"California",
-          "country":"United states"
-     },
-     "delivery_method": {
-      "name": "Air Freight",
-      "delivery_fee": "2 euro"
-    },
-     "products":[
-     {
-      "url": "https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
-      "source": "Aliexpress",
-      "name": "Car",
-      "colour": "Red",
-      "length": "12",
-      "width": "23",
-      "weight": "40",
-      "height": "12",
-      "price": "12000 XAF",
-      "quantity": "20"
-    },
-    {
-      "url": "https://www.amazon.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
-      "source": "Amazon",
-      "name": "Car",
-      "colour": "Black",
-      "length": "12",
-      "height": "12",
-      "price": "12000 XAF"
-    }
-     ],
-     "total_amount":"36000 XAF"
+    "basketProducts":[
+     {"id":"66f2c27657be679160cbb263","quantity":25},
+     {"id":"66f2c29d57be679160cbb271","quantity":68}
+    ]
 }
+
+
+### get all user orders with status which are not refunded
+GET http://localhost:3000/users/66edd3e92ae495db5d122b58/orders
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
+Content-Type: application/json
+
+{
+   
+}
+
+
 
 ### Referrals post
 
