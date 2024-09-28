@@ -923,6 +923,7 @@ router.delete('/:id/basket/:nId', authenticate, getUser, async (req, res) => {
  */
 router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      
+ console.log(req.body);
  
     const orderNumber=await newOrderNumber(res.user.id)
     const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
@@ -935,6 +936,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
             item1.product.quantity=item2.quantity;
             userProducts.push(item1.product);
             itemCount+=1;
+            item1.deleteOne();
           }
       })
     });
