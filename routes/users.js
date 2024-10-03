@@ -8,6 +8,7 @@ const mailer=require('../middleware/mailer')
 const https = require('follow-redirects').https;
 const fs = require('fs');
 const user = require('../models/user')
+const { format } = require('date-fns');
 
 /**
  * Read and return all users 
@@ -774,7 +775,9 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
   
   var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
   const source=domain.charAt(0).toUpperCase()+domain.slice(1)
-  
+  const createdAt = new Date(); 
+  const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
+
   const newBasket={
     _id: new mongoose.Types.ObjectId(),
     delivery_method:{name:'Air Freight'},
@@ -782,7 +785,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       url: new URL(req.body.orderURL),
       source:source,
       quantity:parseInt(req.body.quantity),
-      created_at:new Date(),
+      created_at:humanReadableDate,
      }
   }
  
@@ -831,7 +834,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
        * @property {String} message
        * @property {String} created_at
        */
-      const basketCreatedNotification = {
+       const basketCreatedNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'basketCreated',
         message: ` Your basket has been created successfully`,
@@ -919,14 +922,14 @@ router.delete('/:id/basket/:nId', authenticate, getUser, async (req, res) => {
 
 
 /**
- * Complete order by user
+ * Create order by user
  */
 router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      
- console.log(req.body);
+//  console.log(req.body);
  
-    const orderNumber=await newOrderNumber(res.user.id)
-    const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
+  const orderNumber=await newOrderNumber(res.user.id)
+  const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
   var itemCount=0;
   const userProducts=[]
    res.user.basket.forEach(item1 => {
@@ -944,14 +947,16 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
       name:"Air Freight",
       delivery_fee:"0.00"
     }
-   
+    const createdAt = new Date(); 
+    const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
+  
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
     order_num:orderNumber,
     delivery_details:userDeliveryAddress,
     delivery_method:defaultDelivery,
     products:userProducts,
-    created_at:new Date(),
+    created_at:humanReadableDate,
     items_count:itemCount
     }
 
@@ -1123,6 +1128,56 @@ router.get('/:id/deliveredOrders', authenticate, getUser, async (req, res) => {
     res.status(400).json({message:error})
   }
 });
+/**
+ * Get one particular order from a group of orders
+ */
+router.get('/:id/order/:nId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const orderId = req.params.nId;
+       
+     const order = res.user.orders.find((order) => order.id === orderId);
+     if(!order)
+     {
+         res.status(404).json({ error: 'order not found' });
+         return;
+     }
+     
+     res.json(order);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
+/**
+ * Get one particular order's from a group of orders
+ */
+router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const orderId = req.params.nId;
+       
+     const order = res.user.orders.find((order) => order.id === orderId);
+     if(!order)
+     {
+         res.status(404).json({ error: 'order not found' });
+         return;
+     }
+     
+     res.json(order.products);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
 
 ////////////////////////////////////////////////
 
