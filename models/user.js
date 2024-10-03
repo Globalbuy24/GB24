@@ -97,7 +97,7 @@ const UserSchema=new mongoose.Schema({
                 height:{type:String},
                 price:{type:String},
                 quantity:{type:Number},
-                created_at:{type:Date},
+                created_at:{type:String},
                 updated_at:{type:Date},
             },
             
@@ -143,7 +143,7 @@ const UserSchema=new mongoose.Schema({
             sub_total:{type:String,default:"0.00"},
             total_amount:{type:String,default:"0.00"},
             currency:{type:String,default:"XAF"},
-            created_at:{type:Date}
+            created_at:{type:String}
         }],
 
         payment_methods:[{

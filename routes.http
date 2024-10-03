@@ -303,8 +303,8 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc1NTM0NTQsImV4cCI6MTcyODE1ODI1NH0.-J3gB2oE_2zgiqUenZoryGckd0jjqAKDtzkVwGWDJ9c
+POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newBasket
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
 Content-Type: application/json
 
 {
@@ -358,8 +358,8 @@ Content-Type: application/json
 }
 
 ### Complete order by user
-POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newOrder
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc1NTM0NTQsImV4cCI6MTcyODE1ODI1NH0.-J3gB2oE_2zgiqUenZoryGckd0jjqAKDtzkVwGWDJ9c
+POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newOrder
+Authorization:Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
 Content-Type: application/json
  
 {
@@ -377,7 +377,22 @@ Content-Type: application/json
 {
    
 }
+### get order , one particular ordrer
+GET http://localhost:3000/users/66edd3e92ae495db5d122b58/order/66f6bfc6c776d3d1b3c863cb
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+Content-Type: application/json
 
+{
+   
+}
+### get order , one particular ordrer's products
+GET http://localhost:3000/users/66edd3e92ae495db5d122b58/orderProducts/66f6bfc6c776d3d1b3c863cb
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+Content-Type: application/json
+
+{
+   
+}
 
 
 ### Referrals post
