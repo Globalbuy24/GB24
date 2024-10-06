@@ -1004,6 +1004,29 @@ router.get('/:id/orders', authenticate, getUser, async (req, res) => {
 });
 
 /**
+ * count user orders
+ */
+
+router.get('/:id/ordersCount', authenticate, getUser, async (req, res) => {
+  try{
+    var count=0;
+    res.user.orders.forEach((item)=>{
+      // console.log(item.expiresIn!=="expired" && item.status!=="refunded" && item.isDelivered===false)
+      if(item.expiresIn!=="expired" && item.status!=="refunded" && item.isDelivered===false)
+      {
+         count+=1;
+      }
+      
+    })  
+   res.json(count);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
+
+/**
  * Get user's pending orders 
  */
 
@@ -1178,6 +1201,30 @@ router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) =>
 
 })
 
+/**
+ * Get one particular order's from a group of orders
+ */
+router.delete('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const orderId = req.params.nId;
+       
+     const order = res.user.orders.find((order) => order.id === orderId);
+     if(!order)
+     {
+         res.status(404).json({ error: 'order not found' });
+         return;
+     }
+     
+     res.json(order.products);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
 
 ////////////////////////////////////////////////
 
