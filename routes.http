@@ -359,19 +359,27 @@ Content-Type: application/json
 
 ### Complete order by user
 POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newOrder
-Authorization:Bearer  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
 Content-Type: application/json
  
 {
     "basketProducts":[
-     {"id":"66f860195fa738cd1d67e8f5","quantity":25}
+     {"id":"66f6bfc6c776d3d1b3c863cd","quantity":25}
     ]
 }
 
 
 ### get all user orders with status which are not refunded
 GET http://localhost:3000/users/66edd3e92ae495db5d122b58/orders
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzEyNzUsImV4cCI6MTcyODU3NjA3NX0.DjzKWdyy-cpNBo6SLp1RMvDvD5rGLmrOjtS-2WRprcc
+Content-Type: application/json
+
+{
+   
+}
+### order count
+GET http://localhost:3000/users/66edd3e92ae495db5d122b58/ordersCount
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzEyNzUsImV4cCI6MTcyODU3NjA3NX0.DjzKWdyy-cpNBo6SLp1RMvDvD5rGLmrOjtS-2WRprcc
 Content-Type: application/json
 
 {
@@ -385,7 +393,7 @@ Content-Type: application/json
 {
    
 }
-### get order , one particular ordrer's products
+### get order , one particular order's products
 GET http://localhost:3000/users/66edd3e92ae495db5d122b58/orderProducts/66f6bfc6c776d3d1b3c863cb
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
 Content-Type: application/json
@@ -394,6 +402,14 @@ Content-Type: application/json
    
 }
 
+### delete order , one particular order's products
+DELETE http://localhost:3000/users/66edd3e92ae495db5d122b58/orderProducts/66f6bfc6c776d3d1b3c863cb/product/
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+Content-Type: application/json
+
+{
+   
+}
 
 ### Referrals post
 
