@@ -1052,7 +1052,31 @@ router.get('/:id/pendingOrders', authenticate, getUser, async (req, res) => {
 });
 
 /**
- * Get user's pending orders 
+ * Get user's refunded orders 
+ */
+
+router.get('/:id/refundedOrders', authenticate, getUser, async (req, res) => {
+  try{
+    res.user.orders.forEach((item)=>{
+      if(orderExpiration(item.expires_date)=="expired")
+      {
+         item.deleteOne();
+      }
+      item.expiresIn=orderExpiration(item.expires_date);
+    })
+    await res.user.save()
+
+   userOrder=res.user.orders.filter((order)=>order.status==="refunded")
+  
+   res.json(userOrder);
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error})
+  }
+});
+/**
+ * Get user's confirmed orders 
  */
 
 router.get('/:id/confirmedOrders', authenticate, getUser, async (req, res) => {
