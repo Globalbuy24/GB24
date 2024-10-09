@@ -1265,7 +1265,7 @@ router.get('/:id/groupedPurchases', authenticate, getUser, async (req, res) => {
           return res.status(404).json({ message: "User not found" });
       }
 
-      const orders = user.orders; // Get user's orders
+      const orders = user.orders.filter((order)=>order.status=="purchased");
 
       // Perform aggregation on the orders array
       const groupedPurchases = orders.reduce((acc, order) => {
