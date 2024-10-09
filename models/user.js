@@ -129,6 +129,7 @@ const UserSchema=new mongoose.Schema({
                 weight:{type:String,default:"0"},
                 height:{type:String,default:"0"},
                 price:{type:String,default:"0.00"},
+                img:{type:String}
             }],
             items_count:{type:String},
             estimated_delivery:{type:Date},
@@ -143,8 +144,11 @@ const UserSchema=new mongoose.Schema({
             sub_total:{type:String,default:"0.00"},
             total_amount:{type:String,default:"0.00"},
             currency:{type:String,default:"XAF"},
-            created_at:{type:String}
-        }],
+            created_at:{type:String}, 
+            created_date:{type:Date,default:new Date()},
+            purchase_date:{type:Date,default:new Date()}
+
+        }],   
 
         payment_methods:[{
             _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },

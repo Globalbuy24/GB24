@@ -364,7 +364,10 @@ Content-Type: application/json
  
 {
     "basketProducts":[
-     {"id":"66f6bfc6c776d3d1b3c863cd","quantity":25}
+     {"id":"66f2c27657be679160cbb263","quantity":15},
+     {"id":"66f2c29d57be679160cbb271","quantity":8},
+     {"id":"66fec45886c7c91119004534","quantity":5}
+
     ]
 }
 
@@ -410,6 +413,15 @@ Content-Type: application/json
 {
    
 }
+### grouped purchases
+GET http://localhost:3000/users/66edd3e92ae495db5d122b58/groupedPurchases
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+Content-Type: application/json
+
+{
+   
+}
+
 
 ### Referrals post
 

@@ -1249,6 +1249,54 @@ router.delete('/:id/orderProducts/:nId', authenticate, getUser, async (req, res)
   }
 
 })
+/**
+ * 
+ */
+
+
+// Route to group purchases by delivery dates
+router.get('/:id/groupedPurchases', authenticate, getUser, async (req, res) => {
+  try {
+      const userId = req.params.id; // Get user ID from the route
+
+      const user = await User.findById(userId).select('orders'); // Fetch user with orders
+
+      if (!user) {
+          return res.status(404).json({ message: "User not found" });
+      }
+
+      const orders = user.orders; // Get user's orders
+
+      // Perform aggregation on the orders array
+      const groupedPurchases = orders.reduce((acc, order) => {
+          const purchaseDate = order.purchase_date.toISOString().split('T')[0]; // Format date
+
+          // Check if the date group already exists
+          if (!acc[purchaseDate]) {
+              acc[purchaseDate] = {
+                  purchaseDate,
+                  totalAmount: 0,
+                  orders: []
+              };
+          }
+
+          // Update the total amount and push the order
+          acc[purchaseDate].totalAmount += parseFloat(order.total_amount);
+          acc[purchaseDate].orders.push(order);
+
+          return acc;
+      }, {});
+
+      // Convert the object back to an array
+      const result = Object.values(groupedPurchases);
+
+      res.status(200).json(result);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+
+});
 
 ////////////////////////////////////////////////
 
