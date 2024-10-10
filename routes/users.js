@@ -1335,7 +1335,7 @@ router.get('/:id/orderImages/:pId', authenticate, getUser, async (req, res) => {
      }
      else if(remainder<4)
      {
-      remainder=null;
+      remainder=Null;
      }
      const orderImg={
       images:images,
