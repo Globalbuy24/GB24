@@ -129,7 +129,7 @@ const UserSchema=new mongoose.Schema({
                 weight:{type:String,default:"0"},
                 height:{type:String,default:"0"},
                 price:{type:String,default:"0.00"},
-                img:{type:String}
+                img:{type:String,default:"https://seeklogo.com/images/S/shopping-cart-logo-FDD62BF737-seeklogo.com.png"}
             }],
             items_count:{type:String},
             estimated_delivery:{type:Date},
