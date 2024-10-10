@@ -422,6 +422,15 @@ Content-Type: application/json
    
 }
 
+###
+GET http://localhost:3000/users/66edd3e92ae495db5d122b58/orderImages/6706a48b92522e5abde36f3e
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+Content-Type: application/json
+
+{
+   
+}
+
 
 ### Referrals post
 

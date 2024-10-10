@@ -1298,6 +1298,60 @@ router.get('/:id/groupedPurchases', authenticate, getUser, async (req, res) => {
 
 });
 
+/**
+ * get 4 images from an order 
+ */
+
+router.get('/:id/orderImages/:pId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const orderId = req.params.pId;
+       
+     const order = res.user.orders.find((order) => order.id === orderId);
+     if(!order)
+     {
+         res.status(404).json({ error: 'order not found' });
+         return;
+     }
+    //  console.log(order.products)
+     var images=[];
+     var count=1;
+     var remainder=0;
+     order.products.forEach((item)=>{
+      if(count>4)
+      {
+        return;
+      }
+         images.push(item.img)
+         count+=1 
+     })
+     order.products.forEach((item)=>{
+      remainder+=1;
+     })
+     if(remainder>4)
+     {
+      remainder-=4
+     }
+     else if(remainder<4)
+     {
+      remainder=0;
+     }
+     const orderImg={
+      images:images,
+      remainder:remainder
+     }
+
+     res.json(orderImg);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
+
 ////////////////////////////////////////////////
 
 /**
