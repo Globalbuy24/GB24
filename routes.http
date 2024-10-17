@@ -49,6 +49,34 @@ Content-Type: application/json
     "password":"k0n.12,3><45'6fgh8"
 }
 
+### forgot password- verify user
+
+
+GET http://localhost:3000/login/forgot-pwd-verify-user/66edd3e92ae495db5d122b58
+Content-Type: application/json
+
+{
+     
+}
+### forgot password- verify otp
+
+
+GET http://localhost:3000/login/forgot-pwd-verify-otp/66edd3e92ae495db5d122b58
+Content-Type: application/json
+
+{
+     "code":"519744"
+}
+
+### change password
+
+POST http://localhost:3000/users/change-password/66edd3e92ae495db5d122b58
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjkxNjgwODUsImV4cCI6MTcyOTc3Mjg4NX0.MnwUymynAofCaqa5BAYDnhOh3XuDlIMOzNWCj6FyBbE
+Content-Type: application/json
+
+{
+     "pwd":"123456789"
+}
 ### verify user
 
 POST http://localhost:3000/users/verify/66ab79d176717540c1888a4f
