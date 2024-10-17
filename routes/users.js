@@ -8,6 +8,8 @@ const mailer=require('../middleware/mailer')
 const https = require('follow-redirects').https;
 const fs = require('fs');
 const user = require('../models/user')
+const bcrypt=require('bcrypt')
+
 const { format } = require('date-fns');
 
 /**
@@ -1350,7 +1352,30 @@ router.get('/:id/orderImages/:pId', authenticate, getUser, async (req, res) => {
   }
 
 })
+/**
+ * Change password
+ */
+router.post('/change-password/:id', authenticate, getUser, async (req, res) => {
 
+  try{
+    if(res.user)
+      {
+        const password=req.body.pwd;
+        const salt=await bcrypt.genSalt(10)
+        const hashedPassword=await bcrypt.hash(password,salt)
+        res.user.password=hashedPassword
+        const updatedUSer= await res.user.save()
+        res.json(updatedUSer)
+      }
+      else{
+        res.status(400).json({message:"Something went wrong"});
+      }
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error});
+  }
+});
 
 ////////////////////////////////////////////////
 
