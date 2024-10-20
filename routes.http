@@ -52,11 +52,11 @@ Content-Type: application/json
 ### forgot password- verify user
 
 
-GET http://localhost:3000/login/forgot-pwd-verify-user/66edd3e92ae495db5d122b58
+POST  http://localhost:3000/login/forgot-pwd-verify-user
 Content-Type: application/json
 
 {
-     
+     "credential":"+237673436870"
 }
 ### forgot password- verify otp
 

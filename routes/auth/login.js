@@ -61,7 +61,7 @@ router.post('/', async(req, res) => {
 /**
  * forgot password verify user email or phone number
  */
-router.get('/forgot-pwd-verify-user/:id', async(req, res) => {
+router.post('/forgot-pwd-verify-user', async(req, res) => {
 
     function newTempCode() {
         var code = "";
@@ -76,8 +76,12 @@ router.get('/forgot-pwd-verify-user/:id', async(req, res) => {
       }
 //    console.log(req.params)
    try{
-    const user=await User.findById(req.params.id)
-
+    const user = await User.findOne({
+        $or: [
+          { phone_number: req.body.credential },
+          { email: req.body.credential }
+        ]
+      });
     if(!user)
     {
         res.status(400).json({message:"User not found!"})
