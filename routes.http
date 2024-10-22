@@ -61,11 +61,11 @@ Content-Type: application/json
 ### forgot password- verify otp
 
 
-GET http://localhost:3000/login/forgot-pwd-verify-otp/66edd3e92ae495db5d122b58
+POST http://localhost:3000/login/forgot-pwd-verify-otp/66edd3e92ae495db5d122b58
 Content-Type: application/json
 
 {
-     "code":"519744"
+     "code":"053413"
 }
 
 ### change password

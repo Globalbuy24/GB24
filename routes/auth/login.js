@@ -174,7 +174,7 @@ router.post('/forgot-pwd-verify-user', async(req, res) => {
 /**
  * forgot password verify user otp
  */
-router.get('/forgot-pwd-verify-otp/:id', async(req, res) => {
+router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
     function codeIsValid(dateToCompare) {
         const currentDate = new Date();
         const diffInMilliseconds = currentDate - dateToCompare;
