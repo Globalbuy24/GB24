@@ -46,7 +46,7 @@ Content-Type: application/json
 
 {
     "credential":"+237673436870",
-    "password":"k0n.12,3><45'6fgh8"
+    "password":"1234567890s"
 }
 
 ### forgot password- verify user
@@ -65,17 +65,17 @@ POST http://localhost:3000/login/forgot-pwd-verify-otp/66edd3e92ae495db5d122b58
 Content-Type: application/json
 
 {
-     "code":"353435"
+     "code":"862357"
 }
 
 ### change password
 
 POST http://localhost:3000/users/change-password/66edd3e92ae495db5d122b58
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjkxNjgwODUsImV4cCI6MTcyOTc3Mjg4NX0.MnwUymynAofCaqa5BAYDnhOh3XuDlIMOzNWCj6FyBbE
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjk1NzkzODgsImV4cCI6MTczMDE4NDE4OH0.1oPO48FJHu6rpTfN2PKwlK3Z6yMQf4YclWxbqZzG818
 Content-Type: application/json
 
 {
-     "pwd":"1234567890"
+     "pwd":"1234567890s"
 }
 ### verify user
 

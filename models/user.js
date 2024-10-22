@@ -43,6 +43,8 @@ const UserSchema=new mongoose.Schema({
         ,
         password:{
             type:String,
+            unique: false,
+            maxlength: 120
             
         },
         dob:{

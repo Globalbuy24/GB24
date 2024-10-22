@@ -23,7 +23,11 @@ router.post('/', async(req, res) => {
             if(user!=null)
             {
                 const jwt_secret=process.env.JWT_SECRET
-                if(bcrypt.compareSync(password, user.password))
+                console.log(bcrypt.compareSync(password, user.password))
+                console.log(user.password)
+                const isMatch = await bcrypt.compare(password, user.password);
+               
+                if(isMatch)
                 {
                     
                     const jwt_secret=process.env.JWT_SECRET
