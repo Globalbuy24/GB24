@@ -186,6 +186,7 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
     if(!user)
     {
         res.status(400).json({message:"User not found!"})
+        return
     }
   
     try{
@@ -194,6 +195,7 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
             if(codeIsValid(user.temp.created_at))
             {
                 res.json(user)
+                return;
             }
             res.status(400).json({message:"Code Expired!"})
 
