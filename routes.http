@@ -65,7 +65,7 @@ POST http://localhost:3000/login/forgot-pwd-verify-otp/66edd3e92ae495db5d122b58
 Content-Type: application/json
 
 {
-     "code":"053413"
+     "code":"353435"
 }
 
 ### change password
@@ -75,7 +75,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpY
 Content-Type: application/json
 
 {
-     "pwd":"123456789"
+     "pwd":"1234567890"
 }
 ### verify user
 

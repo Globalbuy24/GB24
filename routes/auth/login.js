@@ -194,7 +194,17 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
         {
             if(codeIsValid(user.temp.created_at))
             {
-                res.json(user)
+                    const jwt_secret=process.env.JWT_SECRET
+                    const token=jwt.sign({
+                        data: user.first_name
+                      }, jwt_secret, { expiresIn: '168h' });
+                      
+                      
+                      await user.updateOne({$unset:{token:""}})
+                     
+                     await user.updateOne({$set:{token:token}})
+                      const updatedUser= await user.save()
+                      res.json(updatedUser)
                 return;
             }
             res.status(400).json({message:"Code Expired!"})
