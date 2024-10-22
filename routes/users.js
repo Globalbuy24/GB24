@@ -1364,7 +1364,7 @@ router.post('/change-password/:id', authenticate, getUser, async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(password, salt);
 
-      await res.user.updateOne({ $set: { password: hashedPassword } });
+      const updatedUser = await res.user.updateOne({ $set: { password: hashedPassword } });
 
       res.json(updatedUser);
   } else {
