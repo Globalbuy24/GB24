@@ -77,6 +77,16 @@ Content-Type: application/json
 {
      "pwd":"1234567890s"
 }
+### change password auth
+
+POST http://localhost:3000/users/change-password-auth/66edd3e92ae495db5d122b58
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjk1NzkzODgsImV4cCI6MTczMDE4NDE4OH0.1oPO48FJHu6rpTfN2PKwlK3Z6yMQf4YclWxbqZzG818
+Content-Type: application/json
+
+{
+     "currentPwd":"1234567890",
+     "newPwd":"1234567890s"
+}
 ### verify user
 
 POST http://localhost:3000/users/verify/66ab79d176717540c1888a4f

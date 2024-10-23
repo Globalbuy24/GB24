@@ -1353,7 +1353,7 @@ router.get('/:id/orderImages/:pId', authenticate, getUser, async (req, res) => {
 
 })
 /**
- * Change password
+ * Change password from forgot password
  */
 router.post('/change-password/:id', authenticate, getUser, async (req, res) => {
 
@@ -1377,6 +1377,38 @@ router.post('/change-password/:id', authenticate, getUser, async (req, res) => {
   }
 });
 
+/**
+ * Change password from forgot password
+ */
+router.post('/change-password-auth/:id', authenticate, getUser, async (req, res) => {
+
+  try{
+
+    const isMatch = await bcrypt.compare(req.body.currentPwd, res.user.password);
+
+    if(isMatch===false)
+    {
+        res.status(400).json({message:"Incorrect current password!"})
+        return;
+    }
+    else if(isMatch && res.user) {
+      const password = req.body.newPwd;
+      console.log(password)
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+
+      const updatedUser = await res.user.updateOne({ $set: { password: hashedPassword } });
+
+      res.json(updatedUser);
+  } else {
+      res.status(400).json({ message: "Something went wrong" });
+  }
+  }
+  catch(error)
+  {
+    res.status(400).json({message:error});
+  }
+});
 ////////////////////////////////////////////////
 
 /**
