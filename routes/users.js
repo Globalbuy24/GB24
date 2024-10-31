@@ -1230,7 +1230,7 @@ router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) =>
 /**
  * Get one particular order's from a group of orders
  */
-router.delete('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) => {
+router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) => {
  
   try {
      
