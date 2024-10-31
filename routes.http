@@ -84,8 +84,8 @@ Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYX
 Content-Type: application/json
 
 {
-     "currentPwd":"1234567890",
-     "newPwd":"1234567890s"
+     "currentPwd":"1234567890a",
+     "newPwd":"1234567890a"
 }
 ### verify user
 
@@ -540,6 +540,66 @@ Content-Type: application/json
      "category":"prohibited"
 }
 
+
+### Add Categories by admin
+POST http://localhost:3000/admin/categories
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+     "category":"c xcccc",
+     "subtypes":[
+          
+         {"name":"jkhjkkjhbjk"},
+          {"name":"gjkhgjhhjkjh"}
+          
+     ]
+}
+
+### Get Categories by admin
+Get http://localhost:3000/admin/categories
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+    
+}
+
+### Add Category subtype by admin
+POST http://localhost:3000/admin/category/subtype/67237016b11c23675360f94c
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+    "name":"xzxzxzxzxzx"
+}
+
+
+### Get subtypes for a category by admin
+GET http://localhost:3000/admin/category/subtype/67237016b11c23675360f94c
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+
+}
+### delete category
+DELETE http://localhost:3000/admin/category/67237016b11c23675360f94c
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+
+}
+
+### delete subtype
+DELETE http://localhost:3000/admin/category/67237016b11c23675360f94c/subtype/67237016b11c23675360f94d
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+
+}
 
 
 #Production

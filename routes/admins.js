@@ -2,6 +2,7 @@ const express=require('express')
 const router =express.Router()
 const Admin=require('../models/admin')
 const User=require('../models/user')
+const Category=require('../models/category')
 const SystemDefault=require('../models/system_default')
 const jwt = require('jsonwebtoken')
 const bcrypt=require('bcrypt')
@@ -251,5 +252,147 @@ router.post('/system_default', authenticate, async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
+
+/**
+ * add new category
+ */
+router.post('/categories', authenticate, async (req, res) => {
+
+  try{
+    const category = new Category({
+      name: req.body.category,
+      subtypes:req.body.subtypes
+  });
+  
+  const cat=await category.save()
+  res.json(cat)
+  }
+  catch(error){
+    res.status(400).json({message:error})
+  }
+
+});
+
+/**
+ * get all categories
+ */
+router.get('/categories', authenticate, async (req, res) => {
+
+  try{
+    const categories = await Category.find({});
+    if(!categories)
+    {
+      res.status(400).json({message:"No Categories found!"})
+    }
+    res.json(categories)
+  }
+  catch(error){
+    res.status(400).json({message:error})
+  }
+
+});
+
+/**
+ * Add subtype to category
+ */
+
+router.post('/category/subtype/:id', authenticate, async (req, res) => {
+
+  const category=await Category.findById(req.params.id);
+  if (!req.body.name) {
+    return res.status(400).json({ message: "Subtype name is required!" });
+ }
+  if(!category)
+  {
+    res.status(400).json({message:"Category not found!"})
+  }
+  console.log(req.body)
+  category.subtypes.push({name:req.body.name})
+
+  try{
+   
+    const newCategory=await category.save()
+    res.json(newCategory)
+  }
+  catch(error){
+    res.status(400).json({message:error})
+  }
+
+});
+
+
+/**
+ * Add subtype to category
+ */
+
+router.get('/category/subtype/:id', authenticate, async (req, res) => {
+
+  const category=await Category.findById(req.params.id);
+
+  if(!category)
+  {
+    res.status(400).json({message:"Category not found!"})
+  }
+
+  try{
+       res.json(category.subtypes)
+  }
+  catch(error){
+    res.status(400).json({message:error})
+  }
+
+});
+/**
+ * delete category
+ */
+
+router.delete('/category/:cid', authenticate, async (req, res) => {
+  try {
+    const categoryToDelete = await Category.findById(req.params.cid);
+
+    if (!categoryToDelete) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    await Category.findByIdAndDelete(req.params.cid);
+    res.status(200).json({ message: 'Category deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+  
+/**
+ * delete subtype
+ */
+
+router.delete('/category/:cid/subtype/:sid', authenticate, async (req, res) => {
+    // console.log(req.params.cid,req.params.sid)
+    const category=await Category.findById(req.params.cid);
+    
+
+    try{
+      // console.log(subTypeToDelete);
+      const subTypeToDelete = category.subtypes.find((subtype) => subtype.id === req.params.sid);
+      console.log(subTypeToDelete)
+      if(!subTypeToDelete)
+      {
+          res.status(404).json({ error: 'Sub Type not found!' });
+          return;
+      }
+  
+      await subTypeToDelete.deleteOne()
+      await category.save()
+      res.json(200);
+    }
+    catch(err)
+    {
+      res.status(400).json({message:err})
+
+    }
+
+})
+
+
 
 module.exports=router
