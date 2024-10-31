@@ -276,7 +276,7 @@ router.post('/categories', authenticate, async (req, res) => {
 /**
  * get all categories
  */
-router.get('/categories', authenticate, async (req, res) => {
+router.get('/categories', async (req, res) => {
 
   try{
     const categories = await Category.find({});
@@ -322,10 +322,10 @@ router.post('/category/subtype/:id', authenticate, async (req, res) => {
 
 
 /**
- * Add subtype to category
+ * Get subtype to category
  */
 
-router.get('/category/subtype/:id', authenticate, async (req, res) => {
+router.get('/category/subtype/:id', async (req, res) => {
 
   const category=await Category.findById(req.params.id);
 
