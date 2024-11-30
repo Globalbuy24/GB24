@@ -322,7 +322,7 @@ router.post('/category/subtype/:id', authenticate, async (req, res) => {
 
 
 /**
- * Get subtype to category
+ * Get subtypes to category
  */
 
 router.get('/category/subtype/:id', async (req, res) => {

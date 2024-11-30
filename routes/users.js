@@ -9,6 +9,8 @@ const mailer=require('../middleware/mailer')
 const https = require('follow-redirects').https;
 const fs = require('fs');
 const user = require('../models/user')
+const fapshi=require('./payments/fapshi')
+
 
 const { format } = require('date-fns');
 
@@ -289,6 +291,7 @@ router.get('/:id/pin',authenticate,getUser,async(req,res)=>{
       street: req.body.street,
       city: req.body.city,
       country: req.body.country ? req.body.country : 'Cameroon',
+      num: req.body.num ? req.body.num : 'no-number',
       isDefault:req.body.default,
       _id: new mongoose.Types.ObjectId() 
     };
@@ -303,7 +306,7 @@ router.get('/:id/pin',authenticate,getUser,async(req,res)=>{
         res.user.addresses.push(newAddress);
         const updatedUser = await res.user.save();
         res.json(updatedUser);
-      } catch (error) {
+      } catch (error) { 
         console.error(error);
         res.status(500).json({ error: 'Server error' });
       }
@@ -405,11 +408,13 @@ router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res
     const oldCity = addressToUpdate.city;
     const oldStreet = addressToUpdate.street;
     const oldCountry = addressToUpdate.country;
+    const oldNum = addressToUpdate.num;
     const oldDefault = addressToUpdate.isDefault;
 
     // Update address fields with new values or retain old ones
     addressToUpdate.street = req.body.street || oldStreet;
     addressToUpdate.city = req.body.city || oldCity;
+    addressToUpdate.num = req.body.num || oldNum;
     addressToUpdate.country = req.body.country || oldCountry;
 
     // Logic for setting isDefault
@@ -611,7 +616,7 @@ router.get('/:id/otherPayment', authenticate, getUser, async (req, res) => {
 });
 
 /**
- * get card payment address
+ * get mobile payment address
 */
 
 router.get('/:id/mobilePayment', authenticate, getUser, async (req, res) => {
@@ -628,7 +633,7 @@ router.get('/:id/mobilePayment', authenticate, getUser, async (req, res) => {
 });
 
 /**
- * get mobile payment addresses
+ * get card payment addresses
 */
 
 router.get('/:id/cardPayment', authenticate, getUser, async (req, res) => {
@@ -954,6 +959,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
   
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
+    pin:newPin() ,
     order_num:orderNumber,
     delivery_details:userDeliveryAddress,
     delivery_method:defaultDelivery,
@@ -1409,7 +1415,149 @@ router.post('/change-password-auth/:id', authenticate, getUser, async (req, res)
     res.status(400).json({message:error});
   }
 });
-////////////////////////////////////////////////
+
+
+// payments
+
+/**
+ *  initiate payment, create a payment link and redirect user to fapshi.com for payment processing
+ */
+
+router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (req, res) => {
+   console.log(res.user.orders)
+
+   const order=res.user.orders.find((order)=> order.id === req.params.oId)
+   console.log(order)
+   
+
+   try{
+
+      if(order.status=="purchased")
+      {
+        res.status(400).json({message:"You have already paid for this order!"})
+        return
+      }
+      if(order.status!="confirmed")
+      {
+        res.status(400).json({message:"Order confirmation pending!"})
+        return
+      }
+      
+    // if(res.user.email!=null)
+    // {
+    //   const userEmail=res.user.email
+    // }
+    // else if(res.user.email==null)
+    // {
+    //   userEmail="noreply@globalbuy24.com"
+    // }
+    const payment = {
+      amount: parseInt(order.total_amount)+(0.04*parseInt(order.total_amount)), 
+      // email:userEmail,
+      externalId:order.id,//orderID
+      userId: res.user.id,
+      redirectUrl: 'https://globalbuy24.com',
+      message: 'GlobalBuy24 Order Payment',
+
+      }
+     const resp = await fapshi.initiatePay(payment)
+    //  console.log(resp)
+
+    // create new transaction
+    const transaction=
+    {
+      _id: new mongoose.Types.ObjectId(),
+      type:"Deposit",
+      amount:parseInt(order.total_amount),
+      status:"Pending",
+      transId:resp.transId
+    }
+    res.user.transactions.push(transaction)
+    const updatedUser=await res.user.save()
+    console.log(updatedUser)
+    res.json(resp)
+    
+   }
+   catch(err)
+   {
+      res.status(400).json({message:err})
+   }
+
+ 
+})
+
+
+// fapshi webhook
+
+router.post('/fapshi-webhook', express.json(), async (req, res) => {
+  // Get the transaction status from fapshi's API to be sure of its source
+  const event = await fapshi.paymentStatus(req.body.transId);
+
+  if(event.statusCode !== 200)
+    return res.status(400).send({message: event.message});
+
+  const user=await User.findById(event.userId)
+  console.log(user)
+  var order=user.orders.find((order)=>order.id === event.externalId)
+  console.log(order)
+  var transaction=user.transactions.find((trans)=> trans.transId===event.transId)
+  // Handle the event
+  switch (event.status) {
+    case 'SUCCESSFUL':
+      //  If payment was successful, update order status to purchased, update the transaction,notify user
+      order.status="purchased"
+      transaction.status="success"
+      // notify user
+      const newNotification={
+        _id: new mongoose.Types.ObjectId(),
+        type:"Order Payment",
+        message:`Your payment of ${event.amount-(0.04*event.amount)}XAF was successful`,
+        created_at:new Date()
+      }
+      user.notifications.push(newNotification)
+
+      const userUpdated1=await user.save()
+      console.log(userUpdated1)
+      console.log(event, 'successful');
+      break;
+    case 'FAILED':
+      // If transaction failed, update transaction, notify user
+      transaction.status="failed"
+       // notify user
+       const secondNewNotification={
+        _id: new mongoose.Types.ObjectId(),
+        type:"Order Payment",
+        message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has failed`,
+        created_at:new Date()
+      }
+      user.notifications.push(secondNewNotification)
+      const updatedUser=await user.save()
+      break;
+    case 'EXPIRED':
+      transaction.status="failed"
+      // notify user
+      const thirdNewNotification={
+       _id: new mongoose.Types.ObjectId(),
+       type:"Order Payment",
+       message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has expired`,
+       created_at:new Date()
+     }
+     user.notifications.push(thirdNewNotification)
+     await user.save()
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event status: ${event.type}`);
+  }
+
+  // Return a 200 response to acknowledge receipt of the event
+  res.send();
+});
+
+
+
+
+////////////////////////////////////////////////-----Functions-----/////////////////////////////////////////
 
 /**
  * 
