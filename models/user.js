@@ -70,6 +70,7 @@ const UserSchema=new mongoose.Schema({
               _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
               street: { type: String },
               city: { type: String },
+              num: { type: String },
               country: { type: String},
               isDefault:{type:Boolean,default:false}
             }
@@ -108,6 +109,7 @@ const UserSchema=new mongoose.Schema({
         orders:[{
             _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
             order_num:{type:String},
+            pin:{type:String},
             delivery_details:
             {
                 street: { type: String },
@@ -169,6 +171,14 @@ const UserSchema=new mongoose.Schema({
             type:{type:String},
             message:{type:String},
             created_at:{type:Date}
+        }],
+        transactions:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+            type:{type:String},
+            amount:{type:String},
+            status:{type:String},
+            transId:{type:String},
+            created_at:{type:Date,default:new Date()}
         }]
 })
 

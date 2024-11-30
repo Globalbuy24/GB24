@@ -45,8 +45,8 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"+237673436870",
-    "password":"1234567890s"
+    "credential":"+237673436873",
+    "password":"k0n.12,3><45'6fgh8"
 }
 
 ### forgot password- verify user
@@ -341,12 +341,12 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newBasket
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzE0MTQ1MjUsImV4cCI6MTczMjAxOTMyNX0.fAa2e-5B1a01vDyAOWaOBVic4UR7AAKdeA17HLXj8_E
 Content-Type: application/json
 
 {
-  "orderURL":"https://www.ybigt.com/itm/266384827922",
+  "orderURL":"https://www.bigt.com/itm/266384827922",
      //"orderURL":"https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
      "quantity":"5"
 }
@@ -396,8 +396,8 @@ Content-Type: application/json
 }
 
 ### Complete order by user
-POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newOrder
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newOrder
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzE0MTQ1MjUsImV4cCI6MTczMjAxOTMyNX0.fAa2e-5B1a01vDyAOWaOBVic4UR7AAKdeA17HLXj8_E
 Content-Type: application/json
  
 {
@@ -459,6 +459,11 @@ Content-Type: application/json
 {
    
 }
+
+###Pay for order now(instantly)
+
+
+
 
 ###
 GET http://localhost:3000/users/66edd3e92ae495db5d122b58/orderImages/6706a48b92522e5abde36f3e
@@ -615,4 +620,24 @@ Content-Type: application/json
        // "email":"ee12113@gmail.com",
         "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"
+}
+
+
+### payments
+
+POST http://localhost:3000/users/initiate-payment/66f85fad5fa738cd1d67e8de/payfor/67334baaf953929386e6fd45
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzI5MjA3MTMsImV4cCI6MTczMzUyNTUxM30.DJ-p3I058xPva06NEzc3pXQPbPLi7HCwOu1MviRJip4
+Content-Type: application/json
+
+{
+    
+}
+
+### webhook Test
+
+POST http://localhost:3000/users/fapshi-webhook
+Content-Type: application/json
+
+{
+    "transId":"5sh2lXWpKg"
 }
