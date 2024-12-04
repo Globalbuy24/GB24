@@ -639,5 +639,13 @@ POST http://localhost:3000/users/fapshi-webhook
 Content-Type: application/json
 
 {
-    "transId":"5sh2lXWpKg"
+    "transId":"vVHGksG4WK"
+}
+###
+POST https://globalbuy24-a3348f9c2173.herokuapp.com/users/initiate-payment/674e53e35a1dff6e5a4185ae/payfor/674e552c5a1dff6e5a41860d
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3MzMyODU1MTMsImV4cCI6MTczMzg5MDMxM30.7gqi6hIH_XWGUv0PflVaLLS0MsrfKZWEWLyNNL5cVr8
+Content-Type: application/json
+
+{
+    
 }

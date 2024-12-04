@@ -1001,7 +1001,7 @@ router.get('/:id/orders', authenticate, getUser, async (req, res) => {
       item.expiresIn=orderExpiration(item.expires_date);
     })
     await res.user.save()
-   userOrder=res.user.orders.filter((order)=>order.status!=="refunded")
+   userOrder=res.user.orders.filter((order)=>order.status!=="refunded" || order.status!=="purchased")
   
    res.json(userOrder);
   }
@@ -1020,7 +1020,7 @@ router.get('/:id/ordersCount', authenticate, getUser, async (req, res) => {
     var count=0;
     res.user.orders.forEach((item)=>{
       // console.log(item.expiresIn!=="expired" && item.status!=="refunded" && item.isDelivered===false)
-      if(item.expiresIn!=="expired" && item.status!=="refunded" && item.isDelivered===false)
+      if(item.expiresIn!=="expired" && item.status!=="refunded" && item.status!=="purchased" && item.isDelivered===false)
       {
          count+=1;
       }
@@ -1424,11 +1424,9 @@ router.post('/change-password-auth/:id', authenticate, getUser, async (req, res)
  */
 
 router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (req, res) => {
-   console.log(res.user.orders)
-
+  
    const order=res.user.orders.find((order)=> order.id === req.params.oId)
    console.log(order)
-   
 
    try{
 
@@ -1442,15 +1440,7 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
         res.status(400).json({message:"Order confirmation pending!"})
         return
       }
-      
-    // if(res.user.email!=null)
-    // {
-    //   const userEmail=res.user.email
-    // }
-    // else if(res.user.email==null)
-    // {
-    //   userEmail="noreply@globalbuy24.com"
-    // }
+
     const payment = {
       amount: parseInt(order.total_amount)+(0.04*parseInt(order.total_amount)), 
       // email:userEmail,
@@ -1461,7 +1451,8 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
 
       }
      const resp = await fapshi.initiatePay(payment)
-    //  console.log(resp)
+    // const resp={link:"nothing"}
+     console.log(resp)
 
     // create new transaction
     const transaction=
@@ -1472,9 +1463,9 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
       status:"Pending",
       transId:resp.transId
     }
-    res.user.transactions.push(transaction)
-    const updatedUser=await res.user.save()
-    console.log(updatedUser)
+    // res.user.transactions.push(transaction)
+    // const updatedUser=await res.user.save()
+    
     res.json(resp)
     
    }

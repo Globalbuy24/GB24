@@ -3,8 +3,8 @@ const axios = require('axios');
 // const baseUrl = 'https://live.fapshi.com'
 const baseUrl = 'https://sandbox.fapshi.com'
 const headers =  {
-    apiuser: '8fc80ee5-c56a-4d40-b7ee-d844ca1f4fcf',
-    apikey: 'FAK_TEST_2986a7849907d6c149d6'
+    apiuser: process.env.FAPSHI_apiuser,
+    apikey: process.env.FAPSHI_apikey
 }
 
 module.exports = {
