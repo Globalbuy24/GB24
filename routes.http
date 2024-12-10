@@ -332,17 +332,17 @@ Content-Type: application/json
 
 ### add to basket
 POST http://localhost:3000/users/66edd3e92ae495db5d122b58/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjY4NjIzMTMsImV4cCI6MTcyNzQ2NzExM30.hFjI2jjw5tX--FFDImcsr4_sFBx4XjANp_SYRK3Oi2w
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
 Content-Type: application/json
 
 {
-     "orderURL":"https://www.ecom.com/itm/266384827922",
-     "quantity":"5"
+     "orderURL":"https://www.ecombb.com/itm/266384827922",
+     "quantity":"56"
 }
 
 ###
 POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzE0MTQ1MjUsImV4cCI6MTczMjAxOTMyNX0.fAa2e-5B1a01vDyAOWaOBVic4UR7AAKdeA17HLXj8_E
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
 Content-Type: application/json
 
 {
@@ -397,15 +397,14 @@ Content-Type: application/json
 
 ### Complete order by user
 POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newOrder
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzE0MTQ1MjUsImV4cCI6MTczMjAxOTMyNX0.fAa2e-5B1a01vDyAOWaOBVic4UR7AAKdeA17HLXj8_E
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
 Content-Type: application/json
  
 {
     "basketProducts":[
-     {"id":"66f2c27657be679160cbb263","quantity":15},
-     {"id":"66f2c29d57be679160cbb271","quantity":8},
-     {"id":"66fec45886c7c91119004534","quantity":5}
-
+     {"id":"67334b59f953929386e6fd34","quantity":15},
+     {"id":"67334b6af953929386e6fd3d","quantity":8},
+     {"id":"675856fa9177e78c2858e001","quantity":5}
     ]
 }
 
@@ -555,7 +554,7 @@ Content-Type: application/json
      "category":"c xcccc",
      "subtypes":[
           
-         {"name":"jkhjkkjhbjk"},
+          {"name":"jkhjkkjhbjk"},
           {"name":"gjkhgjhhjkjh"}
           
      ]
@@ -626,7 +625,7 @@ Content-Type: application/json
 ### payments
 
 POST http://localhost:3000/users/initiate-payment/66f85fad5fa738cd1d67e8de/payfor/67334baaf953929386e6fd45
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzI5MjA3MTMsImV4cCI6MTczMzUyNTUxM30.DJ-p3I058xPva06NEzc3pXQPbPLi7HCwOu1MviRJip4
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
 Content-Type: application/json
 
 {
@@ -639,7 +638,7 @@ POST http://localhost:3000/users/fapshi-webhook
 Content-Type: application/json
 
 {
-    "transId":"vVHGksG4WK"
+    "transId":"BbTsi7dMuV"
 }
 ###
 POST https://globalbuy24-a3348f9c2173.herokuapp.com/users/initiate-payment/674e53e35a1dff6e5a4185ae/payfor/674e552c5a1dff6e5a41860d
