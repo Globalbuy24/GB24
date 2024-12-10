@@ -871,7 +871,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       res.json(updatedUser)
     }
     else{
-      res.status(400).json({message:"A basket exists with that url"});
+      res.status(400).json({message:"An item exist with that url in your basket!"});
     }
     
     }
@@ -939,17 +939,22 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
   const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
   var itemCount=0;
   const userProducts=[]
-   res.user.basket.forEach(item1 => {
-      req.body.basketProducts.forEach(item2=>{
+  req.body.basketProducts.forEach(item2=>{
+     res.user.basket.forEach(item1 => {
           if(item1.id==item2.id)
           {
             item1.product.quantity=item2.quantity;
             userProducts.push(item1.product);
             itemCount+=1;
-            item1.deleteOne();
+            item1.deleteOne({_id:item1.id});
           }
       })
     });
+
+
+
+
+    console.log(itemCount);
     const defaultDelivery={
       name:"Air Freight",
       delivery_fee:"0.00"
@@ -1427,7 +1432,11 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
   
    const order=res.user.orders.find((order)=> order.id === req.params.oId)
    console.log(order)
-
+  if(!order)
+  {
+    res.status(400).json({message:"Order not found!"})
+    return
+  }
    try{
 
       if(order.status=="purchased")
@@ -1452,7 +1461,7 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
       }
      const resp = await fapshi.initiatePay(payment)
     // const resp={link:"nothing"}
-     console.log(resp)
+     console.log(resp.transId)
 
     // create new transaction
     const transaction=
@@ -1463,8 +1472,8 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
       status:"Pending",
       transId:resp.transId
     }
-    // res.user.transactions.push(transaction)
-    // const updatedUser=await res.user.save()
+    res.user.transactions.push(transaction)
+    const updatedUser=await res.user.save()
     
     res.json(resp)
     
@@ -1483,15 +1492,22 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
 router.post('/fapshi-webhook', express.json(), async (req, res) => {
   // Get the transaction status from fapshi's API to be sure of its source
   const event = await fapshi.paymentStatus(req.body.transId);
-
   if(event.statusCode !== 200)
     return res.status(400).send({message: event.message});
-
   const user=await User.findById(event.userId)
-  console.log(user)
-  var order=user.orders.find((order)=>order.id === event.externalId)
-  console.log(order)
-  var transaction=user.transactions.find((trans)=> trans.transId===event.transId)
+  if(user===null)
+  {
+    return res.status(400).send({message:"User not found"});
+
+  }
+  var order=user.orders.find((order)=>order.id ==event.externalId)
+  if(order===null)
+    {
+      return res.status(400).send({message:"Order not found"});
+  
+    }
+  var transaction=user.transactions.find((trans)=> trans.transId==event.transId)
+  console.log(transaction)
   // Handle the event
   switch (event.status) {
     case 'SUCCESSFUL':
