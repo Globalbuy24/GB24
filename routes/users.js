@@ -1006,7 +1006,7 @@ router.get('/:id/orders', authenticate, getUser, async (req, res) => {
       item.expiresIn=orderExpiration(item.expires_date);
     })
     await res.user.save()
-   userOrder=res.user.orders.filter((order)=>order.status!=="refunded" || order.status!=="purchased")
+   userOrder=res.user.orders.filter((order)=>order.status!=="refunded" && order.status!=="purchased")
   
    res.json(userOrder);
   }
