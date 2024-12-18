@@ -342,13 +342,38 @@ Content-Type: application/json
 
 ###
 POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newBasket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzQ1MzQyMTUsImV4cCI6MTczNTEzOTAxNX0.h-2ZQMNxzMZcYsPYOfP4F8lhPuNQIYYHW2PLMkDVudQ
 Content-Type: application/json
 
 {
-  "orderURL":"https://www.bigt.com/itm/266384827922",
+     "orderURL":"https://www.bigghn.com/itm/266384827922",
      //"orderURL":"https://www.aliexpress.com/JmINCHENGkkMEI-Vertical-Mountable-Server-MFT-HVWRF6U/dp/B0C98WD11V/ref=sr_1__sspa?dib=eyJ2IjoiMSJ9.IOT5Fey1YJi4ycOp7pLsO-UuRFteR4_ntwobiZWcIAOzHs4x0smvGogjaP3VlWfser-501l0gUP5mOEGpwPo7F3pjhV4C2ZBJywO7mm1MK6_Eneo31AH1lSixcTSAdTg5Y8m7crNnqLSZzld9-b_K_ylfsH0jOkjjsMQkVTlQN2QjmQQcM9chBUN_gDzfZvPqp0NCUN0g1oQQ0XfC5704ljz622wFbsM-8YNFjelRxspcvOcC9A9sxKaAziOAQcEqDEhUWAdjaF_3rQhczVWitgJyffSWg56Br02jQ8po0k.PyvBwH1cag36nrFJiYUT66QJ3BwAhVwqLZT_CkTpUjk&dib_tag=se&qid=1720608249&s=computers-intl-ship&sr=1-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGZfYnJvd3Nl&th=1",
      "quantity":"5"
+}
+
+####
+POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/saveItem/6762f3ab057e11e72d9c40bf
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzQ1MzQyMTUsImV4cCI6MTczNTEzOTAxNX0.h-2ZQMNxzMZcYsPYOfP4F8lhPuNQIYYHW2PLMkDVudQ
+Content-Type: application/json
+
+{
+  
+}
+####
+POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/moveSaveItemToBasket/6762f3ab057e11e72d9c40bf
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzQ1MzQyMTUsImV4cCI6MTczNTEzOTAxNX0.h-2ZQMNxzMZcYsPYOfP4F8lhPuNQIYYHW2PLMkDVudQ
+Content-Type: application/json
+
+{
+  
+}
+####
+DELETE http://localhost:3000/users/66f85fad5fa738cd1d67e8de/savedItem/6762f06a66ccb2ae37efe4ce
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzQ1MzQyMTUsImV4cCI6MTczNTEzOTAxNX0.h-2ZQMNxzMZcYsPYOfP4F8lhPuNQIYYHW2PLMkDVudQ
+Content-Type: application/json
+
+{
+  
 }
 
 ###heroku
@@ -402,9 +427,9 @@ Content-Type: application/json
  
 {
     "basketProducts":[
-     {"id":"67334b59f953929386e6fd34","quantity":15},
-     {"id":"67334b6af953929386e6fd3d","quantity":8},
-     {"id":"675856fa9177e78c2858e001","quantity":5}
+     {"id":"67585bbac523f1f7402cf94a","quantity":15},
+     {"id":"67585b185bc07b552089ebec","quantity":8},
+     {"id":"67585bc4c523f1f7402cf95d","quantity":5}
     ]
 }
 

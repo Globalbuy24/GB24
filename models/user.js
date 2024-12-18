@@ -80,7 +80,11 @@ const UserSchema=new mongoose.Schema({
             language:{type:String},
             theme:{type:String,default:'light'}
         },
-
+        saved:[{
+            _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+            url:{type:String},
+            source:{type:String}  
+        }],
         basket:[{
             _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
             delivery_method:
