@@ -927,6 +927,121 @@ router.delete('/:id/basket/:nId', authenticate, getUser, async (req, res) => {
 
 })
 
+/**
+ * Save Item for later
+ */
+
+router.post('/:id/saveItem/:bId', authenticate, getUser, async (req, res) => {
+  const basketItem=await res.user.basket.find(item=>item.id==req.params.bId)
+  const itemAlreadySaved=await res.user.saved.find(item2=>item2.url==basketItem.product.url)
+
+  try{
+      if(basketItem==null)
+      {
+        res.status(400).json({message:"Item not found in your basket."})
+        return
+      }
+     
+    
+      if(itemAlreadySaved)
+      {
+        res.status(400).json({message:"This item is already saved.Try saving something else!"})
+        return
+
+      }
+    const itemToSave={
+      _id: new mongoose.Types.ObjectId(),
+      url:basketItem.product.url,
+      source:basketItem.product.source
+      }
+      
+      await res.user.saved.push(itemToSave)
+      basketItem.deleteOne();
+      const updatedUser=await res.user.save()
+      res.json(updatedUser)
+  }
+  catch(err)
+  {
+    res.status(400).json({message:err})
+  }
+  
+})
+
+
+/**
+ * Move Saved Item to Basket
+ */
+
+router.post('/:id/moveSaveItemToBasket/:sId', authenticate, getUser, async (req, res) => {
+  const savedItem=await res.user.saved.find(item=>item.id==req.params.sId)
+  const basketItem=await res.user.basket.find(item=>item.id==req.params.sId)
+
+  try{
+      if(savedItem==null)
+      {
+        res.status(400).json({message:"Item not found."})
+        return
+      }
+     
+    
+      if(basketItem)
+      {
+        res.status(400).json({message:"This item already exists in your basket."})
+        return
+
+      }
+    
+      const createdAt = new Date(); 
+      const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
+    
+      const itemToMove={
+        _id: new mongoose.Types.ObjectId(),
+        delivery_method:{name:'Air Freight'},
+         product:{
+          url:savedItem.url,
+          source:savedItem.source,
+          quantity:1,
+          created_at:humanReadableDate,
+         }
+      }
+      await res.user.basket.push(itemToMove)
+      savedItem.deleteOne();
+      const updatedUser=await res.user.save()
+      res.json(updatedUser)
+  }
+  catch(err)
+  {
+    res.status(400).json({message:err})
+  }
+  
+})
+
+/**
+ * Delete saved item
+ */
+router.delete('/:id/savedItem/:sId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const savedId = req.params.sId;
+       
+     const savedToDelete = res.user.saved.find((saved) => saved.id === savedId);
+     if(!savedToDelete)
+     {
+         res.status(404).json({ message: 'Item not found' });
+         return;
+     }
+     savedToDelete.deleteOne()
+
+     const updatedUser = await res.user.save();
+     res.json(updatedUser);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
 
 /**
  * Create order by user
@@ -993,6 +1108,33 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
 })
 
 /**
+ * Canceled an Order
+ */
+router.delete('/:id/cancelOrder/:oId',authenticate,getUser,async(req,res)=>{
+     
+  try {
+     
+    const orderId = req.params.sId;
+      
+    const orderToDelete = res.user.orders.find((saved) => saved.id === orderId);
+    if(!orderToDelete)
+    {
+        res.status(404).json({ message: 'Item not found' });
+        return;
+    }
+    orderToDelete.deleteOne()
+
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
+ }
+ catch(error)
+ {
+   res.status(500).json({message:error});
+ }
+})
+
+
+/**
  * Get user's order which hasn't been canceled
  */
 
@@ -1046,7 +1188,7 @@ router.get('/:id/ordersCount', authenticate, getUser, async (req, res) => {
 router.get('/:id/pendingOrders', authenticate, getUser, async (req, res) => {
   try{
     res.user.orders.forEach((item)=>{
-      if(orderExpiration(item.expires_date)=="expired")
+      if(orderExpiration(item.expires_date)=="expired" && item.status==="confirmed")
       {
          item.deleteOne();
       }
@@ -1071,7 +1213,7 @@ router.get('/:id/pendingOrders', authenticate, getUser, async (req, res) => {
 router.get('/:id/refundedOrders', authenticate, getUser, async (req, res) => {
   try{
     res.user.orders.forEach((item)=>{
-      if(orderExpiration(item.expires_date)=="expired")
+      if(orderExpiration(item.expires_date)=="expired" && item.status==="confirmed")
       {
          item.deleteOne();
       }
@@ -1095,7 +1237,7 @@ router.get('/:id/refundedOrders', authenticate, getUser, async (req, res) => {
 router.get('/:id/confirmedOrders', authenticate, getUser, async (req, res) => {
   try{
     res.user.orders.forEach((item)=>{
-      if(orderExpiration(item.expires_date)=="expired")
+      if(orderExpiration(item.expires_date)=="expired" && item.status==="confirmed")
       {
          item.deleteOne();
       }
@@ -1121,7 +1263,7 @@ router.get('/:id/purchasedOrders', authenticate, getUser, async (req, res) => {
   try{
    
     res.user.orders.forEach((item)=>{
-      if(orderExpiration(item.expires_date)=="expired")
+      if(orderExpiration(item.expires_date)=="expired" && item.status==="confirmed")
       {
          item.deleteOne();
       }
@@ -1146,7 +1288,7 @@ router.get('/:id/purchasedOrders', authenticate, getUser, async (req, res) => {
 router.get('/:id/inprogressOrders', authenticate, getUser, async (req, res) => {
   try{
     res.user.orders.forEach((item)=>{
-      if(orderExpiration(item.expires_date)=="expired")
+      if(orderExpiration(item.expires_date)=="expired" && item.status==="confirmed")
       {
          item.deleteOne();
       }
@@ -1171,7 +1313,7 @@ router.get('/:id/inprogressOrders', authenticate, getUser, async (req, res) => {
 router.get('/:id/deliveredOrders', authenticate, getUser, async (req, res) => {
   try{
     res.user.orders.forEach((item)=>{
-      if(orderExpiration(item.expires_date)=="expired")
+      if(orderExpiration(item.expires_date)=="expired"&& item.status==="confirmed")
       {
          item.deleteOne();
       }
