@@ -1128,7 +1128,7 @@ router.delete('/:id/cancelOrder/:oId',authenticate,getUser,async(req,res)=>{
      
   try {
      
-    const orderId = req.params.sId;
+    const orderId = req.params.oId;
       
     const orderToDelete = res.user.orders.find((saved) => saved.id === orderId);
     if(!orderToDelete)
