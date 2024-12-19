@@ -359,6 +359,16 @@ Content-Type: application/json
 {
   
 }
+###
+GET http://localhost:3000/users/66f85fad5fa738cd1d67e8de/saveItem
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzQ1MzQyMTUsImV4cCI6MTczNTEzOTAxNX0.h-2ZQMNxzMZcYsPYOfP4F8lhPuNQIYYHW2PLMkDVudQ
+Content-Type: application/json
+
+{
+  
+}
+
+
 ####
 POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/moveSaveItemToBasket/6762f3ab057e11e72d9c40bf
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzQ1MzQyMTUsImV4cCI6MTczNTEzOTAxNX0.h-2ZQMNxzMZcYsPYOfP4F8lhPuNQIYYHW2PLMkDVudQ

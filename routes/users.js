@@ -967,7 +967,21 @@ router.post('/:id/saveItem/:bId', authenticate, getUser, async (req, res) => {
   
 })
 
+/**
+ * Save Item for later
+ */
 
+router.get('/:id/saveItem', authenticate, getUser, async (req, res) => {
+  const savedItems=await res.user.saved
+  try{
+   
+  res.json(savedItems)
+  }
+  catch(err)
+  {
+    res.status(400).json({message:err})
+  }
+})
 /**
  * Move Saved Item to Basket
  */
