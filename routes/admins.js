@@ -325,7 +325,7 @@ router.post('/category/subtype/:id', authenticate, async (req, res) => {
  * Get subtypes to category
  */
 
-router.get('/category/subtype/:id', async (req, res) => {
+router.get('/category/subtype/:id',authenticate, async (req, res) => {
 
   const category=await Category.findById(req.params.id);
 
@@ -399,7 +399,7 @@ router.delete('/category/:cid/subtype/:sid', authenticate, async (req, res) => {
  * Get all users
  */
 
-router.get('/users', async (req, res) => {
+router.get('/users',authenticate, async (req, res) => {
   const users=await User.find({})
   try{
       res.json(users)
@@ -418,7 +418,7 @@ router.get('/users', async (req, res) => {
  * Get all orders
  */
 
-router.get('/allOrders', async (req, res) => {
+router.get('/allOrders',authenticate, async (req, res) => {
 
   const users=await User.find({})
 
@@ -444,7 +444,7 @@ router.get('/allOrders', async (req, res) => {
 /**
  *  get one order
  */
-router.get('/order/:oId', async (req, res) => {
+router.get('/order/:oId',authenticate, async (req, res) => {
  try{
   const users=await User.find({})
   var new_order=[]
@@ -476,7 +476,7 @@ router.get('/order/:oId', async (req, res) => {
 /**
  *  add service fee
  */
-router.patch('/service_fee', async (req, res) => {
+router.patch('/service_fee',authenticate, async (req, res) => {
   try{
     const systemDefault=await SystemDefault.findOne({})
 
@@ -503,7 +503,7 @@ router.patch('/service_fee', async (req, res) => {
 /**
  * Get service fees
  */
-router.get('/service_fee', async (req, res) => {
+router.get('/service_fee',authenticate, async (req, res) => {
   const systemDefault=await SystemDefault.findOne({})
 
   try{
@@ -521,7 +521,7 @@ router.get('/service_fee', async (req, res) => {
 /**
  *  add airfreight fee
  */
-router.patch('/airfreight_fee', async (req, res) => {
+router.patch('/airfreight_fee',authenticate, async (req, res) => {
   try{
     const systemDefault=await SystemDefault.findOne({})
 
@@ -549,7 +549,7 @@ router.patch('/airfreight_fee', async (req, res) => {
 /**
  * Get service fees
  */
-router.get('/airfreight_fee', async (req, res) => {
+router.get('/airfreight_fee',authenticate, async (req, res) => {
   const systemDefault=await SystemDefault.findOne({})
 
   try{
@@ -568,7 +568,7 @@ router.get('/airfreight_fee', async (req, res) => {
 /**
  *  add airfreight fee
  */
-router.patch('/seafreight_fee', async (req, res) => {
+router.patch('/seafreight_fee',authenticate, async (req, res) => {
   try{
     const systemDefault=await SystemDefault.findOne({})
 
@@ -596,7 +596,7 @@ router.patch('/seafreight_fee', async (req, res) => {
 /**
  * Get service fees
  */
-router.get('/seafreight_fee', async (req, res) => {
+router.get('/seafreight_fee',authenticate, async (req, res) => {
   const systemDefault=await SystemDefault.findOne({})
 
   try{
