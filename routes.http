@@ -544,6 +544,18 @@ Content-Type: application/json
      "email":"ee1@gmail.com",
      "password":"k0n.12,3><45'6fgh8"
 }
+###
+
+POST https://globalbuy24-a3348f9c2173.herokuapp.com/admin
+Content-Type: application/json
+
+{
+     "first_name":"GB",
+     "last_name":"Mock Admin",
+     "type":"type1",
+     "email":"admin@globalbuy24.com",
+     "password":"GB24-admin-access@24"
+}
 
 ###
 POST http://localhost:3000/admin/login
@@ -629,6 +641,78 @@ Content-Type: application/json
 
 {
 
+}
+
+### get orders
+GET http://localhost:3000/admin/allOrders
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+GET http://localhost:3000/admin/order/67585be6c523f1f7402cf96
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+  
+}
+### Add service fees
+PATCH http://localhost:3000/admin/service_fee
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+   "amount":"5290"
+}
+
+### Get service fees
+GET http://localhost:3000/admin/service_fee
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+ 
+}
+
+### add Air freight fees
+PATCH http://localhost:3000/admin/airfreight_fee
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+   "amount":"2290"
+}
+
+### Get airfreight fees
+GET http://localhost:3000/admin/airfreight_fee
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+ 
+}
+
+### add Air freight fees
+PATCH http://localhost:3000/admin/seafreight_fee
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+   "amount":"7290"
+}
+
+### Get airfreight fees
+GET http://localhost:3000/admin/seafreight_fee
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Content-Type: application/json
+
+{
+ 
 }
 
 ### delete subtype

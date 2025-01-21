@@ -392,7 +392,222 @@ router.delete('/category/:cid/subtype/:sid', authenticate, async (req, res) => {
     }
 
 })
+/**
+ * =======================USERS=================================
+ */
+/**
+ * Get all users
+ */
+
+router.get('/users', async (req, res) => {
+  const users=await User.find({})
+  try{
+      res.json(users)
+  }
+  catch(err)
+    {
+      res.status(400).json({message:err})
+
+    }
+})
+
+/**
+ * =======================ORDERS=================================
+ */
+/**
+ * Get all orders
+ */
+
+router.get('/allOrders', async (req, res) => {
+
+  const users=await User.find({})
+
+    try{
+      var orders=[]
+      users.forEach((user)=>{
+        orders.push(user.orders)
+      })
+      if(!orders) 
+        {
+          res.status(400).json("No Orders found!")
+          return
+        }
+      res.json(orders)
+    }
+    catch(err)
+    {
+      res.status(400).json({message:err})
+   
+    }
+})
+
+/**
+ *  get one order
+ */
+router.get('/order/:oId', async (req, res) => {
+ try{
+  const users=await User.find({})
+  var new_order=[]
+  users.forEach((user)=>{
+    user.orders.forEach((order)=>{
+       if(order.id==req.params.oId)
+       {
+        new_order=order
+         return
+       }
+    })
+  })
+  if(!new_order) 
+  {
+    res.status(400).json("Order not found")
+    return
+  }
+  res.json(new_order)
+ }
+ catch(err)
+ {
+   res.status(400).json({message:err})
+
+ }
+})
+/**
+ * =======================SERVICE_FEES=================================
+ */
+/**
+ *  add service fee
+ */
+router.patch('/service_fee', async (req, res) => {
+  try{
+    const systemDefault=await SystemDefault.findOne({})
+
+    if(!systemDefault)
+    {
+      const sysDef = new SystemDefault({
+        service_fee:req.body.amount
+      })
+      await sysDef.save()
+      res.status(200).json({message:"service fees updated"})
+
+    }
+    systemDefault.service_fee=req.body.amount
+    await systemDefault.save()
+    res.status(200).json({message:"service fees updated"})
+  }
+  
+  catch(error){
+    res.status(400).json({message:error})
+  }
+
+})
+
+/**
+ * Get service fees
+ */
+router.get('/service_fee', async (req, res) => {
+  const systemDefault=await SystemDefault.findOne({})
+
+  try{
+    if(!systemDefault)
+    {
+      res.status(400).json({message:"No service fees"})
+    }
+    res.json({fees:systemDefault.service_fee})
+  }
+  catch(error){
+    res.status(400).json({message:error})
+  }
+})
+
+/**
+ *  add airfreight fee
+ */
+router.patch('/airfreight_fee', async (req, res) => {
+  try{
+    const systemDefault=await SystemDefault.findOne({})
+
+    if(!systemDefault)
+    {
+      const sysDef = new SystemDefault({
+        delivery_fee:{air_freight:req.body.amount}
+      })
+      await sysDef.save()
+      res.status(200).json({message:"service fees updated"})
+
+    }
+    systemDefault.delivery_fee.air_freight=req.body.amount
+    await systemDefault.save()
+    res.status(200).json({message:"service fees updated"})
+  }
+  
+  catch(error){
+    res.status(400).json({message:error})
+  }
+
+})
 
 
+/**
+ * Get service fees
+ */
+router.get('/airfreight_fee', async (req, res) => {
+  const systemDefault=await SystemDefault.findOne({})
 
+  try{
+    if(!systemDefault)
+    {
+      res.status(400).json({message:"No service fees"})
+    }
+    res.json({fees:systemDefault.delivery_fee.air_freight})
+  }
+  catch(error){
+    res.status(400).json({message:error})
+  }
+})
+
+
+/**
+ *  add airfreight fee
+ */
+router.patch('/seafreight_fee', async (req, res) => {
+  try{
+    const systemDefault=await SystemDefault.findOne({})
+
+    if(!systemDefault)
+    {
+      const sysDef = new SystemDefault({
+        delivery_fee:{sea_freight:req.body.amount}
+      })
+      await sysDef.save()
+      res.status(200).json({message:"service fees updated"})
+
+    }
+    systemDefault.delivery_fee.sea_freight=req.body.amount
+    await systemDefault.save()
+    res.status(200).json({message:"service fees updated"})
+  }
+  
+  catch(error){
+    res.status(400).json({message:error})
+  }
+
+})
+
+
+/**
+ * Get service fees
+ */
+router.get('/seafreight_fee', async (req, res) => {
+  const systemDefault=await SystemDefault.findOne({})
+
+  try{
+    if(!systemDefault)
+    {
+      res.status(400).json({message:"No service fees"})
+    }
+    res.json({fees:systemDefault.delivery_fee.sea_freight})
+  }
+  catch(error){
+    res.status(400).json({message:error})
+  }
+})
 module.exports=router
