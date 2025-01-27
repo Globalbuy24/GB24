@@ -563,7 +563,7 @@ Content-Type: application/json
 
 {
      "credential":"ee@gmail.com",
-     "password":"k0n.12,3><45'6fgh8"
+     "password":"12345678"
 }
 ###
 POST http://localhost:3000/admin/66969f7c30c89bd31c453035/updateUserBasket/6696a00130c89bd31c45303c
@@ -645,7 +645,7 @@ Content-Type: application/json
 
 ### get orders
 GET http://localhost:3000/admin/allOrders
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3Mzc4Nzk2NDIsImV4cCI6MTczODQ4NDQ0Mn0.V8nb8cTcAHiLBVTVaOfwREGoGWMRK92CfBmUu6bsBUQ
 Content-Type: application/json
 
 {
