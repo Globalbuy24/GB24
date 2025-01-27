@@ -423,10 +423,12 @@ router.get('/allOrders',authenticate, async (req, res) => {
   const users=await User.find({})
 
     try{
-      var orders={}
+      const orders={}
       users.forEach((user)=>{
-        orders[user.id]=user.orders
+        const userOrders = user.orders;
+        Object.assign(orders, userOrders)
       })
+     
       if(!orders) 
         {
           res.status(400).json("No orders found!")
