@@ -422,12 +422,15 @@ router.get('/allOrders',authenticate, async (req, res) => {
 
   const users=await User.find({})
 
-    try{
-      const orders=[]
-      users.forEach((user)=>{
+  try{
+    
+      const orders = [];
+      users.forEach((user) => {
         const userOrders = user.orders;
-        Object.assign(orders, userOrders)
-      })
+        userOrders.forEach((order) => {
+          orders.push(order);
+        });
+      });
      
       if(!orders) 
         {
