@@ -452,12 +452,13 @@ router.get('/allOrders',authenticate, async (req, res) => {
 router.get('/order/:oId',authenticate, async (req, res) => {
  try{
   const users=await User.find({})
-  var new_order=[]
+  const new_order=[]
   users.forEach((user)=>{
     user.orders.forEach((order)=>{
        if(order.id==req.params.oId)
        {
-        new_order=order
+        new_order.push(order)
+        // new_order=order
          return
        }
     })
