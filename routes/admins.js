@@ -476,6 +476,106 @@ router.get('/order/:oId',authenticate, async (req, res) => {
 
  }
 })
+/** 
+*  get one order
+*/
+
+router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
+  try {
+    const orderId = req.params.oId;
+    const users = await User.find({});
+
+    // Track if any order was updated
+    let updatedUser = null;
+
+    for (const user of users) {
+      for (const order of user.orders) {
+        if (order.id === orderId) {
+          order.status = "confirmed";
+          updatedUser = await user.save(); // Await the save
+          break; // Exit the inner loop once the order is found and updated
+        }
+      }
+      if (updatedUser) break; // Exit the outer loop if the user was updated
+    }
+
+    if (updatedUser) {
+      res.json(updatedUser); // Send the updated user response
+    } else {
+      res.status(404).json({ message: "Order not found" }); // Handle case where order was not found
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+/**
+ *  get one order
+ */
+router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
+  try {
+    const users = await User.find({});
+    const orderId = req.params.oId;
+    const productId = req.params.pId;
+
+    console.log(orderId, productId);
+    const new_order = [];
+
+    // Collect orders matching the orderId
+    users.forEach((user) => {
+      user.orders.forEach((order) => {
+        if (order.id === orderId) {
+          new_order.push({ user, order }); // Store both user and order
+        }
+      });
+    });
+
+    if (new_order.length > 0) {
+      for (const { user, order } of new_order) {
+        for (const item of order.products) {
+          if (item.id === productId) {
+            // Perform patch logic here
+            // console.log('Updating item:', item);
+
+            // Update item properties with provided data
+            item.source = req.body.source||item.source;
+            item.name = req.body.name||item.name;
+            item.length = req.body.length||item.length;
+            item.width = req.body.width||item.width;
+            item.quantity =req.body.quantity||item.quantity
+            item.weight = req.body.weight||item.weight;
+            item.height = req.body.height||item.height;
+            item.price = req.body.price||item.price;
+            item.img = req.body.img||item.img;
+
+            // Save the user
+            await user.save(); // Ensure you have the correct user reference
+            // update order total price
+            let system_default = await SystemDefault.findOne({});
+            users.forEach((user) => {
+              user.orders.forEach((order) => {
+                if (order.id === orderId) {
+                  var price=0
+                  order.products.forEach((item)=>{
+                    price+=parseInt(item.price)
+                  })
+                  order.total_amount=price+parseInt(system_default.service_fee)+parseInt(system_default.delivery_fee.air_freight)
+                }
+              });
+            });
+            const updatedUser=await user.save();
+            return res.status(200).json(updatedUser);
+          }
+        }
+      }
+    }
+
+    return res.status(404).json({ message: 'Order or product not found' });
+  } catch (err) {
+    console.error(err); // Log the error for debugging
+    res.status(400).json({ message: 'An error occurred', error: err.message });
+  }
+});
+
 /**
  * =======================SERVICE_FEES=================================
  */

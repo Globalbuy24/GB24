@@ -654,12 +654,39 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/admin/order/67585be6c523f1f7402cf96
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+GET http://localhost:3000/admin/order/675857159177e78c2858e009
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzkxMDUxODgsImV4cCI6MTczOTE0ODM4OH0.wa7LySznZdQ1GyALRMydGc2H_mz0l8SC_DdzxkZ1ikk
 Content-Type: application/json
 
 {
   
+}
+###
+
+PATCH http://localhost:3000/admin/orderStatus/675857159177e78c2858e009
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzkxMDUxODgsImV4cCI6MTczOTE0ODM4OH0.wa7LySznZdQ1GyALRMydGc2H_mz0l8SC_DdzxkZ1ikk
+Content-Type: application/json
+
+{
+
+}
+###
+
+PATCH http://localhost:3000/admin/order/675857159177e78c2858e009/product/675857159177e78c2858e00b
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzkxMDUxODgsImV4cCI6MTczOTE0ODM4OH0.wa7LySznZdQ1GyALRMydGc2H_mz0l8SC_DdzxkZ1ikk
+Content-Type: application/json
+
+{
+            "source":"Ybigt",
+            "name":"Globalbuy",
+            "length" :"0",
+            "width":"0",
+            "quantity" :15,
+            "weight" :"0",
+            "height":"0",
+            "price":"0.00",
+            "img":"https://seeklogo.com/images/S/shopping-cart-logo-FDD62BF737-seeklogo.com.png"
+
 }
 ### Add service fees
 PATCH http://localhost:3000/admin/service_fee
