@@ -1062,7 +1062,7 @@ router.delete('/:id/savedItem/:sId', authenticate, getUser, async (req, res) => 
  */
 router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      
-//  console.log(req.body);
+ console.log(req.body);
  
   const orderNumber=await newOrderNumber(res.user.id)
   const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
