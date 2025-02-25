@@ -545,8 +545,13 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
             item.weight = req.body.weight||item.weight;
             item.height = req.body.height||item.height;
             item.price = req.body.price||item.price;
-            item.img = req.body.img||item.img;
+            item.delivery_time = req.body.delivery_time||item.delivery_time;
+            item.canResize = req.body.canResize||item.canResize;
+            item.canRecolour = req.body.canRecolour||item.canRecolour;
+            item.extra_cost = req.body.extra_cost||item.extra_cost;
+            item.isRejected = req.body.isRejected||item.isRejected;
 
+            
             // Save the user
             await user.save(); // Ensure you have the correct user reference
             // update order total price
@@ -555,10 +560,13 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
               user.orders.forEach((order) => {
                 if (order.id === orderId) {
                   var price=0
+                  var extra=0
                   order.products.forEach((item)=>{
                     price+=parseInt(item.price)
+                    extra+=parseInt(item.extra_cost)
                   })
-                  order.total_amount=price+parseInt(system_default.service_fee)+parseInt(system_default.delivery_fee.air_freight)
+                  order.total_amount=price+parseInt(system_default.service_fee)
+                  +parseInt(system_default.delivery_fee.air_freight)+extra
                 }
               });
             });
