@@ -1105,7 +1105,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     const newOrderNotification = {
       _id: new mongoose.Types.ObjectId(),
       type: 'newOrder',
-      message: ` Your order has been placed successfully`,
+      message: `Your order has been placed successfully`,
       created_at:new Date()
     };
     
@@ -1121,6 +1121,82 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      }
 })
 
+/**
+ * Update Order on product change
+ */
+
+router.post('/:id/updateOrder/:oId/quantity/:pId',authenticate,getUser,async(req,res)=>{
+    
+    const orderId=req.params.oId
+    const productId=req.params.pId
+    const quantity=parseInt(req.body.quantity)
+    var productExist=false
+    const order= await res.user.orders.filter((order)=>order.id==orderId)
+    
+    res.user.orders.forEach((item)=>{
+      if(item.id==orderId)
+      {
+        if(item.products)
+        {
+          item.products.forEach((item2)=>{
+            if(item2.id==productId)
+            {
+              productExist=true
+               item2.quantity=quantity 
+            }
+        }
+       
+      )
+        }
+      }
+       
+    })
+
+    if(!quantity)
+    {
+      res.status(400).json({message:"Quantity not found or invalid"})
+      return
+    }
+    if(!res.user)
+    {
+      res.status(400).json({message:"User not found"})
+      return
+    }
+    if(!order)
+    {
+      res.status(400).json({message:"Order not found"})
+      return
+    }
+    if(!productExist)
+      {
+        res.status(400).json({message:"Order not found"})
+        return
+      }
+    
+    // Recompute order total
+    var orderTotal=0
+
+    res.user.orders.forEach((item)=>{
+      if(item.id==orderId)
+      {
+        if(item.products)
+        {
+          item.products.forEach((item2)=>{
+            orderTotal+=parseInt(item2.quantity)*parseFloat(item2.price)+parseFloat(item2.extra_cost)
+          })
+        }
+        item.total_amount=orderTotal+parseFloat(item.service_fee)
+      }
+       
+    })
+
+    // await user.save()
+    console.log(orderTotal)
+    res.json(res.user.orders)
+    // console.log(userId,orderId,productId,quantity);
+
+
+})
 /**
  * Canceled an Order
  */
@@ -1587,7 +1663,7 @@ router.post('/change-password-auth/:id', authenticate, getUser, async (req, res)
 router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (req, res) => {
   
    const order=res.user.orders.find((order)=> order.id === req.params.oId)
-   console.log(order)
+  //  console.log(order)
   if(!order)
   {
     res.status(400).json({message:"Order not found!"})

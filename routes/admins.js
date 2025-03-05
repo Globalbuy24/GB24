@@ -8,6 +8,11 @@ const jwt = require('jsonwebtoken')
 const bcrypt=require('bcrypt')
 const mongoose=require('mongoose')
 const authenticate=require('../middleware/currentUser')
+const axios = require('axios');
+// currency converter
+const CC_API_KEY = '1e06667412357fb0c88dacd6'; // Replace with your API key
+const CC_BASE_URL = 'https://v6.exchangerate-api.com/v6'; // Modify this based on the API service you choose
+
 
 /**
  * Creating a new admin 
@@ -508,6 +513,29 @@ router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+// /**
+//  *  test currency 
+//  */
+router.get('/currency',async (req, res) => {
+
+// convertCurrency(amountToConvert, fromCurrency, toCurrency);
+
+
+  
+  try {
+       
+    const amount=convertCurrency(100, 'EUR', 'XAF');
+
+       console.log(amount);
+    
+   
+} catch (error) {
+    console.error('Error fetching currency data:', error);
+}
+
+})
+
 /**
  *  get one order
  */
@@ -521,56 +549,68 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
     const new_order = [];
 
     // Collect orders matching the orderId
-    users.forEach((user) => {
-      user.orders.forEach((order) => {
+    for (const user of users) {
+      for (const order of user.orders) {
         if (order.id === orderId) {
           new_order.push({ user, order }); // Store both user and order
         }
-      });
-    });
+      }
+    }
 
     if (new_order.length > 0) {
       for (const { user, order } of new_order) {
         for (const item of order.products) {
           if (item.id === productId) {
-            // Perform patch logic here
-            // console.log('Updating item:', item);
-
             // Update item properties with provided data
-            item.source = req.body.source||item.source;
-            item.name = req.body.name||item.name;
-            item.length = req.body.length||item.length;
-            item.width = req.body.width||item.width;
-            item.quantity =req.body.quantity||item.quantity
-            item.weight = req.body.weight||item.weight;
-            item.height = req.body.height||item.height;
-            item.price = req.body.price||item.price;
-            item.delivery_time = req.body.delivery_time||item.delivery_time;
-            item.canResize = req.body.canResize||item.canResize;
-            item.canRecolour = req.body.canRecolour||item.canRecolour;
-            item.extra_cost = req.body.extra_cost||item.extra_cost;
-            item.isRejected = req.body.isRejected||item.isRejected;
+            item.source = req.body.source || item.source;
+            item.name = req.body.name || item.name;
+            item.length = req.body.length || item.length;
+            item.width = req.body.width || item.width;
+            item.quantity = req.body.quantity || item.quantity;
+            item.weight = req.body.weight || item.weight;
+            item.height = req.body.height || item.height;
+            item.price = req.body.price || item.price;
+            item.delivery_time = req.body.delivery_time || item.delivery_time;
+            item.canResize = req.body.canResize || item.canResize;
+            item.canRecolour = req.body.canRecolour || item.canRecolour;
+            item.extra_cost = req.body.extra_cost || item.extra_cost;
+            item.isRejected = req.body.isRejected || item.isRejected;
 
-            
             // Save the user
             await user.save(); // Ensure you have the correct user reference
-            // update order total price
+            
+            // Update order total price
             let system_default = await SystemDefault.findOne({});
-            users.forEach((user) => {
-              user.orders.forEach((order) => {
-                if (order.id === orderId) {
-                  var price=0
-                  var extra=0
-                  order.products.forEach((item)=>{
-                    price+=parseInt(item.price)
-                    extra+=parseInt(item.extra_cost)
-                  })
-                  order.total_amount=price+parseInt(system_default.service_fee)
-                  +parseInt(system_default.delivery_fee.air_freight)+extra
+            let price = 0;
+            let extra = 0;
+            let delivery_period = 0;
+
+            for (const order of user.orders) {
+              if (order.id === orderId) {
+                for (const item of order.products) {
+                  if(item.isRejected==false)
+                  {
+                    delivery_period +=parseInt(item.delivery_time)
+                    price += parseFloat(item.price)*parseInt(item.quantity);
+                    extra += parseInt(item.extra_cost);
+                  }
+                 
                 }
-              });
-            });
-            const updatedUser=await user.save();
+                order.estimated_delivery=2+Math.ceil(delivery_period/7)
+
+                const amount1 = await convertCurrency(price, 'EUR', 'XAF');
+                const amount2 = await convertCurrency(extra, 'EUR', 'XAF');
+                
+                
+                order.service_fee=system_default.service_fee
+
+                order.sub_total=amount1
+                order.total_amount = amount1 + parseFloat(system_default.service_fee)
+                  + parseFloat(system_default.delivery_fee.air_freight) + amount2;
+              }
+            }
+
+            const updatedUser = await user.save();
             return res.status(200).json(updatedUser);
           }
         }
@@ -724,4 +764,24 @@ router.get('/seafreight_fee',authenticate, async (req, res) => {
     res.status(400).json({message:error})
   }
 })
+
+
+async function convertCurrency(amount, fromCurrency, toCurrency) {
+    try {
+        const response = await axios.get(`${CC_BASE_URL}/${CC_API_KEY}/latest/${fromCurrency}`);
+        const rates = response.data.conversion_rates;
+
+        if (rates[toCurrency]) {
+            const conversionRate = rates[toCurrency];
+            const convertedAmount = amount * conversionRate;
+            return convertedAmount
+        } else {
+            return null
+        }
+    } catch (error) {
+            return null
+    }
+}
+
+
 module.exports=router
