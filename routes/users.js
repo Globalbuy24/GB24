@@ -1190,8 +1190,8 @@ router.post('/:id/updateOrder/:oId/quantity/:pId',authenticate,getUser,async(req
        
     })
 
-    // await user.save()
-    console.log(orderTotal)
+    await user.save()
+    // console.log(orderTotal)
     res.json(res.user.orders)
     // console.log(userId,orderId,productId,quantity);
 
