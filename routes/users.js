@@ -1125,7 +1125,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
  * Update Order on product change
  */
 
-router.post('/:id/updateOrder/:oId/quantity/:pId',getUser,async(req,res)=>{
+router.post('/:id/updateOrder/:oId/quantity/:pId',authenticate,getUser,async(req,res)=>{
     
     const orderId=req.params.oId
     const productId=req.params.pId
@@ -1191,7 +1191,7 @@ router.post('/:id/updateOrder/:oId/quantity/:pId',getUser,async(req,res)=>{
     })
 
     await res.user.save()
-    res.json(res.user.orders)
+    res.json(order)
     // console.log(userId,orderId,productId,quantity);
 
 
@@ -1692,7 +1692,7 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
       }
      const resp = await fapshi.initiatePay(payment)
     // const resp={link:"nothing"}
-     console.log(resp.transId)
+    //  console.log(resp.transId)
 
     // create new transaction
     const transaction=
