@@ -145,7 +145,7 @@ const UserSchema=new mongoose.Schema({
                 img:{type:String,default:"https://seeklogo.com/images/S/shopping-cart-logo-FDD62BF737-seeklogo.com.png"}
             }],
             items_count:{type:String},
-            estimated_delivery:{type:Date},
+            estimated_delivery:{type:String,default:"2 weeks"},
             expiresIn:{type:String,default:"7 days"},
             expires_date: { type: Date, default: () => {
                 const currentDate = new Date();

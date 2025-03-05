@@ -442,6 +442,15 @@ Content-Type: application/json
      {"id":"67585bc4c523f1f7402cf95d","quantity":5}
     ]
 }
+###
+
+POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/updateOrder/67585be6c523f1f7402cf96f/quantity/67585be6c523f1f7402cf973
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
+Content-Type: application/json
+ 
+{
+    "quantity":"200"
+}
 
 
 ### get all user orders with status which are not refunded
@@ -642,6 +651,14 @@ Content-Type: application/json
 {
 
 }
+###
+
+GET http://localhost:3000/admin/currency
+Content-Type: application/json
+
+{
+
+}
 
 ### get orders
 GET http://localhost:3000/admin/allOrders
@@ -673,7 +690,7 @@ Content-Type: application/json
 ###
 
 PATCH http://localhost:3000/admin/order/675857159177e78c2858e009/product/675857159177e78c2858e00b
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzkxMDUxODgsImV4cCI6MTczOTE0ODM4OH0.wa7LySznZdQ1GyALRMydGc2H_mz0l8SC_DdzxkZ1ikk
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3NDEwMjE3MTksImV4cCI6MTc0MTA2NDkxOX0.qZ1Si2MCDj_R5wX0c0bwKOiMrKVc7FwKuIg-ykepxBg
 Content-Type: application/json
 
 {
@@ -684,7 +701,9 @@ Content-Type: application/json
             "quantity" :15,
             "weight" :"0",
             "height":"0",
-            "price":"0.00",
+            "delivery_time":"12",
+            "extra_cost":"50",
+            "price":"300.00",
             "img":"https://seeklogo.com/images/S/shopping-cart-logo-FDD62BF737-seeklogo.com.png"
 
 }
