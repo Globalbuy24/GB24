@@ -1682,9 +1682,14 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
         res.status(400).json({message:"Order confirmation pending!"})
         return
       }
-
+      if(parseInt(order.total_amount)<99)
+        {
+          res.status(400).json({message:"Order total too low"})
+          return
+        }
+      // console.log(amount)
     const payment = {
-      amount: parseInt(order.total_amount)+(0.04*parseInt(order.total_amount)), 
+      amount:parseInt(order.total_amount)+parseInt(0.04*parseInt(order.total_amount)),
       // email:userEmail,
       externalId:order.id,//orderID
       userId: res.user.id,
