@@ -537,7 +537,7 @@ router.get('/currency',async (req, res) => {
 })
 
 /**
- *  get one order
+ *  edit one order
  */
 router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
   try {
@@ -562,6 +562,8 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
         for (const item of order.products) {
           if (item.id === productId) {
             // Update item properties with provided data
+            const itemPrice = await convertCurrency(req.body.price, 'EUR', 'XAF');
+
             item.source = req.body.source || item.source;
             item.name = req.body.name || item.name;
             item.length = req.body.length || item.length;
@@ -569,7 +571,7 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
             item.quantity = req.body.quantity || item.quantity;
             item.weight = req.body.weight || item.weight;
             item.height = req.body.height || item.height;
-            item.price = req.body.price || item.price;
+            item.price = itemPrice || item.price;
             item.delivery_time = req.body.delivery_time || item.delivery_time;
             item.canResize = req.body.canResize || item.canResize;
             item.canRecolour = req.body.canRecolour || item.canRecolour;
