@@ -13,6 +13,7 @@ const mailer=require('../../middleware/mailer')
 const https = require('follow-redirects').https;
 const fs = require('fs');
 
+
 router.use(session({
   secret: 'gb24',
   resave: false,
@@ -185,14 +186,16 @@ router.post('/',async(req,res)=>{
              GB24 welcomes you,<strong> ${req.body.first_name} ${req.body.last_name}</strong>. Enjoy your ride with us.
              </p>
             `
+            // const info = await emailMessage(req.body.email, "Welcome to GlobalBuy24'", welcomehtml);
+
             await mailer.sendMail({
-              from:'admin@globalbuy24.com',
+              from:'no-reply@globalbuy24.com',
               to:req.body.email,
               subject:'Welcome to GlobalBuy24',
               html:welcomehtml
             })
             await mailer.sendMail({
-              from:'admin@globalbuy24.com',
+              from:'no-reply@globalbuy24.com',
               to:req.body.email,
               subject:'Verification code',
               html:html
