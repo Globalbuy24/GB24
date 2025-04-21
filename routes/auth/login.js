@@ -105,7 +105,7 @@ router.post('/forgot-pwd-verify-user', async(req, res) => {
       <p> Your verification code is : <strong>${temp_code} </strong></p>
      `
      await mailer.sendMail({
-       from:'noreply@globalbuy24.com',
+       from:'no-reply@globalbuy24.com',
        to:user.email,
        subject:'Verification code',
        html:html
