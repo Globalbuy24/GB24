@@ -1802,7 +1802,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
 });
 
 // Delete user account 
-router.delete('delete-account/:id', authenticate, getUser, async (req, res) => {
+router.delete('/delete-account/:id', authenticate, getUser, async (req, res) => {
       
       var cantDeleteAccount=false
       res.user.orders.forEach((order)=>{
