@@ -813,3 +813,11 @@ Content-Type: application/json
 {
     
 }
+
+###
+POST http://localhost:3000/users/delete-account/674e53e35a1dff6e5a4185ae
+Content-Type: application/json
+
+{
+    "transId":"BbTsi7dMuV"
+}

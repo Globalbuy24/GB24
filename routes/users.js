@@ -56,8 +56,11 @@ router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
       {
         if(res.user.prefered_notification=="email")
           {
+
             await res.user.updateOne({$set:{email_is_verified:true,is_verified:true}})
             const updatedUser=await User.findById(res.user.id)
+
+            
             res.json(updatedUser)
           }
         else if(res.user.prefered_notification=="phone")
@@ -172,7 +175,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
     <p> Your verification code is : <strong>${temp_code} </strong></p>
    `
    await mailer.sendMail({
-     from:'noreply@globalbuy24.com',
+     from:'no-reply@globalbuy24.com',
      to:res.user.email,
      subject:'Verification code',
      html:html
@@ -1798,6 +1801,30 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
   res.send();
 });
 
+// Delete user account 
+router.delete('delete-account/:id', authenticate, getUser, async (req, res) => {
+      
+      var cantDeleteAccount=false
+      res.user.orders.forEach((order)=>{
+          if(order.status=="purchased" && order.isDelivered===true)
+          {
+            cantDeleteAccount=true
+            return
+          }
+      })
+
+      if(cantDeleteAccount)
+      {
+        res.status(400).json({message:"You have (an) ongoing order(s), there for your account cannot be deleted"})
+        return
+      }
+      // Delete acount
+      await User.findByIdAndDelete(req.params.id);
+
+      res.json({message:"Account deleted"})
+
+
+})
 
 
 
