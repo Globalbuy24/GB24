@@ -453,6 +453,14 @@ router.delete('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, re
         }
         addressToDelete.deleteOne()
 
+        if(res.user.addresses)
+        {
+          res.user.addresses.forEach(element => {
+            element.isDefault=true
+            return
+          });
+
+        }
         const updatedUser = await res.user.save();
         res.json(updatedUser);
     } catch (error) {
@@ -758,6 +766,14 @@ router.delete('/:id/payment/:nId', authenticate, getUser, async (req, res) => {
      }
      paymentToDelete.deleteOne()
 
+     if(res.user.payment_methods)
+      {
+        res.user.payment_methods.forEach(element => {
+          element.isDefault=true
+          return
+        });
+        
+      }
      const updatedUser = await res.user.save();
      res.json(updatedUser);
   }
