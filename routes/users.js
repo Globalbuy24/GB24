@@ -441,40 +441,43 @@ router.patch('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res
  */
 
 router.delete('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, res) => {
-    
-    try {
-        const addressId = req.params.dId;
-       
-        const addressToDelete = res.user.addresses.find((address) => address.id === addressId);
-        if(!addressToDelete)
-        {
-            res.status(404).json({ error: 'Address not found' });
-            return;
-        }
-        addressToDelete.deleteOne()
+  try {
+      const addressId = req.params.dId;
 
-        const updatedUser = await res.user.save();
-        res.json(updatedUser);
-    } catch (error) {
-      res.status(500).json({message:error});
-    }
-  });
+      const addressToDelete = res.user.addresses.find((address) => address.id === addressId);
+      if (!addressToDelete) {
+          res.status(404).json({ error: 'Address not found' });
+          return;
+      }
 
+      // Delete the address
+      await addressToDelete.deleteOne();
 
+      // Find the first address that is not deleted and set it as default
+      const remainingAddresses = res.user.addresses.filter(address => address.id !== addressId);
+      if (remainingAddresses.length > 0) {
+          // Set the first remaining address as default
+          remainingAddresses[0].isDefault = true;
+      }
+
+      // Save the updated user
+      const updatedUser = await res.user.save();
+      res.json(updatedUser);
+  } catch (error) {
+      res.status(500).json({ message: error });
+  }
+});
 
 /**
- * get user notification for a particular user id
- */
+* Get user notifications for a particular user id
+*/
 router.get('/:id/notifications', authenticate, getUser, async (req, res) => {
   try {
-    res.json(res.user.notifications)
+      res.json(res.user.notifications);
+  } catch (error) {
+      res.status(500).json({ message: error });
   }
-  catch(error)
-  {
-    res.status(500).json({message:error});
-  }
-
-})
+});
 
 /**
  * add new user notification
@@ -757,6 +760,12 @@ router.delete('/:id/payment/:nId', authenticate, getUser, async (req, res) => {
          return;
      }
      paymentToDelete.deleteOne()
+
+     const remainingPayments = res.user.payment_methods.filter(payment => payment.id !== paymentId);
+     if (remainingPayments.length > 0) {
+         // Set the first remaining address as default
+         remainingPayments[0].isDefault = true;
+     }
 
      const updatedUser = await res.user.save();
      res.json(updatedUser);
