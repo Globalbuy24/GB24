@@ -1075,6 +1075,12 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
      
  console.log(req.body);
  
+  if(res.user.is_verified==false)
+  {
+    res.status(400).json({message:"Please verify your account"})
+    return
+  }
+  
   const orderNumber=await newOrderNumber(res.user.id)
   const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
   var itemCount=0;
