@@ -171,9 +171,8 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
    await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
    
 
-    const html=`
-    <p> Your verification code is : <strong>${temp_code} </strong></p>
-   `
+   const html=messageTemplateForOTP(temp_code)
+
    await mailer.sendMail({
      from:'no-reply@globalbuy24.com',
      to:res.user.email,
@@ -1080,7 +1079,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     res.status(400).json({message:"Please verify your account"})
     return
   }
-  
+
   const orderNumber=await newOrderNumber(res.user.id)
   const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
   var itemCount=0;
@@ -1953,6 +1952,129 @@ async function numEnd(account_number) {
     const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
     
     return dayDifference >= 0 ? `${dayDifference} days` : 'expired';
+}
+function messageTemplateForOTP(otp)
+{
+
+  return `<!DOCTYPE html>
+              <html lang="en">
+              <head>
+              <meta charset="UTF-8">
+              <title>Your GB24 Verification Code</title>
+              <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+              <style>
+              :root {
+              --primary-color: #005ae0;
+              --secondary-bg: #f4f6fb;
+              --text-color: #333;
+              --otp-bg: #eef4ff;
+              }
+
+              @media (prefers-color-scheme: dark) {
+              :root {
+              --secondary-bg: #121212;
+              --text-color: #f5f5f5;
+              --otp-bg: #1e2a48;
+              }
+              }
+
+              body {
+              font-family: 'Poppins', sans-serif;
+              background-color: var(--secondary-bg);
+              margin: 0;
+              padding: 0;
+              color: var(--text-color);
+              }
+
+              .container {
+              max-width: 600px;
+              margin: 30px auto;
+              background-color: #ffffff;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0,0,0,0.05);
+              overflow: hidden;
+              }
+
+              @media (prefers-color-scheme: dark) {
+              .container {
+              background-color: #1c1c1c;
+              }
+              }
+
+              .header {
+              background-color: var(--primary-color);
+              padding: 20px;
+              text-align: center;
+              }
+
+              .header img {
+              max-height: 40px;
+              }
+
+              .content {
+              padding: 30px 20px;
+              text-align: center;
+              }
+
+              .otp-box {
+              margin: 20px auto;
+              background-color: var(--otp-bg);
+              border: 2px dashed var(--primary-color);
+              color: var(--primary-color);
+              font-size: 32px;
+              font-weight: 600;
+              padding: 20px;
+              width: 180px;
+              border-radius: 8px;
+              }
+
+              .footer {
+              text-align: center;
+              font-size: 12px;
+              color: #888;
+              padding: 20px;
+              }
+
+              @media (prefers-color-scheme: dark) {
+              .footer {
+              color: #aaa;
+              }
+              }
+
+              a {
+              color: var(--primary-color);
+              text-decoration: none;
+              }
+              </style>
+              </head>
+              <body>
+              <div class="container">
+              <!-- Header with logo -->
+              <div class="header">
+              <img src="https://globalbuy24.com/assets/logo.png" alt="GlobalBuy24 Logo" />
+              </div>
+
+              <!-- Content section -->
+              <div class="content">
+              <h2>Your Verification Code</h2>
+              <p>Thank you for signing up for <strong>GlobalBuy24</strong>.</p>
+              <p>Please use the code below to verify your email address:</p>
+
+              <div class="otp-box">${otp}</div> <!-- Replace this with the actual code -->
+
+              <p>This code will expire in <strong>10 minutes</strong>.</p>
+              <p>If you did not request this code, you can safely ignore this email.</p>
+              </div>
+
+              <!-- Footer -->
+              <div class="footer">
+              <p>This is an automated message. Please do not reply.</p>
+              <p>Need help? Visit our <a href="https://globalbuy24.com/support">Help Centre</a> or contact us at contact@globalbuy24.com.</p>
+              <p>©️ 2025 GlobalBuy24. All rights reserved.</p>
+              </div>
+              </div>
+              </body>
+              </html>`
 }
 
 module.exports=router
