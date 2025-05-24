@@ -46,7 +46,7 @@ router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
     const diffInMilliseconds = currentDate - dateToCompare;
     const diffInMinutes = diffInMilliseconds / (1000 * 60);
 
-    return Math.abs(diffInMinutes) < 2;
+    return Math.abs(diffInMinutes) < 5;
 }
 
  try{
@@ -2062,7 +2062,7 @@ function messageTemplateForOTP(otp)
 
               <div class="otp-box">${otp}</div> <!-- Replace this with the actual code -->
 
-              <p>This code will expire in <strong>10 minutes</strong>.</p>
+              <p>This code will expire in <strong>5 minutes</strong>.</p>
               <p>If you did not request this code, you can safely ignore this email.</p>
               </div>
 
