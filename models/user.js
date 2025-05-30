@@ -59,6 +59,7 @@ const UserSchema=new mongoose.Schema({
               }
         },
         is_verified:{type:Boolean,default:false},
+        has_onboarded:{type:Boolean,default:false},
         loyalty_points:{
             type:Number,
             default:0

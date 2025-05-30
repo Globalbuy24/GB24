@@ -593,14 +593,14 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
                   if(item.isRejected==false && item.price)
                   {
                     delivery_period +=parseInt(item.delivery_time)
-                    price += parseFloat(item.price)*parseInt(item.quantity);
+                    price += parseFloat(item.price)*parseFloat(item.quantity);
                     extra += parseInt(item.extra_cost);
                   }
                  
                 }
-                order.estimated_delivery=2+Math.ceil(delivery_period/7)
+                order.estimated_delivery=2+Math.ceil(delivery_period/7)+" weeks"
 
-                const amount1 = await convertCurrency(price, 'EUR', 'XAF');
+                const amount1 = price
                 const amount2 = await convertCurrency(extra, 'EUR', 'XAF');
                 
                 
@@ -610,7 +610,7 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
                 order.total_amount = amount1 + parseFloat(system_default.service_fee)
                   + parseFloat(system_default.delivery_fee.air_freight) + amount2;
 
-                
+                return
               }
             }
 
