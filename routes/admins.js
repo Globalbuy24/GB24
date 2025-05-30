@@ -562,7 +562,7 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
         for (const item of order.products) {
           if (item.id === productId) {
             // Update item properties with provided data
-            const itemPrice = await convertCurrency(req.body.price, 'EUR', 'XAF');
+            const itemPrice = await convertCurrency(req.body.price, 'EUR', 'XAF').toFixed(2);
 
             item.source = req.body.source || item.source;
             item.name = req.body.name || item.name;
