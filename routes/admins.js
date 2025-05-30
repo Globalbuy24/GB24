@@ -590,7 +590,7 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
             for (const order of user.orders) {
               if (order.id === orderId) {
                 for (const item of order.products) {
-                  if(item.isRejected==false)
+                  if(item.isRejected==false && item.price)
                   {
                     delivery_period +=parseInt(item.delivery_time)
                     price += parseFloat(item.price)*parseInt(item.quantity);
@@ -609,6 +609,8 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
                 order.sub_total=amount1
                 order.total_amount = amount1 + parseFloat(system_default.service_fee)
                   + parseFloat(system_default.delivery_fee.air_freight) + amount2;
+
+                
               }
             }
 
