@@ -598,7 +598,7 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
                   }
                  
                 }
-                order.estimated_delivery=2+Math.ceil(delivery_period/7)+" weeks"
+                order.estimated_delivery=2+Math.ceil(delivery_period/7)
 
                 const amount1 = price
                 const amount2 = await convertCurrency(extra, 'EUR', 'XAF');
