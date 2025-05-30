@@ -1703,12 +1703,12 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
           res.status(400).json({message:"Order total too low"})
           return
         }
-      if(!res.user.addresses)
+      if(res.user.addresses!=[])
       {
         res.status(400).json({message:"Please add a delivery address"})
         return
       }
-      if(!res.user.payment_methods)
+      if(res.user.payment_methods!=[])
       {
           res.status(400).json({message:"Please add a payment method"})
           return
