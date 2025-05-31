@@ -607,12 +607,12 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
                 order.service_fee=system_default.service_fee
 
                 order.sub_total=amount1.toFixed(1)
-                order.total_amount = (
-                  amount1 + 
+                order.total_amount = parseFloat((
+                  parseFloat(amount1) + 
                   parseFloat(system_default.service_fee) + 
                   parseFloat(system_default.delivery_fee.air_freight) + 
-                  amount2
-              ).toFixed(1);
+                  parseFloat(amount2)
+              ).toFixed(1));
 
                 
               }
@@ -782,7 +782,7 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
         if (rates[toCurrency]) {
             const conversionRate = rates[toCurrency];
             const convertedAmount = amount * conversionRate;
-            return convertedAmount.toFixed(2)
+            return parseFloat(convertedAmount.toFixed(2))
         } else {
             return null
         }
