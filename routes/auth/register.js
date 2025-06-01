@@ -122,7 +122,7 @@ router.post('/',async(req,res)=>{
               const temp_code=user.temp.code
              
               await sendSMS({
-                sender: "GlobalBuy24",
+                sender: "GB24",
                 recipient: user.phone_number, 
                 message: "Your verification code is: "+temp_code+" . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com"
               });
