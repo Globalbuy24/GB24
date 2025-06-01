@@ -124,7 +124,7 @@ router.post('/',async(req,res)=>{
               await sendSMS({
                 sender: "GlobalBuy24",
                 recipient: user.phone_number, 
-                message: "Your verification code is: " + temp_code
+                message: "Your verification code is: " + temp_code + " . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com"
                });
             
           }
@@ -152,13 +152,13 @@ router.post('/',async(req,res)=>{
               from:'no-reply@globalbuy24.com',
               to:req.body.email,
               subject:'Welcome to GlobalBuy24',
-              html:welcomehtml
+              html:messageTemplateForWelcome()
             })
             await mailer.sendMail({
               from:'no-reply@globalbuy24.com',
               to:req.body.email,
               subject:'Verification code',
-              html:html
+              html:messageTemplateForOTP(temp_code)
             })
           
 
@@ -294,5 +294,233 @@ async function sendSMS({ sender, recipient, message }) {
       console.error('Error sending SMS:', error.response?.data || error.message);
       throw error; // You can handle this error where you call the function
   }
+}
+function messageTemplateForWelcome()
+{
+
+  return 
+`<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to GlobalBuy24</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f4f4f5;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1a1a1a;
+        color: #e4e4e7;
+      }
+      .email-container {
+        background-color: #262626;
+      }
+      .header {
+        background-color: #005ae0;
+      }
+      .code-box {
+        background-color: #333;
+        color: #ffffff;
+      }
+      .footer {
+        background-color: #1f1f1f;
+        color: #a3a3a3;
+      }
+    }
+
+    .email-wrapper {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+
+    .header {
+      background-color: #005ae0;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .header h1 {
+      color: #ffffff;
+      font-size: 26px;
+      margin: 0;
+    }
+
+    .content {
+      padding: 32px 24px;
+    }
+
+    .content p {
+      margin: 16px 0;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .content .highlight {
+      font-weight: 600;
+    }
+    
+    .footer {
+      padding: 16px;
+      background-color: #f3f4f6;
+      text-align: center;
+      font-size: 14px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-wrapper">
+    <div class="header">
+      <h1>Welcome to GB24!</h1>
+    </div>
+    <div class="content">
+      <p>Hello and welcome 👋,</p>
+      <p>We’re excited to have you on board. With GlobalBuy24, you can easily <span class="highlight">shop from global online stores</span> and get your purchases delivered to you in Cameroon — reliably, affordably, and hassle-free.</p>
+      <p>Here’s what you can do with the GlobalBuy24 app:</p>
+      <ul>
+        <li>🛒 Simply add product links from any online store worldwide (e.g., Amazon, Temu, eBay, Fashion Nova, SHEIN, and more)</li>
+        <li>📦 Request quotes and confirm orders</li>
+        <li>🚀 Track shipping and delivery straight to Cameroon</li>
+      </ul>
+      <p>We can’t wait to help you shop the world.</p>
+      <p><strong>Happy shopping!<br />— The GlobalBuy24 Team</strong></p>
+    </div>
+    <div class="footer">
+      &copy; 2025 GlobalBuy24. All rights reserved.
+    </div>
+  </div>
+</body>
+</html>`
+}
+
+function messageTemplateForOTP(otp)
+{
+
+  return `
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your OTP Code</title>
+  <style>
+    :root {
+      --primary: #005AE0; /* Indigo-600 */
+      --text-light: #ffffff;
+      --text-dark: #1f2937;
+      --bg-light: #ffffff;
+      --bg-gray: #f3f4f6;
+      --text-muted: #6b7280;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #2979FF;
+        --text-light: #ffffff;
+        --text-dark: #f9fafb;
+        --bg-light: #1f2937;
+        --bg-gray: #374151;
+        --text-muted: #9ca3af;
+      }
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-gray);
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background-color: var(--bg-light);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      background-color: var(--primary);
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .content p {
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+    }
+
+    .otp-box {
+      background-color: var(--bg-gray);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .otp-box p {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .footer {
+      background-color: var(--bg-gray);
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+  </style>
+  <!-- Poppins Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Your OTP Code</h1>
+    </div>
+    <div class="content">
+      <p>Hello,</p>
+      <p>To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:</p>
+      <div class="otp-box">
+        <p>${otp}</p> <!--Add OTP here-->
+      </div>
+      <p>This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.</p>
+      <p>If you didn't request this code, please ignore this email.</p>
+      <p>Thank you for using our service!</p>
+    </div>
+    <div class="footer">
+      &copy; 2025 GlobalBuy24 (GB24). All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
+  `
 }
 module.exports=router

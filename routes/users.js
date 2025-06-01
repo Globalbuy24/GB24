@@ -194,8 +194,8 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
     await sendSMS({
       sender: "GlobalBuy24",
       recipient: res.user.phone_number, 
-      message: "Your verification code is: " + temp_code
-     });
+      message: "Your verification code is: " + temp_code + " . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com"
+    });
     
      res.json({message:"code sent successfully"})
     
@@ -2077,5 +2077,6 @@ function messageTemplateForOTP(otp)
 </html>
   `
 }
+
 
 module.exports=router
