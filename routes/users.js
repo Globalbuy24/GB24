@@ -1793,16 +1793,16 @@ router.delete('/delete-account/:id', authenticate, getUser, async (req, res) => 
       
       var cantDeleteAccount=false
       res.user.orders.forEach((order)=>{
-          if(order.status=="purchased" && order.isDelivered===true)
+          if(order.status==="purchased")
           {
             cantDeleteAccount=true
             return
           }
       })
 
-      if(cantDeleteAccount)
+      if(cantDeleteAccount===true)
       {
-        res.status(400).json({message:"You have (an) ongoing order(s), there for your account cannot be deleted"})
+        res.status(400).json({message:"You have (an) ongoing order(s), therefore your account cannot be deleted"})
         return
       }
       // Delete acount
@@ -1962,125 +1962,120 @@ async function sendSMS({ sender, recipient, message }) {
 function messageTemplateForOTP(otp)
 {
 
-  return `<!DOCTYPE html>
-              <html lang="en">
-              <head>
-              <meta charset="UTF-8">
-              <title>Your GB24 Verification Code</title>
-              <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-              <style>
-              :root {
-              --primary-color: #005ae0;
-              --secondary-bg: #f4f6fb;
-              --text-color: #333;
-              --otp-bg: #eef4ff;
-              }
+  return `
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your OTP Code</title>
+  <style>
+    :root {
+      --primary: #005AE0; /* Indigo-600 */
+      --text-light: #ffffff;
+      --text-dark: #1f2937;
+      --bg-light: #ffffff;
+      --bg-gray: #f3f4f6;
+      --text-muted: #6b7280;
+    }
 
-              @media (prefers-color-scheme: dark) {
-              :root {
-              --secondary-bg: #121212;
-              --text-color: #f5f5f5;
-              --otp-bg: #1e2a48;
-              }
-              }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #2979FF;
+        --text-light: #ffffff;
+        --text-dark: #f9fafb;
+        --bg-light: #1f2937;
+        --bg-gray: #374151;
+        --text-muted: #9ca3af;
+      }
+    }
+    
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-gray);
+      color: var(--text-dark);
+    }
 
-              body {
-              font-family: 'Poppins', sans-serif;
-              background-color: var(--secondary-bg);
-              margin: 0;
-              padding: 0;
-              color: var(--text-color);
-              }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background-color: var(--bg-light);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
 
-              .container {
-              max-width: 600px;
-              margin: 30px auto;
-              background-color: #ffffff;
-              border-radius: 10px;
-              box-shadow: 0 0 10px rgba(0,0,0,0.05);
-              overflow: hidden;
-              }
+    .header {
+      background-color: var(--primary);
+      padding: 1.5rem;
+      text-align: center;
+    }
 
-              @media (prefers-color-scheme: dark) {
-              .container {
-              background-color: #1c1c1c;
-              }
-              }
+    .header h1 {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 2rem;
+      font-weight: bold;
+    }
 
-              .header {
-              background-color: var(--primary-color);
-              padding: 20px;
-              text-align: center;
-              }
+    .content {
+      padding: 2rem;
+    }
 
-              .header img {
-              max-height: 40px;
-              }
+    .content p {
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+    }
 
-              .content {
-              padding: 30px 20px;
-              text-align: center;
-              }
+    .otp-box {
+      background-color: var(--bg-gray);
+      padding: 1rem;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
 
-              .otp-box {
-              margin: 20px auto;
-              background-color: var(--otp-bg);
-              border: 2px dashed var(--primary-color);
-              color: var(--primary-color);
-              font-size: 32px;
-              font-weight: 600;
-              padding: 20px;
-              width: 180px;
-              border-radius: 8px;
-              }
+    .otp-box p {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
 
-              .footer {
-              text-align: center;
-              font-size: 12px;
-              color: #888;
-              padding: 20px;
-              }
-
-              @media (prefers-color-scheme: dark) {
-              .footer {
-              color: #aaa;
-              }
-              }
-
-              a {
-              color: var(--primary-color);
-              text-decoration: none;
-              }
-              </style>
-              </head>
-              <body>
-              <div class="container">
-              <!-- Header with logo -->
-              <div class="header">
-              <img src="https://globalbuy24.com/assets/logo.png" alt="GlobalBuy24 Logo" />
-              </div>
-
-              <!-- Content section -->
-              <div class="content">
-              <h2>Your Verification Code</h2>
-              <p>Thank you for signing up for <strong>GlobalBuy24</strong>.</p>
-              <p>Please use the code below to verify your email address:</p>
-
-              <div class="otp-box">${otp}</div> <!-- Replace this with the actual code -->
-
-              <p>This code will expire in <strong>5 minutes</strong>.</p>
-              <p>If you did not request this code, you can safely ignore this email.</p>
-              </div>
-
-              <!-- Footer -->
-              <div class="footer">
-              <p>This is an automated message. Please do not reply.</p>
-              <p>Need help? Visit our <a href="https://globalbuy24.com/support">Help Centre</a> or contact us at contact@globalbuy24.com.</p>
-              <p>©️ 2025 GlobalBuy24. All rights reserved.</p>
-              </div>
-              </div>
-              </body>
-              </html>`
+    .footer {
+      background-color: var(--bg-gray);
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+  </style>
+  <!-- Poppins Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Your OTP Code</h1>
+    </div>
+    <div class="content">
+      <p>Hello,</p>
+      <p>To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:</p>
+      <div class="otp-box">
+        <p>${otp}</p> <!--Add OTP here-->
+      </div>
+      <p>This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.</p>
+      <p>If you didn't request this code, please ignore this email.</p>
+      <p>Thank you for using our service!</p>
+    </div>
+    <div class="footer">
+      &copy; 2025 GlobalBuy24 (GB24). All rights reserved.
+    </div>
+  </div>
+</body>
+</html>
+  `
 }
 
 module.exports=router
