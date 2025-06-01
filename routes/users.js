@@ -193,7 +193,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
 
     await sendSMS({
       sender: "GB24",
-      recipient: user.phone_number, 
+      recipient: res.user.phone_number, 
       message: "Your verification code is: " + temp_code
      });
     
