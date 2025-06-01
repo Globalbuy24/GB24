@@ -121,51 +121,11 @@ router.post('/',async(req,res)=>{
               user.temp.created_at=new Date()
               const temp_code=user.temp.code
              
-              /**
-               * Send an sms to user if they added a phone number and not email
-               */
-              var options = {
-                'method': 'POST',
-                'hostname': 'vvn8np.api.infobip.com',
-                'path': '/sms/2/text/advanced',
-                'headers': {
-                    'Authorization': 'App 7423850e235a5ee716d199e09b38062c-26cbd0e7-1598-4ca6-89cf-35cad5c9047d',
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                'maxRedirects': 20
-            };
-            
-            const sms = https.request(options, function (res) {
-                var chunks = [];
-            
-                res.on("data", function (chunk) {
-                    chunks.push(chunk);
-                });
-            
-                res.on("end", function (chunk) {
-                    var body = Buffer.concat(chunks);
-                    console.log(body.toString());
-                });
-            
-                res.on("error", function (error) {
-                    console.error(error);
-                });
-            });
-
-              var postData = JSON.stringify({
-                "messages": [
-                    {
-                        "destinations": [{"to":req.body.phone_number}],
-                        "from": "GlobalBuy24",
-                        "text": "Your verification code is: "+temp_code
-                    }
-                ]
-            });
-            
-            sms.write(postData);
-            
-            sms.end();
+              await sendSMS({
+                sender: "GlobalBuy24",
+                recipient: user.phone_number, 
+                message: "Your verification code is: " + temp_code
+               });
             
           }
         else if(req.body.email!=null)
@@ -305,4 +265,34 @@ const initialImage = async (letter) => {
   }
 };
 
+
+/**
+ * Send sms
+ * @param {sender, recipient, message}  
+ * @returns 
+ */
+async function sendSMS({ sender, recipient, message }) {
+  const apiUrl = 'https://api.avlytext.com/v1/sms';
+  const apiKey = '8tVlW9AtRnTfIpuTkxGvqAyuBNzAK3tyJkbZXfgBX1vmvAkT3PYCh0DmjPLuahCbj5k9';
+
+  try {
+      const response = await axios.post(apiUrl, {
+          sender: sender,
+          recipient: recipient,
+          text: message
+      }, {
+          params: {
+              api_key: apiKey
+          },
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error('Error sending SMS:', error.response?.data || error.message);
+      throw error; // You can handle this error where you call the function
+  }
+}
 module.exports=router
