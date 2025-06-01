@@ -190,51 +190,48 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
     const temp_code=newTempCode()
     await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
 
-      
-       var options = {
-          'method': 'POST',
-          'hostname': 'vvn8np.api.infobip.com',
-          'path': '/sms/2/text/advanced',
-          'headers': {
-              'Authorization': 'App 7423850e235a5ee716d199e09b38062c-26cbd0e7-1598-4ca6-89cf-35cad5c9047d',
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-          },
-          'maxRedirects': 20
-      };
-      
-      const sms = https.request(options, function (res) {
-          var chunks = [];
-      
-          res.on("data", function (chunk) {
-              chunks.push(chunk);
-          });
-      
-          res.on("end", function (chunk) {
-              var body = Buffer.concat(chunks);
-              console.log(body.toString());
-          });
-      
-          res.on("error", function (error) {
-              console.error(error);
-          });
-      });
-
-      var postData = JSON.stringify({
-        "messages": [
-            {
-                "destinations": [{"to":res.user.phone_number}],
-                "from": "GlobalBuy24",
-                "text": "Your verification code is: "+temp_code
-            }
-        ]
+    // Your Avlytext API configuration
+    const apiKey = '8tVlW9AtRnTfIpuTkxGvqAyuBNzAK3tyJkbZXfgBX1vmvAkT3PYCh0DmjPLuahCbj5k9';
+    const sender = 'GlobalBuy24';
+    
+    var options = {
+        'method': 'POST',
+        'hostname': 'api.avlytext.com',
+        'path': '/v1/sms?api_key=' + apiKey,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        'maxRedirects': 20
+    };
+    
+    const sms = https.request(options, function (res) {
+        var chunks = [];
+    
+        res.on("data", function (chunk) {
+            chunks.push(chunk);
+        });
+    
+        res.on("end", function (chunk) {
+            var body = Buffer.concat(chunks);
+            console.log(body.toString());
+        });
+    
+        res.on("error", function (error) {
+            console.error(error);
+        });
+    });
+    
+    var postData = JSON.stringify({
+        "sender": sender,
+        "recipient": res.user.phone_number, // Make sure this matches your recipient format
+        "text": "Your verification code is: " + temp_code
     });
     
     sms.write(postData);
-    
     sms.end();
-
-          res.json({message:"code sent successfully"})
+    
+    res.json({message: "code sent successfully"});
   }
 
 }
