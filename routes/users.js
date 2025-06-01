@@ -192,7 +192,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
     await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
 
     await sendSMS({
-      sender: "GB24",
+      sender: "GlobalBuy24",
       recipient: res.user.phone_number, 
       message: "Your verification code is: " + temp_code
      });
@@ -1927,6 +1927,11 @@ async function numEnd(account_number) {
     return dayDifference >= 0 ? `${dayDifference} days` : 'expired';
 }
 
+/**
+ * Send sms
+ * @param {sender, recipient, message}  
+ * @returns 
+ */
 async function sendSMS({ sender, recipient, message }) {
   const apiUrl = 'https://api.avlytext.com/v1/sms';
   const apiKey = '8tVlW9AtRnTfIpuTkxGvqAyuBNzAK3tyJkbZXfgBX1vmvAkT3PYCh0DmjPLuahCbj5k9';
