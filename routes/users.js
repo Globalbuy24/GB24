@@ -10,6 +10,7 @@ const https = require('follow-redirects').https;
 const fs = require('fs');
 const user = require('../models/user')
 const fapshi=require('./payments/fapshi')
+const axios = require('axios');
 
 const { format } = require('date-fns');
 
@@ -190,48 +191,14 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
     const temp_code=newTempCode()
     await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
 
-    // Your Avlytext API configuration
-    const apiKey = '8tVlW9AtRnTfIpuTkxGvqAyuBNzAK3tyJkbZXfgBX1vmvAkT3PYCh0DmjPLuahCbj5k9';
-    const sender = 'GlobalBuy24';
+    await sendSMS({
+      sender: "GB24",
+      recipient: user.phone_number, 
+      message: "Your verification code is: " + temp_code
+     });
     
-    var options = {
-        'method': 'POST',
-        'hostname': 'api.avlytext.com',
-        'path': '/v1/sms?api_key=' + apiKey,
-        'headers': {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        'maxRedirects': 20
-    };
+     res.json({message:"code sent successfully"})
     
-    const sms = https.request(options, function (res) {
-        var chunks = [];
-    
-        res.on("data", function (chunk) {
-            chunks.push(chunk);
-        });
-    
-        res.on("end", function (chunk) {
-            var body = Buffer.concat(chunks);
-            console.log(body.toString());
-        });
-    
-        res.on("error", function (error) {
-            console.error(error);
-        });
-    });
-    
-    var postData = JSON.stringify({
-        "sender": sender,
-        "recipient": res.user.phone_number, // Make sure this matches your recipient format
-        "text": "Your verification code is: " + temp_code
-    });
-    
-    sms.write(postData);
-    sms.end();
-    
-    res.json({message: "code sent successfully"});
   }
 
 }
@@ -1959,6 +1926,34 @@ async function numEnd(account_number) {
     
     return dayDifference >= 0 ? `${dayDifference} days` : 'expired';
 }
+
+async function sendSMS({ sender, recipient, message }) {
+  const apiUrl = 'https://api.avlytext.com/v1/sms';
+  const apiKey = '8tVlW9AtRnTfIpuTkxGvqAyuBNzAK3tyJkbZXfgBX1vmvAkT3PYCh0DmjPLuahCbj5k9';
+
+  try {
+      const response = await axios.post(apiUrl, {
+          sender: sender,
+          recipient: recipient,
+          text: message
+      }, {
+          params: {
+              api_key: apiKey
+          },
+          headers: {
+              'Content-Type': 'application/json'
+          }
+      });
+
+      return response.data;
+  } catch (error) {
+      console.error('Error sending SMS:', error.response?.data || error.message);
+      throw error; // You can handle this error where you call the function
+  }
+}
+
+
+
 function messageTemplateForOTP(otp)
 {
 
