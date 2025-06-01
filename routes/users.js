@@ -192,9 +192,9 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
     await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
 
     await sendSMS({
-      sender: "GlobalBuy24",
+      sender: "GB24",
       recipient: res.user.phone_number, 
-      message: "Your verification code is: "+temp_code+" . It is valid for 5 minutes.Do not share this code with anyone."
+      message: "Your verification code is: "+temp_code+" . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com"
     });
     
      res.json({message:"code sent successfully"})
