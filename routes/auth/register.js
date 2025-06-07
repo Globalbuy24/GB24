@@ -295,6 +295,7 @@ async function sendSMS({ sender, recipient, message }) {
       throw error; // You can handle this error where you call the function
   }
 }
+
 function messageTemplateForWelcome()
 {
 

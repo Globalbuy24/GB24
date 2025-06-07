@@ -1644,6 +1644,8 @@ router.post('/change-password-auth/:id', authenticate, getUser, async (req, res)
 router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (req, res) => {
   
    const order=res.user.orders.find((order)=> order.id === req.params.oId)
+   const isDefault= res.user.addresses.find((address) => address.isDefault === true);
+
   //  console.log(order)
   if(!order)
   {
@@ -1676,7 +1678,10 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
           res.status(400).json({message:"Please add a payment method"})
           return
       }
-      // console.log(amount)
+     
+      order.delivery_details.street=isDefault.delivery_details.street
+      order.delivery_details.city=isDefault.delivery_details.city
+   
     const payment = {
       amount:parseInt(order.total_amount)+parseInt(0.04*parseInt(order.total_amount)),
       // email:userEmail,
