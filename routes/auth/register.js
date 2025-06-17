@@ -12,7 +12,7 @@ const mailer=require('../../middleware/mailer')
 //const sms=require('../../middleware/sms')
 const https = require('follow-redirects').https;
 const fs = require('fs');
-
+const axios = require('axios');
 
 router.use(session({
   secret: 'gb24',
@@ -22,7 +22,19 @@ router.use(session({
 
 router.use(passport.initialize());
 router.use(passport.session());
-    
+ 
+
+const formatDateTime = (date) => {
+  if (!date) return '';
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = String(d.getFullYear()).slice(-2);
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+};
+
 /**
  * Creating new user
  */
@@ -38,7 +50,7 @@ router.post('/',async(req,res)=>{
         email:req.body.email,
         phone_number:req.body.phone_number,
         password:req.body.password,
-        dob:req.body.dob,
+        dob:formatDateTime(new Date(req.body.dob)),
         referal_code:resolvedReferralCode,
         image:defaultImage
     })
@@ -112,13 +124,13 @@ router.post('/',async(req,res)=>{
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
           message: `GB24 welcomes you, ${req.body.first_name} ${req.body.last_name}. Enjoy your ride with us.`,
-          created_at:new Date()
+          created_at:formatDateTime(new Date())
         };
         if(req.body.phone_number!=null)
           {
               user.prefered_notification="phone"
               user.temp.code=newTempCode()
-              user.temp.created_at=new Date()
+              user.temp.created_at=formatDateTime(new Date())
               const temp_code=user.temp.code
              
               await sendSMS({
@@ -132,20 +144,13 @@ router.post('/',async(req,res)=>{
           {
             user.prefered_notification="email"
             user.temp.code=newTempCode()
-            user.temp.created_at=new Date()
+            user.temp.created_at=formatDateTime(new Date())
             const temp_code=user.temp.code
             
               /**
                * Send an email to user if they added an email not a phone number
                */
-            const html=`
-             <p> Your verification code is : <strong>${temp_code} </strong></p>
-            `
-            const welcomehtml=`
-             <p>
-             GB24 welcomes you,<strong> ${req.body.first_name} ${req.body.last_name}</strong>. Enjoy your ride with us.
-             </p>
-            `
+           
             // const info = await emailMessage(req.body.email, "Welcome to GlobalBuy24'", welcomehtml);
 
             await mailer.sendMail({

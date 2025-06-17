@@ -80,7 +80,7 @@ router.post('/',async(req, res) => {
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
           message: `GB24 welcomes you, ${req.body.first_name} ${req.body.last_name}. Enjoy your ride with us.`,
-          created_at:new Date()
+          created_at:formatDateTime(new Date())
         };
         
         admin.notifications.push(welcomeNotification); 
@@ -183,7 +183,7 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
       height:req.body.height||basket.product.height,
       price:req.body.price||basket.product.price,
       quantity:req.body.quantity||basket.product.quantity,
-      updated_at:new Date(),
+      updated_at:formatDateTime(new Date()),
       created_at:basket.product.created_at,
       url:basket.product.url
     }
@@ -203,7 +203,7 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
       _id: new mongoose.Types.ObjectId(),
       type: 'basketUpdated',
       message: ` Your basket has been updated successfully,verify everything you need`,
-      created_at:new Date()
+      created_at:formatDateTime(new Date())
     };
     user.notifications.push(basketUpdatedNotification)
     const updatedUser=await user.save();
@@ -791,5 +791,15 @@ async function convertCurrency(amount, fromCurrency, toCurrency) {
     }
 }
 
+const formatDateTime = (date) => {
+  if (!date) return '';
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = String(d.getFullYear()).slice(-2);
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+};
 
 module.exports=router

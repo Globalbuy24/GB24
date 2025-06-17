@@ -5,6 +5,7 @@ const bcrypt=require('bcrypt')
 const jwt = require('jsonwebtoken')
 const mailer=require('../../middleware/mailer')
 const https = require('follow-redirects').https;
+const axios = require('axios');
 
 /**
  * login user
@@ -108,7 +109,7 @@ router.post('/forgot-pwd-verify-user', async(req, res) => {
        from:'no-reply@globalbuy24.com',
        to:user.email,
        subject:'Verification code',
-       html:messageTemplateForOTP()
+       html:messageTemplateForOTP(temp_code)
      })
      res.json({message:"code sent successfully",uid:user.id})
     }
