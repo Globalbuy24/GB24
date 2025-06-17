@@ -17,7 +17,7 @@ Content-Type: application/json
 {
         "first_name":"GB",
         "last_name":"Test User",
-        "phone_number":"+237673436873",
+        "phone_number":"+237673436779",
         //"email":"kenyedil@gmail.com",
         "password":"k0n.12,3><45'6fgh8",
         "dob":"2023-12-2"

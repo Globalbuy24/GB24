@@ -43,7 +43,7 @@ router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
    * @returns false if the difference in time is more than 2 minutes
    */
   function codeIsValid(dateToCompare) {
-    const currentDate = new Date();
+    const currentDate = formatDateTime(new Date());
     const diffInMilliseconds = currentDate - dateToCompare;
     const diffInMinutes = diffInMilliseconds / (1000 * 60);
 
@@ -169,7 +169,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
   if(res.user.prefered_notification=="email")
   {
     const temp_code=newTempCode()
-   await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
+   await res.user.updateOne({$set:{temp:{code:temp_code,created_at:formatDateTime(new Date())}}})
    
 
    const html=messageTemplateForOTP(temp_code)
@@ -189,7 +189,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
   else if(res.user.prefered_notification=="phone")
   {
     const temp_code=newTempCode()
-    await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
+    await res.user.updateOne({$set:{temp:{code:temp_code,created_at:formatDateTime(new Date())}}})
 
     await sendSMS({
       sender: "GB24",
@@ -458,7 +458,7 @@ router.post('/:id/notifications', authenticate, getUser, async (req, res) => {
     _id: new mongoose.Types.ObjectId(),
     type:req.body.type,
     message:req.body.message,
-    created_at:new Date()
+    created_at:formatDateTime(new Date())
   }
   try {
      res.user.notifications.push(newNotification)
@@ -756,7 +756,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
   
   var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
   const source=domain.charAt(0).toUpperCase()+domain.slice(1)
-  const createdAt = new Date(); 
+  const createdAt = formatDateTime(new Date()); 
   const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
 
   const newBasket={
@@ -819,13 +819,13 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         type: 'basketCreated',
         message: ` Your basket has been created successfully`,
-        created_at:new Date()
+        created_at:formatDateTime(new Date())
       };
       const basketCreatedByUserNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'basketCreated',
         message: ` A new order has been created`,
-        created_at:new Date()
+        created_at:formatDateTime(new Date())
       };
       res.user.notifications.push(basketCreatedNotification)
       res.user.basket.push(newBasket)
@@ -979,7 +979,7 @@ router.post('/:id/moveSaveItemToBasket/:sId', authenticate, getUser, async (req,
 
       }
     
-      const createdAt = new Date(); 
+      const createdAt = formatDateTime(new Date()); 
       const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
     
       const itemToMove={
@@ -1068,7 +1068,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
       name:"Air Freight",
       delivery_fee:"0.00"
     }
-    const createdAt = new Date(); 
+    const createdAt = formatDateTime(new Date()); 
     const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
   
     const newOrder={
@@ -1086,7 +1086,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
       _id: new mongoose.Types.ObjectId(),
       type: 'newOrder',
       message: `Your order has been placed successfully`,
-      created_at:new Date()
+      created_at:formatDateTime(new Date())
     };
     
      try{
@@ -1751,7 +1751,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         type:"Order Payment",
         message:`Your payment of ${event.amount-(0.04*event.amount)}XAF was successful`,
-        created_at:new Date()
+        created_at:formatDateTime(new Date())
       }
       user.notifications.push(newNotification)
 
@@ -1767,7 +1767,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         type:"Order Payment",
         message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has failed`,
-        created_at:new Date()
+        created_at:formatDateTime(new Date())
       }
       user.notifications.push(secondNewNotification)
       const updatedUser=await user.save()
@@ -1779,7 +1779,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
        _id: new mongoose.Types.ObjectId(),
        type:"Order Payment",
        message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has expired`,
-       created_at:new Date()
+       created_at:formatDateTime(new Date())
      }
      user.notifications.push(thirdNewNotification)
      await user.save()
@@ -1923,7 +1923,7 @@ async function numEnd(account_number) {
 
  function orderExpiration(expires_date) {
     const expirationDate = new Date(expires_date);
-    const currentDate = new Date();
+    const currentDate = formatDateTime(new Date());
     
     const timeDifference = expirationDate - currentDate;
     
@@ -2083,5 +2083,16 @@ function messageTemplateForOTP(otp)
   `
 }
 
+
+const formatDateTime = (date) => {
+  if (!date) return '';
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = String(d.getFullYear()).slice(-2);
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+};
 
 module.exports=router
