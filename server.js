@@ -15,10 +15,33 @@ db.on('error',(error)=>console.error(error))
 db.once('open',()=>console.log('connected to database'))
 
 // app.use(cors());
+
+// Option 1: Allow ALL origins (not recommended for production)
+app.use(cors());
+
+// Option 2: Allow specific origins + all others (better)
+const allowedOrigins = [
+  'https://ff-debug-service-frontend-pro-ygxkweukma-uc.a.run.app',
+  // Add other specific origins here
+];
+
 app.use(cors({
-    origin: true, // Dynamically allows the requesting origin
-    credentials: true // Enable if using cookies/sessions
-  }));
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin) || origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    
+    // For production, you might want to remove this and just use the allowedOrigins
+    return callback(null, true); // Allow any origin - ONLY FOR DEVELOPMENT
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true // If you need cookies/auth headers
+}));
+
 
 app.use(express.json({ limit: '10mb' }));
 
