@@ -14,8 +14,13 @@ const db=mongoose.connection
 db.on('error',(error)=>console.error(error))
 db.once('open',()=>console.log('connected to database'))
 
-app.use(cors());
-app.use(express.json())
+// app.use(cors());
+app.use(cors({
+    origin: true, // Dynamically allows the requesting origin
+    credentials: true // Enable if using cookies/sessions
+  }));
+
+app.use(express.json({ limit: '10mb' }));
 
 const loginRouter=require('./routes/auth/login')
 const registerRouter=require('./routes/auth/register')
