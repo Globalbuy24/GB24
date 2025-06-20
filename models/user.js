@@ -151,8 +151,8 @@ const UserSchema = new mongoose.Schema({
         total_amount: { type: String, default: "0.00" },
         currency: { type: String, default: "XAF" },
         created_at: { type: String },
-        created_date: {type: String, default: new Date() },
-        purchase_date: {type: String, default: new Date() }
+        created_date: {type: String},
+        purchase_date: {type: String}
     }],
     payment_methods: [{
         _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
