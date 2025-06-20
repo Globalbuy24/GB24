@@ -746,115 +746,83 @@ router.delete('/:id/payment/:nId', authenticate, getUser, async (req, res) => {
  */
 
 router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
-  console.log(req.body);
-  var  userUrlExist=false
-
-  if(!req.body.orderURL)
-  {
-     res.status(400).json({message:"No Order Url available"});
-  }
-  
-  var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
-  const source=domain.charAt(0).toUpperCase()+domain.slice(1)
-  const createdAt = formatDateTime(new Date()); 
-
-  const newBasket={
-    _id: new mongoose.Types.ObjectId(),
-    delivery_method:{name:'Air Freight'},
-     product:{
-      url: new URL(req.body.orderURL),
-      source:source,
-      quantity:parseInt(req.body.quantity),
-      created_at:createdAt
-     }
-  }
- 
   try {
-    /**
-     * 
-     * @param {*} url 
-     * @param {*} url2 
-     * @returns true if url and url2 are the same
-     */
-
-    function urlsMatch(url, url2) {
-      const parsedUrl1 = new URL(url);
-      const parsedUrl2 = new URL(url2);
-    
-      // Compare origin (protocol, hostname, port)
-      return (
-        parsedUrl1.origin === parsedUrl2.origin &&
-        parsedUrl1.pathname === parsedUrl2.pathname &&
-        parsedUrl1.search === parsedUrl2.search
-      );
+    if (!req.body.orderURL) {
+      return res.status(400).json({ message: "No Order URL available" });
     }
-    
-   await res.user.basket.forEach((basketItem) => {
-    const url=basketItem.product.url||"https://www.gb24.com"
-        //console.log(url)
-        /**
-         * check is the url sent by the user already exists in the system
-         */
-            if (urlsMatch(req.body.orderURL, url)) {
-              userUrlExist=true
-              //res.status(400).json({message:"A basket exists with that url"});
-            }
+
+    // Parse URL and extract domain more safely
+    let domain, source;
+    try {
+      const url = new URL(req.body.orderURL);
+      domain = url.hostname.replace('www.', '').split('.')[0];
+      source = domain.charAt(0).toUpperCase() + domain.slice(1);
+    } catch (e) {
+      return res.status(400).json({ message: "Invalid URL format" });
+    }
+
+    const createdAt = formatDateTime(new Date());
+
+    const newBasket = {
+      _id: new mongoose.Types.ObjectId(),
+      delivery_method: { name: 'Air Freight' },
+      product: {
+        url: req.body.orderURL, // Store as string instead of URL object
+        source: source,
+        quantity: parseInt(req.body.quantity) || 1,
+        created_at: createdAt
+      }
+    };
+
+    // Check for existing URL
+    const urlExists = res.user.basket.some(basketItem => {
+      try {
+        const existingUrl = basketItem.product.url;
+        return existingUrl === req.body.orderURL; // Simple string comparison
+      } catch (e) {
+        return false;
+      }
     });
 
- /**
-  * if url doesnt exist, then the new url is added to the system
-  */
-   if(!userUrlExist)
-    {
-      /**
-       * @typedef {Object} basketCreatedNotification
-       * @typedef {Object} basketCreatedByUserNotification
-       * @property {String} _id
-       * @property {String} type
-       * @property {String} message
-       * @property {String} created_at
-       */
-       const basketCreatedNotification = {
-        _id: new mongoose.Types.ObjectId(),
-        type: 'basketCreated',
-        message: ` Your basket has been created successfully`,
-        created_at:formatDateTime(new Date())
-      };
-      const basketCreatedByUserNotification = {
-        _id: new mongoose.Types.ObjectId(),
-        type: 'basketCreated',
-        message: ` A new order has been created`,
-        created_at:formatDateTime(new Date())
-      };
-      res.user.notifications.push(basketCreatedNotification)
-      res.user.basket.push(newBasket)
-      const updatedUser=await res.user.save()
+    if (urlExists) {
+      return res.status(400).json({ message: "An item exists with that URL in your basket!" });
+    }
 
-     /**
-      *  alert all type1 admins of new basket created
-      */
-      const admins=await Admin.find({})
-      admins.forEach((admin)=>{
-          if(admin.type=="type1")
-            {
-              admin.notifications.push(basketCreatedByUserNotification)
-              admin.save()
-            }
-      })
-      res.json(updatedUser)
-    }
-    else{
-      res.status(400).json({message:"An item exist with that url in your basket!"});
-    }
-    
-    }
-  catch(error)
-  {
-    res.status(500).json({message:error});
+    // Create notifications
+    const basketCreatedNotification = {
+      _id: new mongoose.Types.ObjectId(),
+      type: 'Basket Created',
+      message: 'Your basket has been created successfully',
+      created_at: formatDateTime(new Date())
+    };
+
+    const basketCreatedByUserNotification = {
+      _id: new mongoose.Types.ObjectId(),
+      type: 'Basket Created',
+      message: 'A new order has been created',
+      created_at: formatDateTime(new Date())
+    };
+
+    console.log('Current Date:', new Date());
+    // Update user
+    res.user.notifications.push(basketCreatedNotification);
+    res.user.basket.push(newBasket);
+
+    // Save user and notify admins in parallel
+    const [updatedUser] = await Promise.all([
+      res.user.save(),
+      Admin.updateMany(
+        { type: "type1" },
+        { $push: { notifications: basketCreatedByUserNotification } }
+      )
+    ]);
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error in /:id/newBasket:', error);
+    res.status(500).json({ message: error.message });
   }
-
-})
-
+});
 
 
 /**
@@ -2085,19 +2053,20 @@ function messageTemplateForOTP(otp)
 
 const formatDateTime = (date) => {
   let d;
-
-  // If no date is provided or it's invalid, use current date
-  if (!date || isNaN(Date.parse(date))) {
-      d = new Date(); // Use current date
-  } else {
-      d = new Date(date);
+  
+  // Try to parse the input date
+  try {
+    d = new Date(date);
+    // Check if the date is invalid
+    if (isNaN(d.getTime())) {
+      throw new Error('Invalid date');
+    }
+  } catch (e) {
+    // Fall back to current date if parsing fails
+    d = new Date();
   }
 
-  // Check if the date object is valid
-  if (isNaN(d.getTime())) {
-      d = new Date(); // Fallback to current date if invalid
-  }
-
+  // Format the date components
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = String(d.getFullYear()).slice(-2);
