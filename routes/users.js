@@ -757,7 +757,6 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
   var domain = req.body.orderURL.match(/(?:https?:\/\/)?(?:www\.)?(.*?)?(?:.com)?\//)[1];
   const source=domain.charAt(0).toUpperCase()+domain.slice(1)
   const createdAt = formatDateTime(new Date()); 
-  // const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
 
   const newBasket={
     _id: new mongoose.Types.ObjectId(),
@@ -766,7 +765,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       url: new URL(req.body.orderURL),
       source:source,
       quantity:parseInt(req.body.quantity),
-      created_at:formatDateTime(new Date()),
+      created_at:formatDateTime(new Date())
      }
   }
  
