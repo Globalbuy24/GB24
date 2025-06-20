@@ -765,7 +765,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       url: new URL(req.body.orderURL),
       source:source,
       quantity:parseInt(req.body.quantity),
-      created_at:formatDateTime(new Date())
+      created_at:createdAt
      }
   }
  
@@ -1072,7 +1072,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
   
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
-    pin:newPin() ,
+    pin:newPin(),
     order_num:orderNumber,
     delivery_details:userDeliveryAddress,
     delivery_method:defaultDelivery,
@@ -2084,13 +2084,21 @@ function messageTemplateForOTP(otp)
 
 
 const formatDateTime = (date) => {
-  if (!date) return '';
-  const d = new Date(date);
+  let d;
+  
+  // If no date is provided or it's invalid, use current date
+  if (!date || isNaN(new Date(date).getTime())) {
+    d = new Date(); // Use current date
+  } else {
+    d = new Date(date);
+  }
+
   const day = String(d.getDate()).padStart(2, '0');
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const year = String(d.getFullYear()).slice(-2);
   const hours = String(d.getHours()).padStart(2, '0');
   const minutes = String(d.getMinutes()).padStart(2, '0');
+
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 };
 
