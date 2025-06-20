@@ -1069,7 +1069,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
       delivery_fee:"0.00"
     }
     const createdAt = formatDateTime(new Date()); 
-    const humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
+    // sconst humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
   
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
@@ -1078,13 +1078,13 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     delivery_details:userDeliveryAddress,
     delivery_method:defaultDelivery,
     products:userProducts,
-    created_at:humanReadableDate,
+    created_at:formatDateTime(new Date()),
     items_count:itemCount
     }
 
     const newOrderNotification = {
       _id: new mongoose.Types.ObjectId(),
-      type: 'newOrder',
+      type: 'New Order',
       message: `Your order has been placed successfully`,
       created_at:formatDateTime(new Date())
     };
