@@ -2085,12 +2085,17 @@ function messageTemplateForOTP(otp)
 
 const formatDateTime = (date) => {
   let d;
-  
+
   // If no date is provided or it's invalid, use current date
-  if (!date || isNaN(new Date(date).getTime())) {
-    d = new Date(); // Use current date
+  if (!date || isNaN(Date.parse(date))) {
+      d = new Date(); // Use current date
   } else {
-    d = new Date(date);
+      d = new Date(date);
+  }
+
+  // Check if the date object is valid
+  if (isNaN(d.getTime())) {
+      d = new Date(); // Fallback to current date if invalid
   }
 
   const day = String(d.getDate()).padStart(2, '0');
