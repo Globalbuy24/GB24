@@ -34,6 +34,8 @@ app.use(cors({
     credentials: true // If you need cookies/auth headers
 }));
 
+app.options('*',cors());
+
 app.use(express.json({ limit: '10mb' }));
 
 // Import routes
