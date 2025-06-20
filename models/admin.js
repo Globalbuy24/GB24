@@ -1,19 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const formatDateTime = (date) => {
-    const options = { 
-        day: '2-digit', 
-        month: '2-digit', 
-        year: '2-digit', 
-        hour: '2-digit', 
-        minute: '2-digit', 
-        second: '2-digit', 
-        hour12: false 
-    };
-    return new Intl.DateTimeFormat('en-GB', options).format(date).replace(',', '');
-};
-
 const AdminSchema = new mongoose.Schema({
     token: { type: String },
     first_name: {
@@ -73,13 +60,6 @@ AdminSchema.pre('save', async function (next) {
         const error = new Error('At least one of email or phone number is required');
         return next(error);
     }
-
-    // Format date fields in notifications
-    this.notifications.forEach(notification => {
-        if (notification.created_at) {
-            notification.created_at = formatDateTime(notification.created_at);
-        }
-    });
 
     next();
 });
