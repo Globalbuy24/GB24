@@ -44,7 +44,7 @@ const UserSchema = new mongoose.Schema({
         default: ''
     },
     prefered_notification: { type: String },
-    temp: { code: { type: String }, created_at: {type: String } },
+    temp: { code: { type: String }, created_at: {type: Date } },
     num_is_verified: { type: Boolean, default: false },
     email_is_verified: { type: Boolean, default: false },
     password: {
@@ -198,49 +198,7 @@ UserSchema.pre('save', async function (next) {
         return next(error);
     }
 
-    // Format date fields
-    const dateFields = ['created_at', 'created_date', 'purchase_date', 'expires_date'];
-    dateFields.forEach(field => {
-        if (this[field]) {
-            this[field] = formatDateTime(this[field]);
-        }
-    });
 
-    // Format dates in orders
-    if (this.orders) {
-        this.orders.forEach(order => {
-            if (order.created_at) {
-                order.created_at = formatDateTime(order.created_at);
-            }
-            if (order.created_date) {
-                order.created_date = formatDateTime(order.created_date);
-            }
-            if (order.purchase_date) {
-                order.purchase_date = formatDateTime(order.purchase_date);
-            }
-            if (order.expires_date) {
-                order.expires_date = formatDateTime(order.expires_date);
-            }
-        });
-    }
-
-    // Format dates in notifications
-    if (this.notifications) {
-        this.notifications.forEach(notification => {
-            if (notification.created_at) {
-                notification.created_at = formatDateTime(notification.created_at);
-            }
-        });
-    }
-
-    // Format dates in transactions
-    if (this.transactions) {
-        this.transactions.forEach(transaction => {
-            if (transaction.created_at) {
-                transaction.created_at = formatDateTime(transaction.created_at);
-            }
-        });
-    }
 
     next();
 });
