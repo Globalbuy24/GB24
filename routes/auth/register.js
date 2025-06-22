@@ -130,7 +130,7 @@ router.post('/',async(req,res)=>{
           {
               user.prefered_notification="phone"
               user.temp.code=newTempCode()
-              user.temp.created_at=formatDateTime(new Date())
+              user.temp.created_at=new Date()
               const temp_code=user.temp.code
              
               await sendSMS({
@@ -144,7 +144,7 @@ router.post('/',async(req,res)=>{
           {
             user.prefered_notification="email"
             user.temp.code=newTempCode()
-            user.temp.created_at=formatDateTime(new Date())
+            user.temp.created_at=new Date()
             const temp_code=user.temp.code
             
               /**
@@ -165,10 +165,9 @@ router.post('/',async(req,res)=>{
               subject:'Verification code',
               html:messageTemplateForOTP(temp_code)
             })
-          
-
-
+        
           }
+          
         user.notifications.push(welcomeNotification); 
         user.token = token;
         const newUser=await user.save()
