@@ -43,7 +43,7 @@ router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
    * @returns false if the difference in time is more than 2 minutes
    */
   function codeIsValid(dateToCompare) {
-    const currentDate = formatDateTime(new Date());
+    const currentDate = new Date();
     const diffInMilliseconds = currentDate - dateToCompare;
     const diffInMinutes = diffInMilliseconds / (1000 * 60);
 
@@ -61,7 +61,6 @@ router.post('/verify/:id',authenticate,getUser,async(req,res)=>{
             await res.user.updateOne({$set:{email_is_verified:true,is_verified:true}})
             const updatedUser=await User.findById(res.user.id)
 
-            
             res.json(updatedUser)
           }
         else if(res.user.prefered_notification=="phone")

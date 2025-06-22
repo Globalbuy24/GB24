@@ -431,15 +431,15 @@ Content-Type: application/json
 }
 
 ### Complete order by user
-POST http://localhost:3000/users/66f85fad5fa738cd1d67e8de/newOrder
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
+POST http://localhost:3000/users/68512d140eba6c90b51b5455/newOrder
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3NTAxNTE2OTUsImV4cCI6MTc1MDc1NjQ5NX0.TZFZubXdVeo1PzV3DcOSZrCwrq2RKI1GnhjxMtEUx98
 Content-Type: application/json
  
 {
     "basketProducts":[
-     {"id":"67585bbac523f1f7402cf94a","quantity":15},
-     {"id":"67585b185bc07b552089ebec","quantity":8},
-     {"id":"67585bc4c523f1f7402cf95d","quantity":5}
+     {"id":"6855540ac06431e463d59b54","quantity":15},
+     {"id":"6855549ea1c620de874edabd","quantity":8},
+     {"id":"685554db6f58e35920f88b20","quantity":5}
     ]
 }
 ###
