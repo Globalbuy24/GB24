@@ -169,7 +169,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
   if(res.user.prefered_notification=="email")
   {
     const temp_code=newTempCode()
-   await res.user.updateOne({$set:{temp:{code:temp_code,created_at:formatDateTime(new Date())}}})
+   await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
    
 
    const html=messageTemplateForOTP(temp_code)
