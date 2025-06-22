@@ -1000,72 +1000,99 @@ router.delete('/:id/savedItem/:sId', authenticate, getUser, async (req, res) => 
 /**
  * Create order by user
  */
-router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
-     
- console.log(req.body);
- 
-  if(res.user.is_verified==false)
-  {
-    res.status(400).json({message:"Please verify your account"})
-    return
-  }
+router.post('/:id/newOrder', authenticate, getUser, async (req, res) => {
+  try {
+      console.log(req.body);
 
-  const orderNumber=await newOrderNumber(res.user.id)
-  const userDeliveryAddress=res.user.addresses.find(address=>address.isDefault==true)
-  var itemCount=0;
-  const userProducts=[]
-  req.body.basketProducts.forEach(item2=>{
-     res.user.basket.forEach(item1 => {
-          if(item1.id==item2.id)
-          {
-            item1.product.quantity=item2.quantity;
-            userProducts.push(item1.product);
-            itemCount+=1;
-            item1.deleteOne({_id:item1.id});
+      if (!res.user.is_verified) {
+          return res.status(400).json({ message: "Please verify your account" });
+      }
+
+      if (!req.body.basketProducts || !Array.isArray(req.body.basketProducts)) {
+          return res.status(400).json({ message: "Invalid basket products" });
+      }
+
+      const orderNumber = await newOrderNumber(res.user.id);
+      const userDeliveryAddress = res.user.addresses.find(address => address.isDefault === true);
+      
+      if (!userDeliveryAddress) {
+          return res.status(400).json({ message: "No default delivery address found" });
+      }
+
+      let itemCount = 0;
+      const userProducts = [];
+      const basketItemsToDelete = [];
+
+      // First gather all the products and items to delete
+      for (const item2 of req.body.basketProducts) {
+          const basketItem = res.user.basket.find(item1 => item1.id == item2.id);
+          if (basketItem) {
+              basketItem.product.quantity = item2.quantity;
+              userProducts.push(basketItem.product);
+              itemCount += 1;
+              basketItemsToDelete.push(basketItem.id);
           }
-      })
-    });
+      }
 
+      if (itemCount === 0) {
+          return res.status(400).json({ message: "No valid products in basket" });
+      }
 
+      const defaultDelivery = {
+          name: "Air Freight",
+          delivery_fee: "0.00"
+      };
 
+      const newOrder = {
+          _id: new mongoose.Types.ObjectId(),
+          pin: newPin(),
+          order_num: orderNumber,
+          delivery_details: userDeliveryAddress,
+          delivery_method: defaultDelivery,
+          products: userProducts,
+          created_at: formatDateTime(new Date()),
+          items_count: itemCount
+      };
 
-    console.log(itemCount);
-    const defaultDelivery={
-      name:"Air Freight",
-      delivery_fee:"0.00"
-    }
-    const createdAt = formatDateTime(new Date()); 
-    // sconst humanReadableDate = format(createdAt, 'MMMM do yyyy, h:mm:ss a');
-  
-    const newOrder={
-    _id: new mongoose.Types.ObjectId(),
-    pin:newPin(),
-    order_num:orderNumber,
-    delivery_details:userDeliveryAddress,
-    delivery_method:defaultDelivery,
-    products:userProducts,
-    created_at:formatDateTime(new Date()),
-    items_count:itemCount
-    }
+      const newOrderNotification = {
+          _id: new mongoose.Types.ObjectId(),
+          type: 'New Order',
+          message: `Your order has been placed successfully`,
+          created_at: formatDateTime(new Date())
+      };
 
-    const newOrderNotification = {
-      _id: new mongoose.Types.ObjectId(),
-      type: 'New Order',
-      message: `Your order has been placed successfully`,
-      created_at:formatDateTime(new Date())
-    };
-    
-     try{
-         res.user.notifications.push(newOrderNotification)
-          await res.user.orders.push(newOrder)
-          const updatedUser= await res.user.save()
-          res.status(201).json(updatedUser)
-     }
-     catch(error)
-     {
-       res.status(400).json({message:error})
-     }
-})
+      // Start a session for transactions
+      const session = await mongoose.startSession();
+      session.startTransaction();
+
+      try {
+          // Add notification and order
+          res.user.notifications.push(newOrderNotification);
+          res.user.orders.push(newOrder);
+          
+          // Remove items from basket
+          res.user.basket = res.user.basket.filter(item => !basketItemsToDelete.includes(item.id));
+          
+          const updatedUser = await res.user.save({ session });
+          
+          // Delete basket items
+          await BasketItem.deleteMany(
+              { _id: { $in: basketItemsToDelete } },
+              { session }
+          );
+
+         
+
+          res.status(201).json(updatedUser);
+      } catch (error) {
+          
+          throw error;
+      }
+  } catch (error) {
+      console.error("Order creation error:", error);
+      res.status(400).json({ message: "Failed to create order", error: error.message });
+  }
+});
 
 /**
  * Update Order on product change
