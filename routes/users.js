@@ -1888,7 +1888,7 @@ async function numEnd(account_number) {
 
  function orderExpiration(expires_date) {
     const expirationDate = new Date(expires_date);
-    const currentDate = formatDateTime(new Date());
+    const currentDate = new Date();
     
     const timeDifference = expirationDate - currentDate;
     

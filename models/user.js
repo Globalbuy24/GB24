@@ -130,7 +130,7 @@ const UserSchema = new mongoose.Schema({
         items_count: { type: String },
         estimated_delivery: { type: String, default: "2 weeks" },
         expiresIn: { type: String, default: "7 days" },
-        expires_date: {type: String, default: () => {
+        expires_date: {type: Date, default: () => {
             const currentDate = new Date();
             return new Date(currentDate.setDate(currentDate.getDate() + 7));
         }},
