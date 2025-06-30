@@ -201,8 +201,9 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
     basket.product=data
     const basketUpdatedNotification = {
       _id: new mongoose.Types.ObjectId(),
-      type: 'basketUpdated',
-      message: ` Your basket has been updated successfully,verify everything you need`,
+      type: '💲 Quote Ready',
+      message: `We've prepared your quote with a full price breakdown. Please review and confirm your order in
+       the app to proceed.`,
       created_at:formatDateTime(new Date())
     };
     user.notifications.push(basketUpdatedNotification)

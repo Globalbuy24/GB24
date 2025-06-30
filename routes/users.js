@@ -1049,13 +1049,21 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
 
     const newOrderNotification = {
       _id: new mongoose.Types.ObjectId(),
-      type: 'New Order',
-      message: `Your order has been placed successfully`,
+      type: '✅ Order Received',
+      message: `Thank you for placing your order with GlobalBuy24. We’ve received your request and are now
+      verifying the product details. We’ll notify you once we place the order.`,
+      created_at:formatDateTime(new Date())
+    };
+    const newOrderNotification2 = {
+      _id: new mongoose.Types.ObjectId(),
+      type: '🔍 Order Under Review',
+      message: `Our team is reviewing your product link(s) to confirm availability, price, shipping, and size/variant
+      information. We’ll send you a quote shortly.`,
       created_at:formatDateTime(new Date())
     };
     
      try{
-         res.user.notifications.push(newOrderNotification)
+         res.user.notifications.push(newOrderNotification,newOrderNotification2)
           res.user.orders.push(newOrder)
           const updatedUser= await res.user.save()
           res.status(201).json(updatedUser)
@@ -1714,8 +1722,9 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
       // notify user
       const newNotification={
         _id: new mongoose.Types.ObjectId(),
-        type:"Order Payment",
-        message:`Your payment of ${event.amount-(0.04*event.amount)}XAF was successful`,
+        type:"💳 Payment Confirmed",
+        message:`We’ve received your payment of ${event.amount-(0.04*event.amount)}XAF successfully. We are now placing your order with the seller. You’ll be
+          notified once the item arrives at our hub in Berlin.`,
         created_at:formatDateTime(new Date())
       }
       user.notifications.push(newNotification)
@@ -1730,7 +1739,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
        // notify user
        const secondNewNotification={
         _id: new mongoose.Types.ObjectId(),
-        type:"Order Payment",
+        type:"Payment Failed",
         message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has failed`,
         created_at:formatDateTime(new Date())
       }
@@ -1742,7 +1751,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
       // notify user
       const thirdNewNotification={
        _id: new mongoose.Types.ObjectId(),
-       type:"Order Payment",
+       type:"Payment Expired",
        message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has expired`,
        created_at:formatDateTime(new Date())
      }
