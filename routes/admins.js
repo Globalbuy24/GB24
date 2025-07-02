@@ -774,6 +774,29 @@ router.get('/seafreight_fee',authenticate, async (req, res) => {
   }
 })
 
+/**
+ * 
+ */
+
+router.get('/auth/verify', authenticate, async (req, res) => {
+  try {
+      const user = await Admin.findById(req.body.userId); // Fetch user from DB using userId from token
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).json({ user }); // Return user information
+  } catch (error) {
+      res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+/**
+ * 
+ * @param {*} amount 
+ * @param {*} fromCurrency 
+ * @param {*} toCurrency 
+ * @returns 
+ */
 
 async function convertCurrency(amount, fromCurrency, toCurrency) {
     try {
