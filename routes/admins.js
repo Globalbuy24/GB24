@@ -780,7 +780,7 @@ router.get('/seafreight_fee',authenticate, async (req, res) => {
 
 router.get('/auth/verify', authenticate, async (req, res) => {
   try {
-      const user = await User.findById(req.body.userId); // Fetch user from DB using userId from token
+      const user = await Admin.findById(req.body.userId); // Fetch user from DB using userId from token
       if (!user) {
           return res.status(404).json({ message: 'User not found' });
       }
