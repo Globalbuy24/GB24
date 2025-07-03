@@ -778,15 +778,27 @@ router.get('/seafreight_fee',authenticate, async (req, res) => {
  * 
  */
 
+// Your backend route should look like this:
 router.get('/auth/verify', authenticate, async (req, res) => {
   try {
-      const user = await Admin.findById(req.body.userId); // Fetch user from DB using userId from token
-      if (!user) {
-          return res.status(404).json({ message: 'User not found' });
+    // The authenticate middleware should have attached the user to req.user
+    const user = await Admin.findById(req.user.id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Return sanitized user data
+    res.status(200).json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        // other non-sensitive fields
       }
-      res.status(200).json({ user }); // Return user information
+    });
   } catch (error) {
-      res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
