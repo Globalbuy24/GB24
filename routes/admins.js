@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt=require('bcrypt')
 const mongoose=require('mongoose')
 const authenticate=require('../middleware/currentUser')
+const authenticateAdmin=require('../middleware/currentAdminOnWeb')
 const axios = require('axios');
 // currency converter
 const CC_API_KEY = '1e06667412357fb0c88dacd6'; // Replace with your API key
@@ -778,7 +779,7 @@ router.get('/seafreight_fee',authenticate, async (req, res) => {
  * 
  */
 
-router.get('/auth/verify', authenticate, async (req, res) => {
+router.get('/auth/verify', authenticateAdmin, async (req, res) => {
   try {
     
     const user = await Admin.findById(req.user.id);
