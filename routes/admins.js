@@ -65,7 +65,7 @@ router.post('/',async(req, res) => {
 
         const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
         const token=jwt.sign({
-        data: admin.first_name
+        data: admin.id
         }, jwt_secret, { expiresIn: '12h' });
 
         /**
@@ -115,7 +115,7 @@ router.post('/login',async(req,res)=>{
                      
                      const jwt_secret=process.env.JWT_SECRET||'jwt_gb24_secret'
                      const token=jwt.sign({
-                         data: admin.first_name
+                         data: admin.id
                        }, jwt_secret, { expiresIn: '12h' });
                        
                        await admin.updateOne({$unset:{token:""}})
@@ -778,10 +778,10 @@ router.get('/seafreight_fee',authenticate, async (req, res) => {
  * 
  */
 
-router.get('/auth/verify/:id', authenticate, async (req, res) => {
+router.get('/auth/verify/', authenticate, async (req, res) => {
   try {
     
-    const user = await Admin.findById(req.params.id);
+    const user = await Admin.findById(req.user.id);
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
