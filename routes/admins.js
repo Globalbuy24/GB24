@@ -778,7 +778,7 @@ router.get('/seafreight_fee',authenticate, async (req, res) => {
  * 
  */
 
-router.get('/auth/verify/', authenticate, async (req, res) => {
+router.get('/auth/verify', authenticate, async (req, res) => {
   try {
     
     const user = await Admin.findById(req.user.id);
