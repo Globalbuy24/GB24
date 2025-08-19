@@ -505,6 +505,7 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
 
 router.post('/:id/addPayment', authenticate, getUser, async (req, res) => {
   const { type, provider, account_name, account_number, expiry_date, cvv } = req.body;
+  console.log('Received provider from client:', provider);
   // console.log(req.body);
   if (!type || !provider || !account_name || !account_number) {
     return res.status(400).json({ message: 'All fields are required.' });
@@ -1651,12 +1652,12 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
           res.status(400).json({message:"Please add a payment method"})
           return
       }
+     console.log(isDefault)
+      order.delivery_details.street=isDefault.street
+      order.delivery_details.city=isDefault.city
      
-      order.delivery_details.street=isDefault.delivery_details.street
-      order.delivery_details.city=isDefault.delivery_details.city
-   
     const payment = {
-      amount:parseInt(order.total_amount)+parseInt(0.04*parseInt(order.total_amount)),
+      amount:parseInt(order.total_amount)+parseInt(0.031*parseInt(order.total_amount)),
       // email:userEmail,
       externalId:order.id,//orderID
       userId: res.user.id,
@@ -1665,10 +1666,12 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
 
       }
      const resp = await fapshi.initiatePay(payment)
+     console.log(resp)
     // const resp={link:"nothing"}
     //  console.log(resp.transId)
 
     // create new transaction
+    // return 1
     const transaction=
     {
       _id: new mongoose.Types.ObjectId(),
@@ -1683,10 +1686,9 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
     res.json(resp)
     
    }
-   catch(err)
-   {
-      res.status(400).json({message:err})
-   }
+   catch(err) {
+  res.status(400).json({message: err.message || "Something went wrong"})
+}
 
  
 })
@@ -1863,19 +1865,25 @@ async function newOrderNumber(userId) {
  * @returns a matching provider logo for each provider else it returns a default logo
  */
 async function provLogo(provider) {
-  
   const providerLower = provider.toLowerCase();
-  
-  
-  const logoUrls = {
-      mtn: 'https://seeklogo.com/images/M/mtn-logo-A285C69508-seeklogo.com.png',
-      orange: 'https://seeklogo.com/images/O/orange-logo-A4FC5976DF-seeklogo.com.png',
-      visa: 'https://seeklogo.com/images/V/VISA-logo-A32D589D31-seeklogo.com.png',
-      master: 'https://seeklogo.com/images/M/Master_Card-logo-027CB51F96-seeklogo.com.png',
-      americanexpress: 'https://seeklogo.com/images/A/american-express-logo-EDF87C04A0-seeklogo.com.png'
-  };
 
-  return logoUrls[providerLower] || 'https://seeklogo.com/images/D/dollar-logo-F5403A8DB9-seeklogo.com.png';
+  if (providerLower.includes('mtn')) {
+    return 'https://seeklogo.com/images/M/mtn-logo-A285C69508-seeklogo.com.png';
+  }
+  if (providerLower.includes('orange')) {
+    return 'https://seeklogo.com/images/O/orange-logo-A4FC5976DF-seeklogo.com.png';
+  }
+  if (providerLower.includes('visa')) {
+    return 'https://seeklogo.com/images/V/VISA-logo-A32D589D31-seeklogo.com.png';
+  }
+  if (providerLower.includes('master')) {
+    return 'https://seeklogo.com/images/M/Master_Card-logo-027CB51F96-seeklogo.com.png';
+  }
+  if (providerLower.includes('american')) {
+    return 'https://seeklogo.com/images/A/american-express-logo-EDF87C04A0-seeklogo.com.png';
+  }
+
+  return 'https://seeklogo.com/images/D/dollar-logo-F5403A8DB9-seeklogo.com.png';
 }
 
 /**
