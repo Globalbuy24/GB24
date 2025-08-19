@@ -1455,48 +1455,50 @@ router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) =>
 
 
 // Route to group purchases by delivery dates
+// Route to group purchases by delivery dates
 router.get('/:id/groupedPurchases', authenticate, getUser, async (req, res) => {
   try {
-      const userId = req.params.id; // Get user ID from the route
+    const userId = req.params.id; // Get user ID from the route
 
-      const user = await User.findById(userId).select('orders'); // Fetch user with orders
+    const user = await User.findById(userId).select('orders'); // Fetch user with orders
 
-      if (!user) {
-          return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const orders = user.orders.filter((order) => order.status === "purchased");
+
+    // Perform aggregation on the orders array
+    const groupedPurchases = orders.reduce((acc, order) => {
+      // ✅ Defensive check
+      const purchaseDate = order.purchase_date
+        ? new Date(order.purchase_date).toISOString().split('T')[0]
+        : "Unknown Date"; 
+
+      if (!acc[purchaseDate]) {
+        acc[purchaseDate] = {
+          purchaseDate,
+          totalAmount: 0,
+          orders: []
+        };
       }
 
-      const orders = user.orders.filter((order)=>order.status=="purchased");
+      acc[purchaseDate].totalAmount += parseFloat(order.total_amount || 0);
+      acc[purchaseDate].orders.push(order);
 
-      // Perform aggregation on the orders array
-      const groupedPurchases = orders.reduce((acc, order) => {
-          const purchaseDate = order.purchase_date.toISOString().split('T')[0]; // Format date
+      return acc;
+    }, {});
 
-          // Check if the date group already exists
-          if (!acc[purchaseDate]) {
-              acc[purchaseDate] = {
-                  purchaseDate,
-                  totalAmount: 0,
-                  orders: []
-              };
-          }
+    // Convert the object back to an array
+    const result = Object.values(groupedPurchases);
 
-          // Update the total amount and push the order
-          acc[purchaseDate].totalAmount += parseFloat(order.total_amount);
-          acc[purchaseDate].orders.push(order);
-
-          return acc;
-      }, {});
-
-      // Convert the object back to an array
-      const result = Object.values(groupedPurchases);
-
-      res.status(200).json(result);
+    res.status(200).json(result);
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Internal Server Error" });
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-
 });
+
 
 /**
  * get 4 images from an order 
@@ -1721,11 +1723,12 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
       //  If payment was successful, update order status to purchased, update the transaction,notify user
       order.status="purchased"
       transaction.status="success"
+      order.purchase_date=new Date()
       // notify user
       const newNotification={
         _id: new mongoose.Types.ObjectId(),
         type:"💳 Payment Confirmed",
-        message:`We’ve received your payment of ${event.amount-(0.04*event.amount)}XAF successfully. We are now placing your order with the seller. You’ll be
+        message:`We’ve received your payment of ${event.amount-(0.031*event.amount)}XAF successfully. We are now placing your order with the seller. You’ll be
           notified once the item arrives at our hub in Berlin.`,
         created_at:formatDateTime(new Date())
       }
@@ -1742,7 +1745,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
        const secondNewNotification={
         _id: new mongoose.Types.ObjectId(),
         type:"Payment Failed",
-        message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has failed`,
+        message:`Your payment of ${event.amount-(0.031*event.amount)}XAF has failed`,
         created_at:formatDateTime(new Date())
       }
       user.notifications.push(secondNewNotification)
@@ -1754,7 +1757,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
       const thirdNewNotification={
        _id: new mongoose.Types.ObjectId(),
        type:"Payment Expired",
-       message:`Your payment of ${event.amount-(0.04*event.amount)}XAF has expired`,
+       message:`Your payment of ${event.amount-(0.031*event.amount)}XAF has expired`,
        created_at:formatDateTime(new Date())
      }
      user.notifications.push(thirdNewNotification)
