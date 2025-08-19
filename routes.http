@@ -846,3 +846,11 @@ Content-Type: application/json
     "credential":"ndktechh@gmail.com",
     "password":"12345678"
 }
+###
+GET http://localhost:3000/users/689e52c0383bbc5aaf269ed7/groupedPurchases
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
+Content-Type: application/json
+
+{
+   
+}
