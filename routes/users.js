@@ -442,6 +442,29 @@ router.get('/:id/notifications', authenticate, getUser, async (req, res) => {
 });
 
 /**
+* Get all user notifications for a particular user id
+*/
+router.get('/:id/all-notifications', authenticate, getUser, async (req, res) => {
+  try {
+      res.json(res.user.notifications);
+  } catch (error) {
+      res.status(500).json({ message: error });
+  }
+});
+
+/**
+* Get all unread user notifications for a particular user id
+*/
+router.get('/:id/unread-notifications', authenticate, getUser, async (req, res) => {
+  try {
+      const unreadNotifications = res.user.notifications.filter(notification => notification.status === 'unread');
+      res.json(unreadNotifications);
+  } catch (error) {
+      res.status(500).json({ message: error });
+  }
+});
+
+/**
  * add new user notification
  */
 router.post('/:id/notifications', authenticate, getUser, async (req, res) => {
@@ -488,6 +511,52 @@ router.delete('/:id/notifications/:nId', authenticate, getUser, async (req, res)
          return;
      }
      notificationToDelete.deleteOne()
+
+     const updatedUser = await res.user.save();
+     res.json(updatedUser);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
+/**
+ * mark user notification as read
+ */
+router.patch('/:id/notifications/:nId', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     const notificationId = req.params.nId;
+       
+     const notificationToUpdate = res.user.notifications.find((notification) => notification.id === notificationId);
+     if(!notificationToUpdate)
+     {
+         res.status(404).json({ error: 'Notification not found' });
+         return;
+     }
+     notificationToUpdate.status = 'read';
+
+     const updatedUser = await res.user.save();
+     res.json(updatedUser);
+  }
+  catch(error)
+  {
+    res.status(500).json({message:error});
+  }
+
+})
+
+/**
+ * delete all user notifications
+ */
+router.delete('/:id/notifications', authenticate, getUser, async (req, res) => {
+ 
+  try {
+     
+     res.user.notifications = [];
 
      const updatedUser = await res.user.save();
      res.json(updatedUser);
@@ -761,7 +830,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       return res.status(400).json({ message: "Invalid URL format" });
     }
 
-    const createdAt = formatDateTime(new Date());
+    const createdAt = new Date();
 
     const newBasket = {
       _id: new mongoose.Types.ObjectId(),
@@ -793,14 +862,14 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       _id: new mongoose.Types.ObjectId(),
       type: 'Basket Created',
       message: 'Your basket has been created successfully',
-      created_at: formatDateTime(new Date())
+      created_at: new Date()
     };
 
     const basketCreatedByUserNotification = {
       _id: new mongoose.Types.ObjectId(),
       type: 'Basket Created',
       message: 'A new order has been created',
-      created_at: formatDateTime(new Date())
+      created_at: new Date()
     };
 
     console.log('Current Date:', new Date());
@@ -1454,7 +1523,7 @@ router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) =>
  */
 
 
-// Route to group purchases by delivery dates
+
 // Route to group purchases by delivery dates
 router.get('/:id/groupedPurchases', authenticate, getUser, async (req, res) => {
   try {

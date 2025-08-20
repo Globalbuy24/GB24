@@ -160,6 +160,7 @@ const UserSchema = new mongoose.Schema({
         _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
         type: { type: String },
         message: { type: String },
+        status: { type: String, default: 'unread' },
         created_at: {type: String }
     }],
     transactions: [{
