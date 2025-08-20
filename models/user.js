@@ -159,7 +159,10 @@ const UserSchema = new mongoose.Schema({
     notifications: [{
         _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
         type: { type: String },
+        title: { type: String },
         message: { type: String },
+        icon: { type: String },
+        link: { type: String },
         status: { type: String, default: 'unread' },
         created_at: {type: String }
     }],
