@@ -854,3 +854,24 @@ Content-Type: application/json
 {
    
 }
+
+###
+GET http://localhost:3000/users/689e52c0383bbc5aaf269ed7/groupedPurchases
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
+Content-Type: application/json
+
+{
+   
+}
+
+### Send SMS via Avlytext API
+POST https://api.avlytext.com/v1/sms?api_key=8tVlW9AtRnTfIpuTkxGvqAyuBNzAK3tyJkbZXfgBX1vmvAkT3PYCh0DmjPLuahCbj5k9
+Content-Type: application/json
+
+{
+  "sender": "GB24",
+  "recipient": "+237673964362",
+  "text": "Hello, this is a test SMS 🚀"
+}
+
+

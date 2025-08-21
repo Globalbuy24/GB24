@@ -11,6 +11,8 @@ const fs = require('fs');
 const user = require('../models/user')
 const fapshi=require('./payments/fapshi')
 const axios = require('axios');
+const { HfInference } = require('@huggingface/inference');
+const cheerio = require('cheerio');
 
 const { format } = require('date-fns');
 

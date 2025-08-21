@@ -111,7 +111,7 @@ router.post('/forgot-pwd-verify-user', async(req, res) => {
        subject:'Verification code',
        html:messageTemplateForOTP(temp_code)
      })
-     res.json({message:"code sent successfully",uid:user.id})
+     res.json({message:"code sent successfully",uid:user.id,token:user.token})
     }
 
       /**
