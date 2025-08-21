@@ -111,9 +111,10 @@ router.post('/forgot-pwd-verify-user', async(req, res) => {
        subject:'Verification code',
        html:messageTemplateForOTP(temp_code)
      })
+     const jwt_secret=process.env.JWT_SECRET
       const token=jwt.sign({
                         data: user.first_name
-      }, jwt_secret, { expiresIn: '168h' });
+      }, jwt_secret, { expiresIn: '1h' });
 
      res.json({message:"code sent successfully",uid:user.id,token:token})
     }
