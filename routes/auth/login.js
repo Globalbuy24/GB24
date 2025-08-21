@@ -133,7 +133,11 @@ router.post('/forgot-pwd-verify-user', async(req, res) => {
         recipient: user.phone_number, 
         message: "Your verification code is: "+temp_code+" . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com"
       });
-
+      const jwt_secret=process.env.JWT_SECRET
+      const token=jwt.sign({
+        data: user.first_name
+      }, jwt_secret, { expiresIn: '1h' });
+      res.json({message:"code sent successfully",uid:user.id,token:token})
     }
     }
    }
