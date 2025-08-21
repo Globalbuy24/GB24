@@ -173,6 +173,11 @@ const UserSchema = new mongoose.Schema({
         status: { type: String },
         transId: { type: String },
         created_at: {type: String, default: new Date() }
+    }],
+    chatbot_history: [{
+        message: { type: String },
+        sender: { type: String },
+        timestamp: { type: Date, default: Date.now }
     }]
 });
 
