@@ -70,12 +70,21 @@ Content-Type: application/json
 
 ### change password
 
-POST http://localhost:3000/users/change-password/66edd3e92ae495db5d122b58
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjk1NzkzODgsImV4cCI6MTczMDE4NDE4OH0.1oPO48FJHu6rpTfN2PKwlK3Z6yMQf4YclWxbqZzG818
+POST http://localhost:3000/users/change-password/689e52c0383bbc5aaf269ed7
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU3OTI5NzQsImV4cCI6MTc1NTc5NjU3NH0.hdEBLjnNJucxRm-ZZcFGY3agYRKN1Lx46rmxYxUo19c
 Content-Type: application/json
 
 {
-     "pwd":"1234567890s"
+     "pwd":"qwertyui"
+}
+
+### Test change password
+POST http://localhost:3000/users/change-password/689e52c0383bbc5aaf269ed7
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU3OTI5NzQsImV4cCI6MTc1NTc5NjU3NH0.hdEBLjnNJucxRm-ZZcFGY3agYRKN1Lx46rmxYxUo19c
+Content-Type: application/json
+
+{
+     "pwd":"newpassword"
 }
 ### change password auth
 
@@ -873,5 +882,3 @@ Content-Type: application/json
   "recipient": "+237673964362",
   "text": "Hello, this is a test SMS 🚀"
 }
-
-
