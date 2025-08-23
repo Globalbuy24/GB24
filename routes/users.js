@@ -1870,9 +1870,9 @@ router.post('/chatbot/:id',getUser,authenticate, async (req, res) => {
         const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
             method: "POST",
             headers: {
-                "Authorization": "Bearer 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",
-                "HTTP-Referer": "", // Update with your actual site URL
-                "X-Title": "GB24", // Update with your site name
+                "Authorization": "Bearer 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",
+                "HTTP-Referer": "https://globalbuy24-a3348f9c2173.herokuapp.com/", // Update with your actual site URL
+                "X-Title": "GlobalBuy24", // Update with your site name
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
