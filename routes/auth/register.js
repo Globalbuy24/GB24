@@ -1,18 +1,19 @@
 //create new user
-const express=require('express')
-const session = require('express-session');
-require('../../routes/auth/google')
-require('../../routes/auth/facebook')
-const router =express.Router()
-const passport =require('passport')
-const User=require('../../models/user')
-const jwt = require('jsonwebtoken')
-const mongoose=require('mongoose')
-const mailer=require('../../middleware/mailer')
+import express from 'express';
+import session from 'express-session';
+import '../../routes/auth/google.js';
+import '../../routes/auth/facebook.js';
+const router = express.Router();
+import passport from 'passport';
+import User from '../../models/user.js';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import mailer from '../../middleware/mailer.js';
 //const sms=require('../../middleware/sms')
-const https = require('follow-redirects').https;
-const fs = require('fs');
-const axios = require('axios');
+import pkg from 'follow-redirects';
+const { https } = pkg;
+import fs from 'fs';
+import axios from 'axios';
 
 router.use(session({
   secret: 'gb24',
@@ -527,4 +528,4 @@ function messageTemplateForOTP(otp)
 </html>
   `
 }
-module.exports=router
+export default router;

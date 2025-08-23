@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const AdminSchema = new mongoose.Schema({
     token: { type: String },
@@ -64,4 +64,4 @@ AdminSchema.pre('save', async function (next) {
     next();
 });
 
-module.exports = mongoose.model('admins', AdminSchema);
+export default mongoose.model('admins', AdminSchema);

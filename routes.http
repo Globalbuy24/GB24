@@ -56,7 +56,7 @@ POST  http://localhost:3000/login/forgot-pwd-verify-user
 Content-Type: application/json
 
 {
-     "credential":"ndktechh@gmail.com"
+     "credential":"+237673964362"
 }
 ### forgot password- verify otp
 
@@ -853,7 +853,7 @@ Content-Type: application/json
 
 {
     "credential":"ndktechh@gmail.com",
-    "password":"12345678"
+    "password":"12345678@"
 }
 ###
 GET http://localhost:3000/users/689e52c0383bbc5aaf269ed7/groupedPurchases
@@ -881,4 +881,27 @@ Content-Type: application/json
   "sender": "GB24",
   "recipient": "+237673964362",
   "text": "Hello, this is a test SMS 🚀"
+}
+
+### Chatbot
+POST http://localhost:3000/users/chatbot/689e52c0383bbc5aaf269ed7
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
+Content-Type: application/json
+
+{
+  "message": "What kind of platform are you guys"
+}
+### Get user chats
+GET http://localhost:3000/users/chatbot/689e52c0383bbc5aaf269ed7
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
+Content-Type: application/json
+
+{
+}
+### Delete user chat
+DELETE http://localhost:3000/users/chatbot/689e52c0383bbc5aaf269ed7
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
+Content-Type: application/json
+
+{
 }

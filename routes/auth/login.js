@@ -1,11 +1,12 @@
-const express=require('express')
-const router =express.Router()
-const User=require('../../models/user')
-const bcrypt=require('bcrypt')
-const jwt = require('jsonwebtoken')
-const mailer=require('../../middleware/mailer')
-const https = require('follow-redirects').https;
-const axios = require('axios');
+import express from 'express';
+const router = express.Router();
+import User from '../../models/user.js';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import mailer from '../../middleware/mailer.js';
+import pkg from 'follow-redirects';
+const { https } = pkg;
+import axios from 'axios';
 
 /**
  * login user
@@ -346,4 +347,4 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
 
  
 
-module.exports=router
+export default router;

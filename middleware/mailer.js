@@ -1,4 +1,4 @@
-const nodemailer=require('nodemailer')
+import nodemailer from 'nodemailer';
 
 var transport = nodemailer.createTransport({
   host: "live.smtp.mailtrap.io",
@@ -8,4 +8,4 @@ var transport = nodemailer.createTransport({
     pass: "731e2c98c7272dbcca7bb85396f644ae"
   }
 });
-module.exports = transport;
+export default transport;

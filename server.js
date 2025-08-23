@@ -1,10 +1,7 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import 'dotenv/config';
 
 mongoose.connect(process.env.DATABASE_URL);
 const db = mongoose.connection;
@@ -28,12 +25,12 @@ app.options('*',cors());
 app.use(express.json({ limit: '10mb' }));
 
 // Import routes
-const loginRouter = require('./routes/auth/login');
-const registerRouter = require('./routes/auth/register');
-const usersRouter = require('./routes/users');
-const adminsRouter = require('./routes/admins');
-const referralRouter = require('./routes/auth/referral');
-const homeRouter = require('./routes/home');
+import loginRouter from './routes/auth/login.js';
+import registerRouter from './routes/auth/register.js';
+import usersRouter from './routes/users.js';
+import adminsRouter from './routes/admins.js';
+import referralRouter from './routes/auth/referral.js';
+import homeRouter from './routes/home.js';
 
 // Define routes
 app.use('/', homeRouter);
