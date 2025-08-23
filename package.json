@@ -34,10 +34,11 @@
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
-    "set-function-length": "^1.2.2"
+    "set-function-length": "^1.2.2",
+     "dotenv": "^16.4.5"
   },
   "devDependencies": {
-    "dotenv": "^16.4.5",
+   
     "nodemon": "^3.1.2"
   },
   "keywords": [],
