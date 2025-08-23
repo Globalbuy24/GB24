@@ -1,20 +1,20 @@
-const express=require('express')
-const router =express.Router()
-const User=require('../models/user')
-const bcrypt=require('bcrypt')
-const Admin=require('../models/admin')
-const authenticate=require('../middleware/currentUser')
-const mongoose = require('mongoose');
-const mailer=require('../middleware/mailer')
-const https = require('follow-redirects').https;
-const fs = require('fs');
-const user = require('../models/user')
-const fapshi=require('./payments/fapshi')
-const axios = require('axios');
-const { HfInference } = require('@huggingface/inference');
-const cheerio = require('cheerio');
+import express from 'express';
+const router = express.Router();
+import User from '../models/user.js';
+import bcrypt from 'bcrypt';
+import Admin from '../models/admin.js';
+import authenticate from '../middleware/currentUser.js';
+import mongoose from 'mongoose';
+import mailer from '../middleware/mailer.js';
+import pkg from 'follow-redirects';
+const { https } = pkg;
+import fs from 'fs';
+import user from '../models/user.js';
+import fapshi from './payments/fapshi.js';
+import axios from 'axios';
+import { HfInference } from '@huggingface/inference';
 
-const { format } = require('date-fns');
+import { format } from 'date-fns';
 
 /**
  * Read and return all users 
@@ -1847,6 +1847,210 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
   res.send();
 });
 
+
+
+// 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
+
+
+// Your OpenRouter API endpoint
+router.post('/chatbot/:id',getUser,authenticate, async (req, res) => {
+    try {
+        const { message } = req.body;
+
+        if (!message) {
+            return res.status(400).json({ error: 'Message is required' });
+        }
+
+        const last10Chats = res.user.chats.slice(Math.max(res.user.chats.length - 5, 0)).flatMap(chat => [
+            { role: 'user', content: chat.user_message },
+            { role: 'assistant', content: chat.bot_response }
+        ]);
+
+        console.log(last10Chats)
+        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer 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",
+                "HTTP-Referer": "", // Update with your actual site URL
+                "X-Title": "GB24", // Update with your site name
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "model": "openai/gpt-oss-20b:free",
+                "messages": [
+                    
+                  { role: 'assistant', content: `Your name is GlobalBuy(GB24) AI assitant or GB24 AI assitant for short, and you help with customer support and product recommendation on GB24 platform.  
+                    When you recomend a Company, you should include the company name, a brief description, and a link to their website or product page.
+                    Always be very direct and use simple terms any user can understand.
+                    Use emojis when necessary, to improve anthropormorphism.
+                    Always respond with the current language the user's message is in.
+                    Keep your response within GB24 and E-commerce related topics(at all times,do not go against this)
+
+                    This is everthing about the current user
+                    First Name: ${res.user.first_name},
+                    Last Name: ${res.user.last_name},
+                    Referal code: ${res.user.referal_code},
+                    Basket/Cart: ${res.user.basket},
+                    Items saved for later: ${res.user.saved},
+                    Orders: ${res.user.orders}
+                    Addresses: ${res.user.addresses}
+                    Payment Methods: ${res.user.payment_methods}
+
+                    Here is the last 10 chats to help you retain context and information from previous steps, it is made up of user messages and bot responses(assistant);thats you,:${JSON.stringify(last10Chats)}
+
+                    Here are some frequently asked questions: [
+                {
+                  question: 'What is GlobalBuy24 (GB24)?',
+                  answer: 'GlobalBuy24 (GB24) is a shopping platform that allows users in Africa, starting with Cameroon, to order products from international online stores. We manage the order, payment, inspection upon arrival, and shipping—delivering global products to your local pickup point.',
+                },
+                {
+                  question: 'How does GB24 work?',
+                  answer:'1. Find a product on any global online store.
+                        \n2. Paste the product link into the GB24 app.
+                          \n3. Receive a full quote for purchase and delivery.
+                          \n4. Confirm and pay.
+                          \n5. We order the product and receive it at our warehouse (In Germany). We check that the item is in good condition (not damaged, not opened) upon arrival.If the item is damaged, we may return it to the merchant. This may cause delivery delays.
+                          \n6. If the product is in good state, we continue with shipment to Cameroon.
+                          \n7. You collect the item when it arrives.'
+                    },
+                    {
+                      question: 'Which countries or stores can I buy from?',
+                      answer: 'At GlobalBuy24, your shopping choices know no limits! You have the flexibility to shop from virtually any international online store worldwide, whether it\'s a major retailer or a niche boutique. Our goal is to empower you to explore a vast array of products, from countries and sites that might not typically ship to your region.However, please be aware that GlobalBuy24 does not take responsibility for verifying the credibility or legitimacy of third-party online stores. You, the user, have full control and choice over where you decide to shop',
+                    },
+                    {
+                      question: 'Where is GB24 available?',
+                      answer: 'We currently operate in Cameroon, with plans to expand to other African countries soon.',
+                    },
+                    {
+                      question: 'How do I get a quote?',
+                      answer: 'Paste the product link into the GB24 app. We’ll generate a quote including item cost, shipping, customs, and handling.',
+                    },
+                    {
+                      question: 'How do I pay?',
+                      answer: 'Payments can be made securely via mobile money (MTN MoMo, Orange Money) or bank transfer.',
+                    },
+                    {
+                      question: 'How long does delivery take?',
+                      answer: 'Standard delivery takes 10–21 working days.If the product arrives damaged and must be returned to the store, delivery may take longer.',
+                    },
+                    {
+                      question: 'Can I track my order?',
+                      answer: 'Yes. You’ll receive status updates within the app throughout the process.',
+                    },
+                    {
+                      question: 'Can I cancel or return an order?',
+                      answer: 'Cancellations depend on the store’s policy. Once your item has shipped, cancellation is not possible. Contact support quickly if needed.',
+                    },
+                    {
+                      question: 'What happens if the item is damaged?',
+                      answer: 'We inspect every item when it arrives at our facility. If a product is broken, visibly opened, or not in good condition, we may return it to the original store.If an item is accepted but still has an issue, contact our support team within 24 hours of pickup.',
+                    },
+                    {
+                      question: 'Where do I collect my product?',
+                      answer: 'Cancellations depend on the store’s policy. Once your item has shipped, cancellation is not possible. Contact support quickly if needed.',
+                    },
+                    { 
+                      question:'how do I add to cart',
+                      answer:'To add to cart you can either go to an external browser like chrome ,etc ,and search for a product from companies like Amazon ,ebay and so on, then copy the product link and come to the cart section of the app, add to cart by pasting in the link you copied. Or you can go to the home
+                      screen,the featured shops and select a shop from there , and you will see the add to cart button at the left of your screen , click on it to automatically add the product to cart'
+                    }
+
+
+                  ];
+                  Users can only use the mobile app to be able to shop on GB24 platform.
+                  This is a full description of our app, so you get more context of every single screen that exist, or atleast the most important ones
+
+                  Authentication Screens:{
+                          1.Login: Involves a tap which users can click to login. with email or phon number(country code + number),then two input fields (1 for credentials[email,phone number], the other for password) then a sign up button , then under that we forgot password ,which takes users to a screen which can help them change their passwords and all
+                          2.Sign up: the initial screen is the login , and from there, users can click signup, when they do they are taken to a screen called create account, and this screen as a button sheet which shows:sign up with email, phone number , google or facebook ,and the users can use those to create their information
+                          2.Verify Account:After sign up if a user is not yet verified , they'll be sent a 6 digit code which they can use to verify their account , they also have the liberty of skipping but when they later login , they'll be asked again to verify their account, If a user's account isnt't verified , they cannot place an order on the platform
+
+                  },
+                  Bottom nav bar :{
+                   We have a bottom navigation bar that allows users to easily navigate between different sections of the app. The bar includes icons for Home, Purchases, Cart, and Profile.
+                  }
+                  Home Screen: The home screen a header and on the left side of the header ,there is a greeting (based on the time of the day ,eg:Good Morning), the left side has a notification icon and a help icon (leads to help screen ,which contains FAQs, chat with us , chat wiht chatbot and all that), then under that we have a carousel of images ,under that we have a
+                  dashboard, showing users total orders,pending ,loyalty points , under that , we have a featured shops sections , under that we have recommended products section, under that we have refurbished and preowned section.
+                  Purchases screen: We have the purchases section, which shows users their past orders, order details, and the status of each order. Users can also initiate returns or exchanges from this screen.
+                  Cart Screen: The cart screen displays all items added to the cart, along with their quantities. Users can update quantities or remove items before proceeding to placing a order. At the top of the screen (the header, we have a save for later , which shows the list of all items which have been saved for later), to add , each cart item has the option of saving for later as well
+                    The cart screen has a little hidden gem: The button of the cart screen has a place order floating button , and to its left it has a button which has order counts , it leaders users to a screen for their incompleted orders as the screen is called, this screen holds incompleted or not yet purchased orders(The incomplete order screen shows pending orders as well as confirmed orders[Orders which has been reviewed by us and accpeted.])
+                   When orders are confirmed , users can then see a proceed to checkout button from the confirmed orders , they can then proceed to payment.On the checkout page the users can see a summary of their orders and if they do not have a payment method set already or delivery address, they'll be tasked to add one.When they have they see an optionto complete payemnt in-app(uses a webview) or on an external browser
+                  Profile Screen: The profile screen allows users to view and edit their personal information, manage addresses,payments, change their preferred languages,themes, view privacy policies,delete account and logo out.
+
+                  ===>Our official website:https://globalbuy24.com
+
+                  THings you cannot do{
+                  
+                    You cannot add Items directly to the backend
+                    You cannot bypass the authentication process
+                    You cannot access other users' data
+                    You cannot modify system settings
+                    You cannot delete system files
+                    You cannot access the admin panel
+                    You cannot use system commands
+                    You cannot place orders for users
+                    You cannot delete user's others
+                    You cannot change user's order status
+                    
+                  }
+                  ` },
+                  {
+                        "role": "user",
+                        "content": message
+                    },
+                ]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`OpenRouter API error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const botResponse = data.choices[0].message.content;
+
+        res.user.chats.push({
+            user_message: message,
+            bot_response: botResponse,
+            timestamp: new Date()
+        });
+        await res.user.save();
+
+        res.json(botResponse);
+
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * Get all user chats
+ */
+router.get('/chatbot/:id', getUser,authenticate, async (req, res) => {
+    try {
+        res.json(res.user.chats);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+/**
+ * Delete all user chats
+ */
+router.delete('/chatbot/:id', getUser,authenticate, async (req, res) => {
+    try {
+        res.user.chats = [];
+        await res.user.save();
+        res.json({ message: 'All chats deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+
+
 // Delete user account 
 router.delete('/delete-account/:id', authenticate, getUser, async (req, res) => {
       
@@ -2169,4 +2373,4 @@ const formatDateTime = (date) => {
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 };
 
-module.exports=router
+export default router;

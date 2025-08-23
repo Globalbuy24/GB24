@@ -1,11 +1,11 @@
-const express=require('express')
-const router =express.Router()
-const User=require('../../models/user')
-const passport =require('passport')
-const FacebookStrategy = require( 'passport-facebook' ).Strategy;
-const mailer=require('../../middleware/mailer')
-const jwt = require('jsonwebtoken')
-const mongoose=require('mongoose')
+import express from 'express';
+const router = express.Router();
+import User from '../../models/user.js';
+import passport from 'passport';
+import { Strategy as FacebookStrategy } from 'passport-facebook';
+import mailer from '../../middleware/mailer.js';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
  
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,
@@ -134,7 +134,7 @@ passport.serializeUser(function(user, done) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const codeLength = 6;
     let referralCode = '';
-  
+    
     for (let i = 0; i < codeLength; i++) {
       const randomIndex = Math.floor(Math.random() * characters.length);
       referralCode += characters[randomIndex];

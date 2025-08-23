@@ -1,11 +1,11 @@
-const express=require('express')
-const router =express.Router()
-const User=require('../../models/user')
-const passport =require('passport')
-const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
-const mailer=require('../../middleware/mailer')
-const jwt = require('jsonwebtoken')
-const mongoose=require('mongoose')
+import express from 'express';
+const router = express.Router();
+import User from '../../models/user.js';
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth2';
+import mailer from '../../middleware/mailer.js';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
 
 
 passport.use(new GoogleStrategy({

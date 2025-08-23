@@ -1,15 +1,15 @@
-const express=require('express')
-const router =express.Router()
-const Admin=require('../models/admin')
-const User=require('../models/user')
-const Category=require('../models/category')
-const SystemDefault=require('../models/system_default')
-const jwt = require('jsonwebtoken')
-const bcrypt=require('bcrypt')
-const mongoose=require('mongoose')
-const authenticate=require('../middleware/currentUser')
-const authenticateAdmin=require('../middleware/currentAdminOnWeb')
-const axios = require('axios');
+import express from 'express';
+const router = express.Router();
+import Admin from '../models/admin.js';
+import User from '../models/user.js';
+import Category from '../models/category.js';
+import SystemDefault from '../models/system_default.js';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
+import authenticate from '../middleware/currentUser.js';
+import authenticateAdmin from '../middleware/currentAdminOnWeb.js';
+import axios from 'axios';
 // currency converter
 const CC_API_KEY = '1e06667412357fb0c88dacd6'; // Replace with your API key
 const CC_BASE_URL = 'https://v6.exchangerate-api.com/v6'; // Modify this based on the API service you choose
@@ -846,4 +846,4 @@ const formatDateTime = (date) => {
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 };
 
-module.exports=router
+export default router;

@@ -1,5 +1,5 @@
 // middleware/authenticate.js
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const authenticateAdmin = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -19,4 +19,4 @@ const authenticateAdmin = (req, res, next) => {
   }
 };
 
-module.exports = authenticateAdmin;
+export default authenticateAdmin;

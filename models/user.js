@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 
 const UserSchema = new mongoose.Schema({
@@ -174,9 +174,9 @@ const UserSchema = new mongoose.Schema({
         transId: { type: String },
         created_at: {type: String, default: new Date() }
     }],
-    chatbot_history: [{
-        message: { type: String },
-        sender: { type: String },
+    chats: [{
+        user_message: { type: String },
+        bot_response: { type: String },
         timestamp: { type: Date, default: Date.now }
     }]
 });
@@ -202,4 +202,4 @@ UserSchema.pre('save', async function (next) {
     next();
 });
 
-module.exports = mongoose.model('users', UserSchema);
+export default mongoose.model('users', UserSchema);

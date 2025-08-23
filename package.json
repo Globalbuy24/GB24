@@ -10,9 +10,13 @@
   "license": "ISC",
   "dependencies": {
     "@everapi/freecurrencyapi-js": "^1.0.1",
+    "@huggingface/inference": "^2.8.1",
+    "@huggingface/mcp-client": "^0.2.2",
+    "@playwright/mcp": "^0.0.34",
     "avatar-initials": "^6.0.0",
     "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
+    "cheerio": "^1.0.0-rc.12",
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
@@ -30,14 +34,13 @@
     "passport-google-oauth2": "^0.2.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
-    "set-function-length": "^1.2.2",
-    "@huggingface/inference": "^2.7.0",
-    "cheerio": "^1.0.0-rc.12"
+    "set-function-length": "^1.2.2"
   },
   "devDependencies": {
     "dotenv": "^16.4.5",
     "nodemon": "^3.1.2"
   },
   "keywords": [],
-  "description": ""
+  "description": "",
+  "type": "module"
 }

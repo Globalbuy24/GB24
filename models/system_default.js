@@ -1,4 +1,4 @@
-const mongoose=require('mongoose')
+import mongoose from 'mongoose';
 
 const SystemDefault=new mongoose.Schema({
         service_fee:{type:String,default:"0.00"},
@@ -7,4 +7,4 @@ const SystemDefault=new mongoose.Schema({
         prohibited:{product:[{type:String}]}
     })
 
-module.exports=mongoose.model('system_defaults',SystemDefault)
+export default mongoose.model('system_defaults',SystemDefault);

@@ -1,17 +1,18 @@
 //create new user
-const express=require('express')
-const session = require('cookie-session');
-require('../../routes/auth/google')
-require('../../routes/auth/facebook')
-const router =express.Router()
-const passport =require('passport')
-const User=require('../../models/user')
-const SystemDefault=require('../../models/system_default')
-const jwt = require('jsonwebtoken')
-const mongoose=require('mongoose')
-const mailer=require('../../middleware/mailer')
-const https = require('follow-redirects').https;
-const fs = require('fs');
+import express from 'express';
+import session from 'cookie-session';
+import '../../routes/auth/google.js';
+import '../../routes/auth/facebook.js';
+const router = express.Router();
+import passport from 'passport';
+import User from '../../models/user.js';
+import SystemDefault from '../../models/system_default.js';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+import mailer from '../../middleware/mailer.js';
+import pkg from 'follow-redirects';
+const { https } = pkg;
+import fs from 'fs';
 
 router.get('/:id',async(req,res)=>{
     
@@ -271,4 +272,4 @@ async function generateRefCode() {
 }
 
 
-module.exports=router
+export default router;

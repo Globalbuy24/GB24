@@ -1,5 +1,5 @@
 
-const axios = require('axios');
+import axios from 'axios';
 // const baseUrl = 'https://live.fapshi.com'
 const baseUrl = 'https://sandbox.fapshi.com'
 const headers =  {
@@ -7,7 +7,7 @@ const headers =  {
     apikey: process.env.FAPSHI_apikey
 }
 
-module.exports = {
+export default {
     /** 
     *This function returns an object with the link were a user is to be redirected in order to complete his payment
 
