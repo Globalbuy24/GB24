@@ -905,13 +905,13 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
 
 router.get('/:id/basket', authenticate, getUser, async (req, res) => {
      try{
-      
-      userBasket=res.user.basket
+
+      const userBasket = res.user.basket;
       res.json(userBasket);
      }
      catch(error)
      {
-       res.status(400).json({message:error})
+       res.status(400).json({message:error.message})
      }
 });
 
@@ -1267,7 +1267,7 @@ router.get('/:id/orders', authenticate, getUser, async (req, res) => {
       item.expiresIn=orderExpiration(item.expires_date);
     })
     await res.user.save()
-   userOrder=res.user.orders.filter((order)=>order.status!=="refunded" && order.status!=="purchased")
+   const userOrder=res.user.orders.filter((order)=>order.status!=="refunded" && order.status!=="purchased")
   
    res.json(userOrder);
   }
@@ -1315,7 +1315,7 @@ router.get('/:id/pendingOrders', authenticate, getUser, async (req, res) => {
     })
     await res.user.save()
 
-   userOrder=res.user.orders.filter((order)=>order.status==="pending")
+   const userOrder=res.user.orders.filter((order)=>order.status==="pending")
   
    res.json(userOrder);
   }
@@ -1340,7 +1340,7 @@ router.get('/:id/refundedOrders', authenticate, getUser, async (req, res) => {
     })
     await res.user.save()
 
-   userOrder=res.user.orders.filter((order)=>order.status==="refunded")
+   const userOrder=res.user.orders.filter((order)=>order.status==="refunded")
   
    res.json(userOrder);
   }
@@ -1364,7 +1364,7 @@ router.get('/:id/confirmedOrders', authenticate, getUser, async (req, res) => {
     })
     await res.user.save()
 
-   userOrder=res.user.orders.filter((order)=>order.status==="confirmed")
+  const userOrder=res.user.orders.filter((order)=>order.status==="confirmed")
   
    res.json(userOrder);
   }
@@ -1390,7 +1390,7 @@ router.get('/:id/purchasedOrders', authenticate, getUser, async (req, res) => {
     })
     await res.user.save()
 
-   userOrder=res.user.orders.filter((order)=>order.status==="purchased")
+   const userOrder=res.user.orders.filter((order)=>order.status==="purchased")
   
    res.json(userOrder);
   }
@@ -1415,7 +1415,7 @@ router.get('/:id/inprogressOrders', authenticate, getUser, async (req, res) => {
     })
     await res.user.save()
 
-   userOrder=res.user.orders.filter((order)=>order.status==="purchased" && order.isDelivered===false)
+   const userOrder=res.user.orders.filter((order)=>order.status==="purchased" && order.isDelivered===false)
   
    res.json(userOrder);
   }
@@ -1440,7 +1440,7 @@ router.get('/:id/deliveredOrders', authenticate, getUser, async (req, res) => {
     })
     await res.user.save()
 
-   userOrder=res.user.orders.filter((order)=>order.status==="purchased" && order.isDelivered===true)
+   const userOrder=res.user.orders.filter((order)=>order.status==="purchased" && order.isDelivered===true)
   
    res.json(userOrder);
   }
@@ -1990,6 +1990,8 @@ router.post('/chatbot/:id', getUser, authenticate, async (req, res) => {
                     You cannot place orders for users
                     You cannot delete user's others
                     You cannot change user's order status
+                    You cannot add to cart for users
+                    You cannot track orders in real time.
                     
                   }
                   ` },
@@ -2075,30 +2077,6 @@ router.delete('/delete-account/:id', authenticate, getUser, async (req, res) => 
 
 
 })
-
-import Cerebras from '@cerebras/cerebras_cloud_sdk';
-
-router.post("/chat", async (req, res) => {
-
-
-const client = new Cerebras({
-  apiKey: 'csk-jdptwkcjxkvwhf5y2hrymvjvt6nxxt9rt22ch2nnrp2ttnff'
-  // This is the default and can be omitted
-});
-
-
-async function main() {
-  const completionCreateResponse = await client.chat.completions.create({
-    messages: [{ role: 'user', content: req.body.message }],
-    model: 'llama-4-scout-17b-16e-instruct',
-  });
-
-  res.json({ message: completionCreateResponse.choices[0].message.content });
-}
-
-main();
-
-});
 
 
 ////////////////////////////////////////////////-----Functions-----/////////////////////////////////////////
