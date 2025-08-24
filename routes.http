@@ -889,7 +889,7 @@ Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLC
 Content-Type: application/json
 
 {
-  "message": "What kind of platform are you guys"
+  "message": "What do I call you?"
 }
 ### Get user chats
 GET http://localhost:3000/users/chatbot/689e52c0383bbc5aaf269ed7
@@ -904,4 +904,14 @@ Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLC
 Content-Type: application/json
 
 {
+}
+
+### Chat
+
+POST http://localhost:3000/users/chat
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
+Content-Type: application/json
+
+{
+  "message": "What do I call you?"
 }

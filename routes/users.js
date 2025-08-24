@@ -12,7 +12,7 @@ import fs from 'fs';
 import user from '../models/user.js';
 import fapshi from './payments/fapshi.js';
 import axios from 'axios';
-import { HfInference } from '@huggingface/inference';
+
 
 import { format } from 'date-fns';
 
@@ -1848,12 +1848,9 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
 });
 
 
+// Chatbot
 
-// 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
-
-
-// Your OpenRouter API endpoint
-router.post('/chatbot/:id',getUser,authenticate, async (req, res) => {
+router.post('/chatbot/:id', getUser, authenticate, async (req, res) => {
     try {
         const { message } = req.body;
 
@@ -1861,29 +1858,31 @@ router.post('/chatbot/:id',getUser,authenticate, async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
-        const last10Chats = res.user.chats.slice(Math.max(res.user.chats.length - 5, 0)).flatMap(chat => [
-            { role: 'user', content: chat.user_message },
-            { role: 'assistant', content: chat.bot_response }
-        ]);
+        const last10Chats = res.user.chats
+            .slice(Math.max(res.user.chats.length - 5, 0))
+            .flatMap(chat => [
+                { role: 'user', content: chat.user_message },
+                { role: 'assistant', content: chat.bot_response }
+            ]);
 
-        console.log(last10Chats)
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        console.log(last10Chats);
+
+        // Using OpenAI GPT-5 Nano model
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
             method: "POST",
             headers: {
-                "Authorization": "Bearer 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",
-                "HTTP-Referer": "https://globalbuy24-a3348f9c2173.herokuapp.com/", // Update with your actual site URL
-                "X-Title": "GlobalBuy24", // Update with your site name
+                "Authorization": `Bearer ${process.env.OPEN_AI_KEY}`, // Replace with your OpenAI API key
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                "model": "openai/gpt-oss-20b:free",
-                "messages": [
+                model: "gpt-5-nano",
+                  "messages": [
                     
                   { role: 'assistant', content: `Your name is GlobalBuy(GB24) AI assitant or GB24 AI assitant for short, and you help with customer support and product recommendation on GB24 platform.  
                     When you recomend a Company, you should include the company name, a brief description, and a link to their website or product page.
                     Always be very direct and use simple terms any user can understand.
                     Use emojis when necessary, to improve anthropormorphism.
-                    Always respond with the current language the user's message is in.
+                    Always respond with the current language the user's message is in(Do not add any strange language for any reason).
                     Keep your response within GB24 and E-commerce related topics(at all times,do not go against this)
 
                     This is everthing about the current user
@@ -2003,7 +2002,7 @@ router.post('/chatbot/:id',getUser,authenticate, async (req, res) => {
         });
 
         if (!response.ok) {
-            throw new Error(`OpenRouter API error: ${response.status} ${response.statusText}`);
+            throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
@@ -2023,6 +2022,7 @@ router.post('/chatbot/:id',getUser,authenticate, async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 /**
  * Get all user chats
@@ -2076,6 +2076,29 @@ router.delete('/delete-account/:id', authenticate, getUser, async (req, res) => 
 
 })
 
+import Cerebras from '@cerebras/cerebras_cloud_sdk';
+
+router.post("/chat", async (req, res) => {
+
+
+const client = new Cerebras({
+  apiKey: 'csk-jdptwkcjxkvwhf5y2hrymvjvt6nxxt9rt22ch2nnrp2ttnff'
+  // This is the default and can be omitted
+});
+
+
+async function main() {
+  const completionCreateResponse = await client.chat.completions.create({
+    messages: [{ role: 'user', content: req.body.message }],
+    model: 'llama-4-scout-17b-16e-instruct',
+  });
+
+  res.json({ message: completionCreateResponse.choices[0].message.content });
+}
+
+main();
+
+});
 
 
 ////////////////////////////////////////////////-----Functions-----/////////////////////////////////////////
