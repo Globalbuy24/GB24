@@ -408,8 +408,8 @@ Content-Type: application/json
 }
 
 ### Display/Get user basket
-GET http://localhost:3000/users/66969f7c30c89bd31c453035/basket
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjEzMDM2NzMsImV4cCI6MTcyMTMwNDU3M30.ePpjilDLmr-5GpSjU03YYVK99YrxWyKJV7wS_dBa5K8
+GET http://localhost:3000/users/689e52c0383bbc5aaf269ed7/basket
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
 Content-Type: application/json
 
 {
@@ -463,8 +463,8 @@ Content-Type: application/json
 
 
 ### get all user orders with status which are not refunded
-GET http://localhost:3000/users/66edd3e92ae495db5d122b58/orders
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzEyNzUsImV4cCI6MTcyODU3NjA3NX0.DjzKWdyy-cpNBo6SLp1RMvDvD5rGLmrOjtS-2WRprcc
+GET http://localhost:3000/users/689e52c0383bbc5aaf269ed7/orders
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
 Content-Type: application/json
 
 {
@@ -889,7 +889,7 @@ Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLC
 Content-Type: application/json
 
 {
-  "message": "What do I call you?"
+  "message": "I fit get updates on some ma order so?"
 }
 ### Get user chats
 GET http://localhost:3000/users/chatbot/689e52c0383bbc5aaf269ed7
@@ -906,12 +906,11 @@ Content-Type: application/json
 {
 }
 
-### Chat
-
-POST http://localhost:3000/users/chat
+### GET 
+GET http://localhost:3000/users/689e52c0383bbc5aaf269ed7/inprogressOrders
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
 Content-Type: application/json
 
 {
-  "message": "What do I call you?"
+
 }
