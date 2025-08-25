@@ -192,7 +192,7 @@ router.post('/',async(req,res)=>{
           const randomIndex = Math.floor(Math.random() * characters.length);
           referralCode += characters[randomIndex];
         }
-        userExist=await User.findOne({referal_code:referralCode})
+        const userExist=await User.findOne({referal_code:referralCode})
         
         if(!userExist)
         {
