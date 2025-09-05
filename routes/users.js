@@ -12,6 +12,7 @@ import fs from 'fs';
 import user from '../models/user.js';
 import fapshi from './payments/fapshi.js';
 import axios from 'axios';
+import translate from '../middleware/translator.js';
 
 
 import { format } from 'date-fns';
@@ -173,12 +174,12 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
    await res.user.updateOne({$set:{temp:{code:temp_code,created_at:new Date()}}})
    
 
-   const html=messageTemplateForOTP(temp_code)
+   const html=messageTemplateForOTP(temp_code, res.user.settings.language)
 
    await mailer.sendMail({
      from:'no-reply@globalbuy24.com',
      to:res.user.email,
-     subject:'Verification code',
+     subject:translate('Verification code', res.user.settings.language),
      html:html
    })
    res.json({message:"code sent successfully"})
@@ -437,9 +438,21 @@ router.delete('/:id/deliveryAddress/:dId', authenticate, getUser, async (req, re
 */
 router.get('/:id/notifications', authenticate, getUser, async (req, res) => {
   try {
-      res.json(res.user.notifications);
+      const userLanguage = res.user.settings.language;
+      const translatedNotifications = res.user.notifications.map(notification => {
+          let replacements = {};
+          let notificationTitle = notification.type || ''; // Set title to notification type
+          let notificationMessage = notification.message || '';
+          return {
+              ...notification.toObject(),
+              title: translate(notificationTitle, userLanguage, replacements),
+              message: translate(notificationMessage, userLanguage, replacements)
+          };
+      });
+      res.json(translatedNotifications);
   } catch (error) {
-      res.status(500).json({ message: error });
+      console.error("Error in /:id/notifications:", error); // Log the full error
+      res.status(500).json({ message: error.message }); // Send error message
   }
 });
 
@@ -448,9 +461,21 @@ router.get('/:id/notifications', authenticate, getUser, async (req, res) => {
 */
 router.get('/:id/all-notifications', authenticate, getUser, async (req, res) => {
   try {
-      res.json(res.user.notifications);
+      const userLanguage = res.user.settings.language;
+      const translatedNotifications = res.user.notifications.map(notification => {
+          let replacements = {};
+          let notificationTitle = notification.type || ''; // Set title to notification type
+          let notificationMessage = notification.message || '';
+          return {
+              ...notification.toObject(),
+              title: translate(notificationTitle, userLanguage, replacements),
+              message: translate(notificationMessage, userLanguage, replacements)
+          };
+      });
+      res.json(translatedNotifications);
   } catch (error) {
-      res.status(500).json({ message: error });
+      console.error("Error in /:id/all-notifications:", error); // Log the full error
+      res.status(500).json({ message: error.message }); // Send error message
   }
 });
 
@@ -459,10 +484,21 @@ router.get('/:id/all-notifications', authenticate, getUser, async (req, res) => 
 */
 router.get('/:id/unread-notifications', authenticate, getUser, async (req, res) => {
   try {
-      const unreadNotifications = res.user.notifications.filter(notification => notification.status === 'unread');
+      const userLanguage = res.user.settings.language;
+      const unreadNotifications = res.user.notifications.filter(notification => notification.status === 'unread').map(notification => {
+          let replacements = {};
+          let notificationTitle = notification.type || ''; // Set title to notification type
+          let notificationMessage = notification.message || '';
+          return {
+              ...notification.toObject(),
+              title: translate(notificationTitle, userLanguage, replacements),
+              message: translate(notificationMessage, userLanguage, replacements)
+          };
+      });
       res.json(unreadNotifications);
   } catch (error) {
-      res.status(500).json({ message: error });
+      console.error("Error in /:id/unread-notifications:", error); // Log the full error
+      res.status(500).json({ message: error.message }); // Send error message
   }
 });
 
@@ -863,17 +899,19 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
     }
 
     // Create notifications
+    const userLanguage = res.user.settings.language;
+
     const basketCreatedNotification = {
       _id: new mongoose.Types.ObjectId(),
-      type: 'Basket Created',
-      message: 'Your basket has been created successfully',
+      type: translate('Basket Created', userLanguage),
+      message: translate('Your basket has been created successfully', userLanguage),
       created_at: new Date()
     };
 
     const basketCreatedByUserNotification = {
       _id: new mongoose.Types.ObjectId(),
-      type: 'Basket Created',
-      message: 'A new order has been created',
+      type: translate('Basket Created', userLanguage),
+      message: translate('A new order has been created', userLanguage),
       created_at: new Date()
     };
 
@@ -1122,18 +1160,18 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     items_count:itemCount
     }
 
+    const userLanguage = res.user.settings.language;
+
     const newOrderNotification = {
       _id: new mongoose.Types.ObjectId(),
-      type: '✅ Order Received',
-      message: `Thank you for placing your order with GlobalBuy24. We’ve received your request and are now
-      verifying the product details. We’ll notify you once we place the order.`,
+      type: translate('✅ Order Received', userLanguage),
+      message: translate('Thank you for placing your order with GlobalBuy24. We’ve received your request and are now verifying the product details. We’ll notify you once we place the order.', userLanguage),
       created_at:new Date()
     };
     const newOrderNotification2 = {
       _id: new mongoose.Types.ObjectId(),
-      type: '🔍 Order Under Review',
-      message: `Our team is reviewing your product link(s) to confirm availability, price, shipping, and size/variant
-      information. We’ll send you a quote shortly.`,
+      type: translate('🔍 Order Under Review', userLanguage),
+      message: translate('Our team is reviewing your product link(s) to confirm availability, price, shipping, and size/variant information. We’ll send you a quote shortly.', userLanguage),
       created_at:new Date()
     };
     
@@ -1792,6 +1830,7 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
     }
   var transaction=user.transactions.find((trans)=> trans.transId==event.transId)
   console.log(transaction)
+  const userLanguage = user.settings.language; // Declare userLanguage once here
   // Handle the event
   switch (event.status) {
     case 'SUCCESSFUL':
@@ -1802,9 +1841,8 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
       // notify user
       const newNotification={
         _id: new mongoose.Types.ObjectId(),
-        type:"💳 Payment Confirmed",
-        message:`We’ve received your payment of ${event.amount-(0.031*event.amount)}XAF successfully. We are now placing your order with the seller. You’ll be
-          notified once the item arrives at our hub in Berlin.`,
+        type: translate("💳 Payment Confirmed", userLanguage),
+        message: translate("We’ve received your payment of {amount}XAF successfully. We are now placing your order with the seller. You’ll be notified once the item arrives at our hub in Berlin.", userLanguage, { amount: event.amount - (0.031 * event.amount) }),
         created_at:new Date()
       }
       user.notifications.push(newNotification)
@@ -1819,8 +1857,8 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
        // notify user
        const secondNewNotification={
         _id: new mongoose.Types.ObjectId(),
-        type:"Payment Failed",
-        message:`Your payment of ${event.amount-(0.031*event.amount)}XAF has failed`,
+        type: translate("Payment Failed", userLanguage),
+        message: translate("Your payment of {amount}XAF has failed", userLanguage, { amount: event.amount - (0.031 * event.amount) }),
         created_at:new Date()
       }
       user.notifications.push(secondNewNotification)
@@ -1831,8 +1869,8 @@ router.post('/fapshi-webhook', express.json(), async (req, res) => {
       // notify user
       const thirdNewNotification={
        _id: new mongoose.Types.ObjectId(),
-       type:"Payment Expired",
-       message:`Your payment of ${event.amount-(0.031*event.amount)}XAF has expired`,
+       type: translate("Payment Expired", userLanguage),
+       message: translate("Your payment of {amount}XAF has expired", userLanguage, { amount: event.amount - (0.031 * event.amount) }),
        created_at:new Date()
      }
      user.notifications.push(thirdNewNotification)
@@ -2078,6 +2116,31 @@ router.delete('/delete-account/:id', authenticate, getUser, async (req, res) => 
 
 })
 
+/**
+ * Set user's preferred language
+ */
+router.patch('/:id/language', authenticate, getUser, async (req, res) => {
+  try {
+    console.log(req.body)
+    const { language } = req.body;
+
+    if (!language) {
+      return res.status(400).json({ message: 'Language is required.' });
+    }
+
+    if (language !== 'en' && language !== 'fr') {
+      return res.status(400).json({ message: 'Invalid language. Must be "en" or "fr".' });
+    }
+
+    res.user.settings.language = language;
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error setting language:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
 
 ////////////////////////////////////////////////-----Functions-----/////////////////////////////////////////
 
@@ -2229,16 +2292,24 @@ async function sendSMS({ sender, recipient, message }) {
 
 
 
-function messageTemplateForOTP(otp)
+function messageTemplateForOTP(otp, language)
 {
+  const translatedTitle = translate('Verification code', language);
+  const translatedHello = translate('Hello', language);
+  const translatedMessage = translate('Your verification code is: {otp}', language, { otp: otp });
+  const translatedValidity = translate('This OTP is valid for 5 minutes. Please do not share this code with anyone.', language);
+  const translatedIgnore = translate('If you didn\'t request this code, please ignore this email.', language);
+  const translatedThanks = translate('Thank you for using our service!', language);
+  const translatedFooter = translate('All rights reserved.', language);
+
 
   return `
   <!DOCTYPE html>
-<html lang="en">
+<html lang="${language}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your OTP Code</title>
+  <title>${translatedTitle}</title>
   <style>
     :root {
       --primary: #005AE0; /* Indigo-600 */
@@ -2327,20 +2398,20 @@ function messageTemplateForOTP(otp)
 <body>
   <div class="container">
     <div class="header">
-      <h1>Your OTP Code</h1>
+      <h1>${translatedTitle}</h1>
     </div>
     <div class="content">
-      <p>Hello,</p>
-      <p>To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:</p>
+      <p>${translatedHello},</p>
+      <p>${translatedMessage}</p>
       <div class="otp-box">
         <p>${otp}</p> <!--Add OTP here-->
       </div>
-      <p>This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.</p>
-      <p>If you didn't request this code, please ignore this email.</p>
-      <p>Thank you for using our service!</p>
+      <p>${translatedValidity}</p>
+      <p>${translatedIgnore}</p>
+      <p>${translatedThanks}</p>
     </div>
     <div class="footer">
-      &copy; 2025 GlobalBuy24 (GB24). All rights reserved.
+      &copy; 2025 GlobalBuy24 (GB24). ${translatedFooter}
     </div>
   </div>
 </body>

@@ -109,8 +109,8 @@ router.post('/forgot-pwd-verify-user', async(req, res) => {
      await mailer.sendMail({
        from:'no-reply@globalbuy24.com',
        to:user.email,
-       subject:'Verification code',
-       html:messageTemplateForOTP(temp_code)
+       subject:translate('Verification code', user.settings.language),
+       html:messageTemplateForOTP(temp_code, user.settings.language)
      })
      const jwt_secret=process.env.JWT_SECRET
       const token=jwt.sign({
@@ -201,7 +201,7 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
 
 
 // Message 
- function messageTemplateForOTP(otp)
+ function messageTemplateForOTP(otp, language)
  {
  
    return `
@@ -210,7 +210,7 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
  <head>
    <meta charset="UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-   <title>Your OTP Code</title>
+   <title>${translate('Your verification code is: {otp}', language, { otp: otp })}</title>
    <style>
      :root {
        --primary: #005AE0; /* Indigo-600 */
@@ -299,21 +299,21 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
  <body>
    <div class="container">
      <div class="header">
-       <h1>Your OTP Code</h1>
+       <h1>${translate('Your OTP Code', language)}</h1>
      </div>
      <div class="content">
-       <p>Hello,</p>
-       <p>We've recieved a request to reset your password for your GlobalBuy24 account</p>
-       <p>To proceed, please enter the following verification code in the GlobalBuy24 app</p>
+       <p>${translate('Hello,', language)}</p>
+       <p>${translate("We've recieved a request to reset your password for your GlobalBuy24 account", language)}</p>
+       <p>${translate('To proceed, please enter the following verification code in the GlobalBuy24 app', language)}</p>
        <div class="otp-box">
          <p>${otp}</p> <!--Add OTP here-->
        </div>
-       <p>This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.</p>
-       <p>If you didn't request this code, please ignore this email.</p>
-       <p>Thank you for using our service!</p>
+       <p>${translate('This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.', language)}</p>
+       <p>${translate("If you didn't request this code, please ignore this email.", language)}</p>
+       <p>${translate('Thank you for using our service!', language)}</p>
      </div>
      <div class="footer">
-       &copy; 2025 GlobalBuy24 (GB24). All rights reserved.
+       &copy; ${translate('2025 GlobalBuy24 (GB24). All rights reserved.', language)}
      </div>
    </div>
  </body>

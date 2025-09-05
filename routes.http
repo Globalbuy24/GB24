@@ -17,10 +17,11 @@ Content-Type: application/json
 {
         "first_name":"GB",
         "last_name":"Test User",
-        "phone_number":"+237673436779",
+        "phone_number":"+237673964362",
         //"email":"kenyedil@gmail.com",
-        "password":"k0n.12,3><45'6fgh8",
-        "dob":"2023-12-2"
+        "password":"12345678",
+        "dob":"2023-12-2",
+        "language": "en"
 }
 ### google auth
 
@@ -45,8 +46,8 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"+237673436779",
-    "password":"k0n.12,3><45'6fgh8"
+    "credential":"+237673964362",
+    "password":"12345678"
 }
 
 ### forgot password- verify user
@@ -122,9 +123,8 @@ Content-Type: application/json
 
 }
 ### Delete user
-DELETE http://localhost:3000/users/6664211211c4a713bc21308d
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7ImZpcnN0X25hbWUiOiJHQiIsImxhc3RfbmFtZSI6IlRlc3QgVXNlciIsImVtYWlsIjoibkBnLmMiLCJwaG9uZV9udW1iZXIiOiIiLCJudW1faXNfdmVyaWZpZWQiOmZhbHNlLCJlbWFpbF9pc192ZXJpZmllZCI6ZmFsc2UsInBhc3N3b3JkIjoiazBuLjEyLDM-PDQ1JzZmZ2g4IiwiZG9iIjoiMjAyMy0xMi0wMVQyMzowMDowMC4wMDBaIiwiaXNfdmVyaWZpZWQiOmZhbHNlLCJsb3lhbHR5X3BvaW50cyI6MCwiYWRkcmVzcyI6eyJjb3VudHJ5IjoiQ2FtZXJvb24ifSwic2V0dGluZ3MiOnsibm90aWZpY2F0aW9uX3R5cGVzIjpbXSwidGhlbWUiOiJsaWdodCJ9LCJwYXltZW50X21ldGhvZHMiOltdLCJfaWQiOiI2NjY0MjMxNDQzZDE5OGJhYjA2NmM0ZjciLCJwaW4iOjEwMTQ4fSwiaWF0IjoxNzE3ODM4NjEyLCJleHAiOjE3MTc4ODE4MTJ9.E7tVhgSOg21aeRABJcBYjtoL5kc9e8DKkddeZCJ9A64
-
+DELETE http://localhost:3000/users/68baf6f88b40471dc1d9d942
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3NTcwODI2MjEsImV4cCI6MTc1NzY4NzQyMX0.1pq5Gs9DCaO8MVTIW2R-vJwaRSMJ6HiuKyA0Vd7rG2E
 ### week 2
 
 ### get new user pin
@@ -227,8 +227,8 @@ Content-Type: application/json
 
 ### get all Notificatons from a user
 
-GET  http://localhost:3000/users/66969f7c30c89bd31c453035/notifications
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MjEzMDM2NzksImV4cCI6MTcyMTMwNDU3OX0.jRmB-SRHqU7gyk0vqZHSJ7YbsbM2FK6SgiDbMFB_oqk
+GET  http://localhost:3000/users/68baf72a8b40471dc1d9d94a/all-notifications
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3NTcwODM0MzUsImV4cCI6MTc1NzY4ODIzNX0.bgHWIfHsTVen9pvL1dy_Tg6qAVVnUpi9ErmNYgYWrUs
 Content-Type: application/json
 
 {
@@ -871,6 +871,15 @@ Content-Type: application/json
 
 {
    
+}
+
+### Set user preferred language
+PATCH http://localhost:3000/users/68baf72a8b40471dc1d9d94a/language
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTY4MzI3NDcsImV4cCI6MTc1NzQzNzU0N30.LREI_XtQrNwJ7JCl486RuO04P2qa5RiMNwC5F1ccZJk
+Content-Type: application/json
+
+{
+  "language": "en"
 }
 
 ### Send SMS via Avlytext API
