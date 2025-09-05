@@ -14,6 +14,7 @@ import pkg from 'follow-redirects';
 const { https } = pkg;
 import fs from 'fs';
 import axios from 'axios';
+import translate from '../../middleware/translator.js';
 
 router.use(session({
   secret: 'gb24',
@@ -23,18 +24,7 @@ router.use(session({
 
 router.use(passport.initialize());
 router.use(passport.session());
- 
 
-const formatDateTime = (date) => {
-  if (!date) return '';
-  const d = new Date(date);
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = String(d.getFullYear()).slice(-2);
-  const hours = String(d.getHours()).padStart(2, '0');
-  const minutes = String(d.getMinutes()).padStart(2, '0');
-  return `${day}.${month}.${year} ${hours}:${minutes}`;
-};
 
 /**
  * Creating new user
@@ -51,9 +41,12 @@ router.post('/',async(req,res)=>{
         email:req.body.email,
         phone_number:req.body.phone_number,
         password:req.body.password,
-        dob:formatDateTime(new Date(req.body.dob)),
+        dob:new Date(req.body.dob),
         referal_code:resolvedReferralCode,
-        image:defaultImage
+        image:defaultImage,
+        settings: {
+          language: req.body.language || 'en' // Default to 'en' if not provided
+        }
     })
     /**
      * 
@@ -124,8 +117,9 @@ router.post('/',async(req,res)=>{
         const welcomeNotification = {
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
-          message: `GB24 welcomes you, ${req.body.first_name} ${req.body.last_name}. Enjoy your ride with us.`,
-          created_at:formatDateTime(new Date())
+          title: 'Welcome to GlobalBuy24', // Store the English key directly
+          message: 'GB24 welcomes you, {first_name} {last_name}. Enjoy your ride with us.', // Store the English key directly
+          created_at: new Date()
         };
         if(req.body.phone_number!=null)
           {
@@ -137,7 +131,7 @@ router.post('/',async(req,res)=>{
               await sendSMS({
                 sender: "GB24",
                 recipient: user.phone_number, 
-                message: "Your verification code is: "+temp_code+" . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com"
+                message: translate("Your verification code is: {temp_code} . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com", user.settings.language, {temp_code: temp_code})
               });
             
           }
@@ -157,14 +151,14 @@ router.post('/',async(req,res)=>{
             await mailer.sendMail({
               from:'no-reply@globalbuy24.com',
               to:req.body.email,
-              subject:'Welcome to GlobalBuy24',
-              html:messageTemplateForWelcome()
+              subject:translate('Welcome to GlobalBuy24', user.settings.language),
+              html:messageTemplateForWelcome(user.settings.language)
             })
             await mailer.sendMail({
               from:'no-reply@globalbuy24.com',
               to:req.body.email,
-              subject:'Verification code',
-              html:messageTemplateForOTP(temp_code)
+              subject:translate('Verification code', user.settings.language),
+              html:messageTemplateForOTP(temp_code, user.settings.language)
             })
         
           }
@@ -301,7 +295,7 @@ async function sendSMS({ sender, recipient, message }) {
   }
 }
 
-function messageTemplateForWelcome()
+function messageTemplateForWelcome(language)
 {
 
   return `<!DOCTYPE html>
@@ -309,7 +303,7 @@ function messageTemplateForWelcome()
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Welcome to GlobalBuy24</title>
+  <title>${translate('Welcome to GlobalBuy24', language)}</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -388,29 +382,29 @@ function messageTemplateForWelcome()
 <body>
   <div class="email-wrapper">
     <div class="header">
-      <h1>Welcome to GB24!</h1>
+      <h1>${translate('Welcome to GB24!', language)}</h1>
     </div>
     <div class="content">
-      <p>Hello and welcome 👋,</p>
-      <p>We’re excited to have you on board. With GlobalBuy24, you can easily <span class="highlight">shop from global online stores</span> and get your purchases delivered to you in Cameroon — reliably, affordably, and hassle-free.</p>
-      <p>Here’s what you can do with the GlobalBuy24 app:</p>
+      <p>${translate('Hello and welcome 👋,', language)}</p>
+      <p>${translate('We’re excited to have you on board. With GlobalBuy24, you can easily <span class="highlight">shop from global online stores</span> and get your purchases delivered to you in Cameroon — reliably, affordably, and hassle-free.', language)}</p>
+      <p>${translate('Here’s what you can do with the GlobalBuy24 app:', language)}</p>
       <ul>
-        <li>🛒 Simply add product links from any online store worldwide (e.g., Amazon, Temu, eBay, Fashion Nova, SHEIN, and more)</li>
-        <li>📦 Request quotes and confirm orders</li>
-        <li>🚀 Track shipping and delivery straight to Cameroon</li>
+        <li>${translate('🛒 Simply add product links from any online store worldwide (e.g., Amazon, Temu, eBay, Fashion Nova, SHEIN, and more)', language)}</li>
+        <li>${translate('📦 Request quotes and confirm orders', language)}</li>
+        <li>${translate('🚀 Track shipping and delivery straight to Cameroon', language)}</li>
       </ul>
-      <p>We can’t wait to help you shop the world.</p>
-      <p><strong>Happy shopping!<br />— The GlobalBuy24 Team</strong></p>
+      <p>${translate('We can’t wait to help you shop the world.', language)}</p>
+      <p><strong>${translate('Happy shopping!', language)}<br />— ${translate('The GlobalBuy24 Team', language)}</strong></p>
     </div>
     <div class="footer">
-      &copy; 2025 GlobalBuy24. All rights reserved.
+      &copy; ${translate('2025 GlobalBuy24. All rights reserved.', language)}
     </div>
   </div>
 </body>
 </html>`
 }
 
-function messageTemplateForOTP(otp)
+function messageTemplateForOTP(otp, language)
 {
 
   return `
@@ -419,7 +413,7 @@ function messageTemplateForOTP(otp)
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Your OTP Code</title>
+  <title>${translate('Your verification code is: {otp}', language, { otp: otp })}</title>
   <style>
     :root {
       --primary: #005AE0; /* Indigo-600 */
@@ -508,20 +502,20 @@ function messageTemplateForOTP(otp)
 <body>
   <div class="container">
     <div class="header">
-      <h1>Your OTP Code</h1>
+      <h1>${translate('Your OTP Code', language)}</h1>
     </div>
     <div class="content">
-      <p>Hello,</p>
-      <p>To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:</p>
+      <p>${translate('Hello,', language)}</p>
+      <p>${translate('To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:', language)}</p>
       <div class="otp-box">
         <p>${otp}</p> <!--Add OTP here-->
       </div>
-      <p>This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.</p>
-      <p>If you didn't request this code, please ignore this email.</p>
-      <p>Thank you for using our service!</p>
+      <p>${translate('This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.', language)}</p>
+      <p>${translate('If you didn\'t request this code, please ignore this email.', language)}</p>
+      <p>${translate('Thank you for using our service!', language)}</p>
     </div>
     <div class="footer">
-      &copy; 2025 GlobalBuy24 (GB24). All rights reserved.
+      &copy; ${translate('2025 GlobalBuy24 (GB24). All rights reserved.', language)}
     </div>
   </div>
 </body>
