@@ -155,7 +155,13 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
     const userId=req.params.uId;
     const basketId=req.params.bId;
     const user=await User.findOne({'_id':userId})
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
     const basket=user.basket.find((basket)=>basket.id===basketId)
+    if (!basket) {
+      return res.status(404).json({ message: 'Basket item not found' });
+    }
     //console.log(basket)
    try{
    /**
@@ -656,6 +662,7 @@ router.patch('/service_fee',authenticate, async (req, res) => {
     systemDefault.service_fee=req.body.amount
     await systemDefault.save()
     res.status(200).json({message:"service fees updated"})
+
   }
   
   catch(error){
@@ -670,16 +677,19 @@ router.patch('/service_fee',authenticate, async (req, res) => {
 router.get('/service_fee',authenticate, async (req, res) => {
   const systemDefault=await SystemDefault.findOne({})
 
-  try{
+  try
+  {
     if(!systemDefault)
     {
       res.status(400).json({message:"No service fees"})
     }
     res.json({fees:systemDefault.service_fee})
   }
+
   catch(error){
     res.status(400).json({message:error})
   }
+
 })
 
 /**
