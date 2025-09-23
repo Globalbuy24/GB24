@@ -67,7 +67,7 @@ const UserSchema = new mongoose.Schema({
     }],
     settings: {
         notification_types: [{ type: String, default: 'all' }],
-        language: { type: String },
+        language: { type: String, default: 'en' },
         theme: { type: String, default: 'light' }
     },
     saved: [{
