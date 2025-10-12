@@ -83,6 +83,7 @@ const UserSchema = new mongoose.Schema({
         },
         product: {
             url: { type: String },
+            message: { type: String , default: "No message" },
             source: { type: String },
             name: { type: String },
             colour: { type: String },
@@ -111,6 +112,7 @@ const UserSchema = new mongoose.Schema({
         },
         products: [{
             url: { type: String },
+            message: { type: String, default: "No message" },
             source: { type: String },
             name: { type: String, default: "Globalbuy" },
             colour: { type: String },

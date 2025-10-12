@@ -889,7 +889,7 @@ Content-Type: application/json
 {
   "sender": "GB24",
   "recipient": "+237673964362",
-  "text": "Hello, this is a test SMS 🚀"
+  "text": "Hello, this is a test SMS from GlobalBuy24."
 }
 
 ### Chatbot

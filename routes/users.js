@@ -878,6 +878,7 @@ router.post('/:id/newBasket', authenticate, getUser, async (req, res) => {
       delivery_method: { name: 'Air Freight' },
       product: {
         url: req.body.orderURL, // Store as string instead of URL object
+        message: req.body.message || "No message",
         source: source,
         quantity: parseInt(req.body.quantity) || 1,
         created_at: createdAt
