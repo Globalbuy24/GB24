@@ -955,8 +955,39 @@ router.get('/:id/basket', authenticate, getUser, async (req, res) => {
 });
 
 /**
+ * Update particular user basket message
+*/
+
+router.patch('/:id/basket/:bId/message', authenticate, getUser, async (req, res) => {
+  try {
+    const basketId = req.params.bId;
+    const newMessage = req.body.message;
+
+    if (newMessage === undefined) {
+      return res.status(400).json({ message: 'Message is required in the request body.' });
+    }
+
+    const basketItem = res.user.basket.find((item) => item.id === basketId);
+
+    if (!basketItem) {
+      return res.status(404).json({ message: 'Basket item not found.' });
+    }
+
+    basketItem.product.message = newMessage;
+    basketItem.product.updated_at = new Date();
+
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating basket item message:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+/**
  * Delete particular user basket
 */
+
 router.delete('/:id/basket/:nId', authenticate, getUser, async (req, res) => {
  
   try {

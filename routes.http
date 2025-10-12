@@ -915,6 +915,15 @@ Content-Type: application/json
 {
 }
 
+### Edit basket item message
+PATCH http://localhost:3000/users/66edd3e92ae495db5d122b58/basket/66edd4672ae495db5d122b63/message
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3MzM4NDE1MjIsImV4cCI6MTczNDQ0NjMyMn0.kTnfZ_91Zi1FfupAh5IxbLYDE7-zRZNdDMwwYRGjP7k
+Content-Type: application/json
+
+{
+  "message": "Updated message for basket item"
+}
+
 ### GET 
 GET http://localhost:3000/users/689e52c0383bbc5aaf269ed7/inprogressOrders
 Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3NTU2MTI2NDksImV4cCI6MTc1NjIxNzQ0OX0.6LPLERBzOQ3pkjKed_qhCQRKtu-8lTKnD61rlsVg9cY
