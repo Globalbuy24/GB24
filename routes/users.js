@@ -1570,29 +1570,40 @@ router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) =>
 })
 
 /**
- * Get one particular order's from a group of orders
+ * Update order message
  */
-router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) => {
- 
+router.patch('/:id/orders/:oId/message', authenticate, getUser, async (req, res) => {
   try {
-     
-     const orderId = req.params.nId;
-       
-     const order = res.user.orders.find((order) => order.id === orderId);
-     if(!order)
-     {
-         res.status(404).json({ error: 'order not found' });
-         return;
-     }
-     
-     res.json(order.products);
-  }
-  catch(error)
-  {
-    res.status(500).json({message:error});
-  }
+    const orderId = req.params.oId;
+    const newMessage = req.body.message;
 
-})
+    if (newMessage === undefined) {
+      return res.status(400).json({ message: 'Message is required in the request body.' });
+    }
+
+    const order = res.user.orders.find((order) => order.id === orderId);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found.' });
+    }
+
+    if (order.status !== 'pending') {
+      return res.status(400).json({ message: 'Order status must be "pending" to update the message.' });
+    }
+
+    order.products.forEach(product => {
+      product.message = newMessage;
+    });
+    order.updated_at = new Date(); // Assuming you want to track when the order was last updated
+
+    const updatedUser = await res.user.save();
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating order message:', error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
 /**
  * 
  */
