@@ -130,7 +130,7 @@ const UserSchema = new mongoose.Schema({
             img: { type: String, default: "https://seeklogo.com/images/S/shopping-cart-logo-FDD62BF737-seeklogo.com.png" }
         }],
         items_count: { type: String },
-        estimated_delivery: { type: String, default: "2 weeks" },
+        estimated_delivery: { type: String, default: "2" },
         expiresIn: { type: String, default: "7 days" },
         expires_date: {type: Date, default: () => {
             const currentDate = new Date();
@@ -144,6 +144,7 @@ const UserSchema = new mongoose.Schema({
         currency: { type: String, default: "XAF" },
         created_at: { type: String },
         created_date: {type: String},
+        updated_at: {type: Date},
         purchase_date: {type: String}
     }],
     payment_methods: [{

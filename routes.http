@@ -46,7 +46,7 @@ POST http://localhost:3000/login
 Content-Type: application/json
 
 {
-    "credential":"+237673964362",
+    "credential":"ndktechh@gmail.com",
     "password":"12345678"
 }
 
@@ -798,9 +798,8 @@ Content-Type: application/json
 
 ### payments
 
-POST http://localhost:3000/users/initiate-payment/66f85fad5fa738cd1d67e8de/payfor/675857159177e78c2858e009
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3NDEzNjgzNzYsImV4cCI6MTc0MTk3MzE3Nn0.m695TAEMHVJkQpoIspXWmD2mJsPQLUkt1riZIKQm8ic
-Content-Type: application/json
+POST http://localhost:3000/users/initiate-payment/68bd99917a546fff59317558/payfor/68f24d05d5969ff5606f29b7
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2MDcxMzI3NiwiZXhwIjoxNzYxMzE4MDc2fQ.JK5x9xMJDp-NOSgMklOy9F3PpJhVdBi-l1i2QZxjElc
 
 {
     
@@ -815,8 +814,8 @@ Content-Type: application/json
     "transId":"BbTsi7dMuV"
 }
 ###
-POST https://globalbuy24-a3348f9c2173.herokuapp.com/users/initiate-payment/674e53e35a1dff6e5a4185ae/payfor/674e552c5a1dff6e5a41860d
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiRGlsYW4iLCJpYXQiOjE3MzMyODU1MTMsImV4cCI6MTczMzg5MDMxM30.7gqi6hIH_XWGUv0PflVaLLS0MsrfKZWEWLyNNL5cVr8
+POST https://globalbuy24-a3348f9c2173.herokuapp.com/users/initiate-payment/68bd99917a546fff59317558/payfor/68f24d05d5969ff5606f29b7
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2MDcxMzI3NiwiZXhwIjoxNzYxMzE4MDc2fQ.JK5x9xMJDp-NOSgMklOy9F3PpJhVdBi-l1i2QZxjElc
 Content-Type: application/json
 
 {
@@ -922,6 +921,15 @@ Content-Type: application/json
 
 {
   "message": "Updated message for basket item"
+}
+
+### Update order message
+PATCH http://localhost:3000/users/66edd3e92ae495db5d122b58/orders/66f6bfc6c776d3d1b3c863cb/message
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3Mjc5NzAzODYsImV4cCI6MTcyODU3NTE4Nn0.wCe75kGHmnRe49WGG7gvisw0We6GlDV3u-NJIU4OKjU
+Content-Type: application/json
+
+{
+  "message": "This is an updated order message."
 }
 
 ### GET 
