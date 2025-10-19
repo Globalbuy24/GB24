@@ -1854,7 +1854,7 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
      
     const payment = {
       amount:parseInt(order.total_amount)+parseInt(0.031*parseInt(order.total_amount)),
-      // email:userEmail,
+      email:res.user.email ?? '',
       externalId:order.id,//orderID
       userId: res.user.id,
       redirectUrl: 'https://globalbuy24.com',
