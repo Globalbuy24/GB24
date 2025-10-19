@@ -1,7 +1,7 @@
 
 import axios from 'axios';
-// const baseUrl = 'https://live.fapshi.com'
-const baseUrl = 'https://sandbox.fapshi.com'
+const baseUrl = 'https://live.fapshi.com'
+// const baseUrl = 'https://sandbox.fapshi.com'
 const headers =  {
     apiuser: process.env.FAPSHI_apiuser,
     apikey: process.env.FAPSHI_apikey
