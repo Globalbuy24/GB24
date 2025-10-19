@@ -1786,30 +1786,63 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
   }
    try{
 
-      if(order.status=="purchased")
+      // Error handling french and english
+      if(res.user.settings.language=="en")
       {
-        res.status(400).json({message:"You have already paid for this order!"})
-        return
+          if(order.status=="purchased")
+          {
+            res.status(400).json({message:"You have already paid for this order!"})
+            return
+          }
+          else if(order.status!="confirmed")
+          {
+            res.status(400).json({message:"Order confirmation pending!"})
+            return
+          }
+          else if(parseInt(order.total_amount)<99)
+            {
+              res.status(400).json({message:"Order total too low"})
+              return
+            }
+          else if(res.user.addresses.length === 0) {
+              res.status(400).json({message: "Please add a delivery address"});
+              return;
+          }
+          else if(res.user.payment_methods.length === 0)
+          {
+              res.status(400).json({message:"Please add a payment method"})
+              return
+          }
       }
-      if(order.status!="confirmed")
+      else if(res.user.settings.language=="fr")
       {
-        res.status(400).json({message:"Order confirmation pending!"})
-        return
-      }
-      if(parseInt(order.total_amount)<99)
+        if(order.status=="purchased")
         {
-          res.status(400).json({message:"Order total too low"})
-          return
+            res.status(400).json({message:"Vous avez déjà payé cette commande !"})
+            return
         }
-      if(res.user.addresses.length === 0) {
-          res.status(400).json({message: "Please add a delivery address"});
-          return;
+        else if(order.status!="confirmed")
+        {
+            res.status(400).json({message:"Confirmation de commande en attente !"})
+            return
+        }
+        else if(parseInt(order.total_amount)<99)
+        {
+            res.status(400).json({message:"Le total de la commande est trop bas"})
+            return
+        }
+        else if(res.user.addresses.length === 0) {
+            res.status(400).json({message: "Veuillez ajouter une adresse de livraison"});
+            return;
+        }
+        else if(res.user.payment_methods.length === 0)
+        {
+            res.status(400).json({message:"Veuillez ajouter un moyen de paiement"})
+            return
+        }
       }
-      if(res.user.payment_methods.length === 0)
-      {
-          res.status(400).json({message:"Please add a payment method"})
-          return
-      }
+
+      
      console.log(isDefault)
       order.delivery_details.street=isDefault.street
       order.delivery_details.city=isDefault.city
