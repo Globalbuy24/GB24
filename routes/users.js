@@ -2300,7 +2300,7 @@ async function numEnd(account_number) {
     
     const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
     
-    return dayDifference >= 0 ? `${dayDifference} days` : 'expired';
+    return dayDifference >= 0 ? `${dayDifference}` : 'expired';
 }
 
 /**
