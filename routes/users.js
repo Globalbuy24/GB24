@@ -1572,9 +1572,10 @@ router.get('/:id/orderProducts/:nId', authenticate, getUser, async (req, res) =>
 /**
  * Update order message
  */
-router.patch('/:id/orders/:oId/message', authenticate, getUser, async (req, res) => {
+router.patch('/:id/orders/:oId/product/:pId/message', authenticate, getUser, async (req, res) => {
   try {
     const orderId = req.params.oId;
+    const productId = req.params.pId;
     const newMessage = req.body.message;
 
     if (newMessage === undefined) {
@@ -1591,9 +1592,13 @@ router.patch('/:id/orders/:oId/message', authenticate, getUser, async (req, res)
       return res.status(400).json({ message: 'Order status must be "pending" to update the message.' });
     }
 
-    order.products.forEach(product => {
-      product.message = newMessage;
-    });
+    const productToUpdate = order.products.find(product => product.id === productId);
+
+    if (!productToUpdate) {
+      return res.status(404).json({ message: 'Product not found in this order.' });
+    }
+
+    productToUpdate.message = newMessage;
     order.updated_at = new Date(); // Assuming you want to track when the order was last updated
 
     const updatedUser = await res.user.save();
