@@ -122,7 +122,7 @@ const UserSchema = new mongoose.Schema({
             weight: { type: String, default: "0" },
             height: { type: String, default: "0" },
             price: { type: String, default: "0.00" },
-            delivery_time: { type: String, default: "2 weeks" },
+            delivery_time: { type: String, default: "2" },
             canResize: { type: Boolean, default: false },
             canRecolour: { type: Boolean, default: false },
             isRejected: { type: Boolean, default: false },
@@ -131,7 +131,7 @@ const UserSchema = new mongoose.Schema({
         }],
         items_count: { type: String },
         estimated_delivery: { type: String, default: "2" },
-        expiresIn: { type: String, default: "7 days" },
+        expiresIn: { type: String, default: "7" },
         expires_date: {type: Date, default: () => {
             const currentDate = new Date();
             return new Date(currentDate.setDate(currentDate.getDate() + 7));
