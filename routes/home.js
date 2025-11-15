@@ -5,7 +5,7 @@ router.get('/',async (req,res)=>{
     try
     {
         
-        res.json("Welcome to GlobalBuy24")
+        res.json("Welcome to GlobalBuy")
     }
     catch(error)
     {

@@ -194,7 +194,7 @@ router.post('/getCode/:id',getUser,async(req,res)=>{
     await res.user.updateOne({$set:{temp:{code:temp_code,created_at: new Date()}}})
     
     await sendSMS({
-      sender: "GB24",
+      sender: "GB",
       recipient: res.user.phone_number, 
       message: "Your verification code is: "+temp_code+" . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com"
     });
@@ -1197,7 +1197,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     const newOrderNotification = {
       _id: new mongoose.Types.ObjectId(),
       type: translate('✅ Order Received', userLanguage),
-      message: translate('Thank you for placing your order with GlobalBuy24. We’ve received your request and are now verifying the product details. We’ll notify you once we place the order.', userLanguage),
+      message: translate('Thank you for placing your order with GlobalBuy. We’ve received your request and are now verifying the product details. We’ll notify you once we place the order.', userLanguage),
       created_at:new Date()
     };
     const newOrderNotification2 = {
@@ -1858,7 +1858,7 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
       externalId:order.id,//orderID
       userId: res.user.id,
       redirectUrl: 'https://globalbuy24.com',
-      message: 'GlobalBuy24 Order Payment',
+      message: 'GlobalBuy Order Payment',
 
       }
      const resp = await fapshi.initiatePay(payment)
@@ -1997,12 +1997,12 @@ router.post('/chatbot/:id', getUser, authenticate, async (req, res) => {
                 model: "gpt-5-nano",
                   "messages": [
                     
-                  { role: 'assistant', content: `Your name is GlobalBuy(GB24) AI assitant or GB24 AI assitant for short, and you help with customer support and product recommendation on GB24 platform.  
+                  { role: 'assistant', content: `Your name is GlobalBuy(GB) AI assitant or GB AI assitant for short, and you help with customer support and product recommendation on GB platform.  
                     When you recomend a Company, you should include the company name, a brief description, and a link to their website or product page.
                     Always be very direct and use simple terms any user can understand.
                     Use emojis when necessary, to improve anthropormorphism.
                     Always respond with the current language the user's message is in(Do not add any strange language for any reason).
-                    Keep your response within GB24 and E-commerce related topics(at all times,do not go against this)
+                    Keep your response within GB and E-commerce related topics(at all times,do not go against this)
 
                     This is everthing about the current user
                     First Name: ${res.user.first_name},
@@ -2018,13 +2018,13 @@ router.post('/chatbot/:id', getUser, authenticate, async (req, res) => {
 
                     Here are some frequently asked questions: [
                 {
-                  question: 'What is GlobalBuy24 (GB24)?',
-                  answer: 'GlobalBuy24 (GB24) is a shopping platform that allows users in Africa, starting with Cameroon, to order products from international online stores. We manage the order, payment, inspection upon arrival, and shipping—delivering global products to your local pickup point.',
+                  question: 'What is GlobalBuy (GB)?',
+                  answer: 'GlobalBuy (GB) is a shopping platform that allows users in Africa, starting with Cameroon, to order products from international online stores. We manage the order, payment, inspection upon arrival, and shipping—delivering global products to your local pickup point.',
                 },
                 {
-                  question: 'How does GB24 work?',
+                  question: 'How does GB work?',
                   answer:'1. Find a product on any global online store.
-                        \n2. Paste the product link into the GB24 app.
+                        \n2. Paste the product link into the GB app.
                           \n3. Receive a full quote for purchase and delivery.
                           \n4. Confirm and pay.
                           \n5. We order the product and receive it at our warehouse (In Germany). We check that the item is in good condition (not damaged, not opened) upon arrival.If the item is damaged, we may return it to the merchant. This may cause delivery delays.
@@ -2033,15 +2033,15 @@ router.post('/chatbot/:id', getUser, authenticate, async (req, res) => {
                     },
                     {
                       question: 'Which countries or stores can I buy from?',
-                      answer: 'At GlobalBuy24, your shopping choices know no limits! You have the flexibility to shop from virtually any international online store worldwide, whether it\'s a major retailer or a niche boutique. Our goal is to empower you to explore a vast array of products, from countries and sites that might not typically ship to your region.However, please be aware that GlobalBuy24 does not take responsibility for verifying the credibility or legitimacy of third-party online stores. You, the user, have full control and choice over where you decide to shop',
+                      answer: 'At GlobalBuy, your shopping choices know no limits! You have the flexibility to shop from virtually any international online store worldwide, whether it\'s a major retailer or a niche boutique. Our goal is to empower you to explore a vast array of products, from countries and sites that might not typically ship to your region.However, please be aware that GlobalBuy does not take responsibility for verifying the credibility or legitimacy of third-party online stores. You, the user, have full control and choice over where you decide to shop',
                     },
                     {
-                      question: 'Where is GB24 available?',
+                      question: 'Where is GB available?',
                       answer: 'We currently operate in Cameroon, with plans to expand to other African countries soon.',
                     },
                     {
                       question: 'How do I get a quote?',
-                      answer: 'Paste the product link into the GB24 app. We’ll generate a quote including item cost, shipping, customs, and handling.',
+                      answer: 'Paste the product link into the GB app. We’ll generate a quote including item cost, shipping, customs, and handling.',
                     },
                     {
                       question: 'How do I pay?',
@@ -2075,7 +2075,7 @@ router.post('/chatbot/:id', getUser, authenticate, async (req, res) => {
 
 
                   ];
-                  Users can only use the mobile app to be able to shop on GB24 platform.
+                  Users can only use the mobile app to be able to shop on GB platform.
                   This is a full description of our app, so you get more context of every single screen that exist, or atleast the most important ones
 
                   Authentication Screens:{
@@ -2492,7 +2492,7 @@ function messageTemplateForOTP(otp, language)
       <p>${translatedThanks}</p>
     </div>
     <div class="footer">
-      &copy; 2025 GlobalBuy24 (GB24). ${translatedFooter}
+      &copy; 2025 GlobalBuy (GB). ${translatedFooter}
     </div>
   </div>
 </body>
