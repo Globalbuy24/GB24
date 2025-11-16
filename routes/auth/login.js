@@ -303,8 +303,8 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
      </div>
      <div class="content">
        <p>${translate('Hello,', language)}</p>
-       <p>${translate("We've recieved a request to reset your password for your GlobalBuy24 account", language)}</p>
-       <p>${translate('To proceed, please enter the following verification code in the GlobalBuy24 app', language)}</p>
+       <p>${translate("We've recieved a request to reset your password for your GlobalBuy account", language)}</p>
+       <p>${translate('To proceed, please enter the following verification code in the GlobalBuy app', language)}</p>
        <div class="otp-box">
          <p>${otp}</p> <!--Add OTP here-->
        </div>
@@ -313,7 +313,7 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
        <p>${translate('Thank you for using our service!', language)}</p>
      </div>
      <div class="footer">
-       &copy; ${translate('2025 GlobalBuy24 (GB24). All rights reserved.', language)}
+       &copy; ${translate('2025 GlobalBuy (GB24). All rights reserved.', language)}
      </div>
    </div>
  </body>

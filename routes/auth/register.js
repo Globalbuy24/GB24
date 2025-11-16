@@ -117,8 +117,8 @@ router.post('/',async(req,res)=>{
         const welcomeNotification = {
           _id: new mongoose.Types.ObjectId(),
           type: 'welcome',
-          title: 'Welcome to GlobalBuy24', // Store the English key directly
-          message: 'GB24 welcomes you, {first_name} {last_name}. Enjoy your ride with us.', // Store the English key directly
+          title: 'Welcome to GlobalBuy', // Store the English key directly
+          message: 'GlobalBuy welcomes you, {first_name} {last_name}. Enjoy your ride with us.', // Store the English key directly
           created_at: new Date()
         };
         if(req.body.phone_number!=null)
@@ -129,7 +129,7 @@ router.post('/',async(req,res)=>{
               const temp_code=user.temp.code
              
               await sendSMS({
-                sender: "GB24",
+                sender: "GB",
                 recipient: user.phone_number, 
                 message: translate("Your verification code is: {temp_code} . It is valid for 5 minutes.Do not share this code with anyone. Need Help? Visit the help centre on the app or globalbuy24.com", user.settings.language, {temp_code: temp_code})
               });
@@ -151,7 +151,7 @@ router.post('/',async(req,res)=>{
             await mailer.sendMail({
               from:'no-reply@globalbuy24.com',
               to:req.body.email,
-              subject:translate('Welcome to GlobalBuy24', user.settings.language),
+              subject:translate('Welcome to GlobalBuy', user.settings.language),
               html:messageTemplateForWelcome(user.settings.language)
             })
             await mailer.sendMail({
@@ -303,7 +303,7 @@ function messageTemplateForWelcome(language)
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${translate('Welcome to GlobalBuy24', language)}</title>
+  <title>${translate('Welcome to GlobalBuy', language)}</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -382,22 +382,22 @@ function messageTemplateForWelcome(language)
 <body>
   <div class="email-wrapper">
     <div class="header">
-      <h1>${translate('Welcome to GB24!', language)}</h1>
+      <h1>${translate('Welcome to GB!', language)}</h1>
     </div>
     <div class="content">
       <p>${translate('Hello and welcome 👋,', language)}</p>
-      <p>${translate('We’re excited to have you on board. With GlobalBuy24, you can easily <span class="highlight">shop from global online stores</span> and get your purchases delivered to you in Cameroon — reliably, affordably, and hassle-free.', language)}</p>
-      <p>${translate('Here’s what you can do with the GlobalBuy24 app:', language)}</p>
+      <p>${translate('We’re excited to have you on board. With GlobalBuy, you can easily <span class="highlight">shop from global online stores</span> and get your purchases delivered to you in Cameroon — reliably, affordably, and hassle-free.', language)}</p>
+      <p>${translate('Here’s what you can do with the GlobalBuy app:', language)}</p>
       <ul>
         <li>${translate('🛒 Simply add product links from any online store worldwide (e.g., Amazon, Temu, eBay, Fashion Nova, SHEIN, and more)', language)}</li>
         <li>${translate('📦 Request quotes and confirm orders', language)}</li>
         <li>${translate('🚀 Track shipping and delivery straight to Cameroon', language)}</li>
       </ul>
       <p>${translate('We can’t wait to help you shop the world.', language)}</p>
-      <p><strong>${translate('Happy shopping!', language)}<br />— ${translate('The GlobalBuy24 Team', language)}</strong></p>
+      <p><strong>${translate('Happy shopping!', language)}<br />— ${translate('The GlobalBuy Team', language)}</strong></p>
     </div>
     <div class="footer">
-      &copy; ${translate('2025 GlobalBuy24. All rights reserved.', language)}
+      &copy; ${translate('2025 GlobalBuy. All rights reserved.', language)}
     </div>
   </div>
 </body>
@@ -506,7 +506,7 @@ function messageTemplateForOTP(otp, language)
     </div>
     <div class="content">
       <p>${translate('Hello,', language)}</p>
-      <p>${translate('To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:', language)}</p>
+      <p>${translate('To complete your GlobalBuy sign-up, please enter the following verification code in the app:', language)}</p>
       <div class="otp-box">
         <p>${otp}</p> <!--Add OTP here-->
       </div>
@@ -515,7 +515,7 @@ function messageTemplateForOTP(otp, language)
       <p>${translate('Thank you for using our service!', language)}</p>
     </div>
     <div class="footer">
-      &copy; ${translate('2025 GlobalBuy24 (GB24). All rights reserved.', language)}
+      &copy; ${translate('2025 GlobalBuy (GB). All rights reserved.', language)}
     </div>
   </div>
 </body>
