@@ -522,6 +522,50 @@ router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
   }
 });
 
+/**
+ * Toggle order progress
+ */
+router.patch('/order/:oId/progress', authenticate, async (req, res) => {
+  try {
+    const orderId = req.params.oId;
+    const { progressItem, status } = req.body; // Expect progressItem name and its new status in the body
+    const users = await User.find({});
+
+    if (typeof progressItem === 'undefined' || typeof status === 'undefined') {
+      return res.status(400).json({ message: "Both 'progressItem' and 'status' are required in the request body." });
+    }
+
+    let updatedUser = null;
+
+    for (const user of users) {
+      for (const order of user.orders) {
+        if (order.id === orderId) {
+          // Find the progress item in the array
+          const progressIndex = order.progress.findIndex(item => item.hasOwnProperty(progressItem));
+
+          if (progressIndex !== -1) {
+            // Set the boolean value to the provided status
+            order.progress[progressIndex][progressItem] = status;
+            updatedUser = await user.save();
+            break;
+          } else {
+            return res.status(404).json({ message: `Progress item '${progressItem}' not found in order.` });
+          }
+        }
+      }
+      if (updatedUser) break;
+    }
+
+    if (updatedUser) {
+      res.json(updatedUser);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 // /**
 //  *  test currency 
 //  */

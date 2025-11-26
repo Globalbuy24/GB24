@@ -1179,7 +1179,7 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
       name:"Air Freight",
       delivery_fee:"0.00"
     }
-     const humanReadableDate = format(new Date(), 'MMMM do yyyy, h:mm:ss a');
+    //  const humanReadableDate = format(new Date(), 'MMMM do yyyy, h:mm:ss a');
   
     const newOrder={
     _id: new mongoose.Types.ObjectId(),
@@ -1188,7 +1188,6 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     delivery_details:userDeliveryAddress,
     delivery_method:defaultDelivery,
     products:userProducts,
-    created_at:humanReadableDate,
     items_count:itemCount
     }
 
