@@ -137,12 +137,19 @@ const UserSchema = new mongoose.Schema({
             return new Date(currentDate.setDate(currentDate.getDate() + 7));
         }},
         status: { type: String, default: "pending" },
+        progress:[
+            {items_ordered:{type:Boolean,default:false}},
+            {items_recieved:{type:Boolean,default:false}},
+            {items_shipped:{type:Boolean,default:false}},
+            {arrived_destination:{type:Boolean,default:false}},
+            {ready_for_pickup:{type:Boolean,default:false}
+        }],
         isDelivered: { type: Boolean, default: false },
         service_fee: { type: String, default: "0.00" },
         sub_total: { type: String, default: "0.00" },
         total_amount: { type: String, default: "0.00" },
         currency: { type: String, default: "XAF" },
-        created_at: { type: String },
+        created_at: { type: Date ,default: Date.now },
         created_date: {type: String},
         updated_at: {type: Date},
         purchase_date: {type: String}
