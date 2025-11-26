@@ -527,44 +527,42 @@ router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
  */
 router.patch('/order/:oId/progress', authenticate, async (req, res) => {
   try {
-    const orderId = req.params.oId;
-    const { progressItem, status } = req.body; // Expect progressItem name and its new status in the body
-    const users = await User.find({});
+    const { oId } = req.params;
+    const { progressItem, status } = req.body;
 
-    if (typeof progressItem === 'undefined' || typeof status === 'undefined') {
-      return res.status(400).json({ message: "Both 'progressItem' and 'status' are required in the request body." });
+    if (!progressItem || typeof status === 'undefined') {
+      return res.status(400).json({
+        message: "Both 'progressItem' and 'status' are required",
+      });
     }
 
-    let updatedUser = null;
+    const user = await User.findOne({ "orders._id": oId });
 
-    for (const user of users) {
-      for (const order of user.orders) {
-        if (order.id === orderId) {
-          // Find the progress item in the array
-          const progressIndex = order.progress.findIndex(item => item.hasOwnProperty(progressItem));
-
-          if (progressIndex !== -1) {
-            // Set the boolean value to the provided status
-            order.progress[progressIndex][progressItem] = status;
-            updatedUser = await user.save();
-            break;
-          } else {
-            return res.status(404).json({ message: `Progress item '${progressItem}' not found in order.` });
-          }
-        }
-      }
-      if (updatedUser) break;
+    if (!user) {
+      return res.status(404).json({ message: "Order not found" });
     }
 
-    if (updatedUser) {
-      res.json(updatedUser);
-    } else {
-      res.status(404).json({ message: "Order not found" });
+    const order = user.orders.id(oId);
+
+    const index = order.progress.findIndex(p =>
+      Object.keys(p)[0] === progressItem
+    );
+
+    if (index === -1) {
+      return res.status(404).json({
+        message: `Progress item '${progressItem}' not found`,
+      });
     }
+
+    order.progress[index][progressItem] = status;
+    await user.save();
+
+    res.json(order);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
+
 
 // /**
 //  *  test currency 
