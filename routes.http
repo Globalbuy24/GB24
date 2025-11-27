@@ -940,3 +940,13 @@ Content-Type: application/json
 {
 
 }
+
+### PATCH progress
+PATCH http://localhost:3000/admin/order/68fdd0acb5f2483850e5417d/progress
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2NDI1MjkzOCwiZXhwIjoxNzY0ODU3NzM4fQ.Z7BrxRA8f-hpIEs5h7EnLyKAGQaYEK6-trGcAbhY82A
+Content-Type: application/json
+
+{
+  "progressItem": "items_ordered",
+  "status": true
+}
