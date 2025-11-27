@@ -137,7 +137,7 @@ const UserSchema = new mongoose.Schema({
             return new Date(currentDate.setDate(currentDate.getDate() + 7));
         }},
         status: { type: String, default: "pending" },
-        
+
         progress: {
         items_ordered: { type: Boolean, default: false },
         items_received: { type: Boolean, default: false },
@@ -151,7 +151,7 @@ const UserSchema = new mongoose.Schema({
         sub_total: { type: String, default: "0.00" },
         total_amount: { type: String, default: "0.00" },
         currency: { type: String, default: "XAF" },
-        created_at: { type: Date ,default: Date.now },
+        created_at: { type: String ,default: new Date()},
         created_date: {type: String},
         updated_at: {type: Date},
         purchase_date: {type: String}

@@ -1188,7 +1188,8 @@ router.post('/:id/newOrder',authenticate,getUser,async(req,res)=>{
     delivery_details:userDeliveryAddress,
     delivery_method:defaultDelivery,
     products:userProducts,
-    items_count:itemCount
+    items_count:itemCount,
+    created_at:new Date(),
     }
 
     const userLanguage = res.user.settings.language;

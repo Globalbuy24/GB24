@@ -544,17 +544,13 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
 
     const order = user.orders.id(oId);
 
-    const index = order.progress.findIndex(p =>
-      Object.keys(p)[0] === progressItem
-    );
-
-    if (index === -1) {
+    if (!order.progress.hasOwnProperty(progressItem)) {
       return res.status(404).json({
-        message: `Progress item '${progressItem}' not found`,
+        message: `Progress item '${progressItem}' not found in order progress`,
       });
     }
 
-    order.progress[index][progressItem] = status;
+    order.progress[progressItem] = status;
     await user.save();
 
     res.json(order);
