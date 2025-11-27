@@ -151,7 +151,7 @@ const UserSchema = new mongoose.Schema({
         sub_total: { type: String, default: "0.00" },
         total_amount: { type: String, default: "0.00" },
         currency: { type: String, default: "XAF" },
-        created_at: { type: String ,default: new Date()},
+        created_at: { type: String ,default: Date.now},
         created_date: {type: String},
         updated_at: {type: Date},
         purchase_date: {type: String}
