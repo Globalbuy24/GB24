@@ -140,7 +140,7 @@ const UserSchema = new mongoose.Schema({
 
         progress: {
         items_ordered: { type: Boolean, default: false },
-        items_recieved: { type: Boolean, default: false },
+        items_received: { type: Boolean, default: false },
         items_shipped: { type: Boolean, default: false },
         arrived_destination: { type: Boolean, default: false },
         ready_for_pickup: { type: Boolean, default: false }
