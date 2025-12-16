@@ -36,10 +36,14 @@ const translations = {
         "To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:": "To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:",
         "This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.": "This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.",
         "If you didn't request this code, please ignore this email.": "If you didn't request this code, please ignore this email.",
-        "Thank you for using our service!": "Thank you for using our service!"
+        "Thank you for using our service!": "Thank you for using our service!",
+        "Order Status Update": "Order Status Update",
+        "Your order {order_id} status has been updated to {status}.": "Your order {order_id} status has been updated to {status}."
     },
     fr: {
         "welcome": "Bienvenue",
+        "Order Status Update": "Mise à jour du statut de la commande",
+        "Your order {order_id} status has been updated to {status}.": "Le statut de votre commande {order_id} a été mis à jour à {status}.",
         "Basket Created": "Panier créé",
         "Your OTP Code": "Votre code OTP",
         "Hello,": "Bonjour,",
