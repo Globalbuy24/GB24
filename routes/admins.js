@@ -504,7 +504,14 @@ router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
     for (const user of users) {
       for (const order of user.orders) {
         if (order.id === orderId) {
-          order.status = "confirmed";
+          order.status = req.body.status; // Use the status from the request body
+          const orderStatusNotification = {
+            _id: new mongoose.Types.ObjectId(),
+            type: 'Order Status Update',
+            message: `Your order ${order.id} status has been updated to ${req.body.status}.`,
+            created_at: formatDateTime(new Date())
+          };
+          user.notifications.push(orderStatusNotification);
           updatedUser = await user.save(); // Await the save
           break; // Exit the inner loop once the order is found and updated
         }
@@ -551,6 +558,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
     }
 
     order.progress[progressItem] = status;
+    
     await user.save();
 
     res.json(order);
