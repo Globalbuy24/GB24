@@ -509,7 +509,7 @@ router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
           const orderStatusNotification = {
             _id: new mongoose.Types.ObjectId(),
             type: 'Order Status Update',
-            message: translate(`Your order ${order.id} status has been updated to ${req.body.status}.`),
+            message: translate(`Your order {order_num} status has been updated to {status}.`, user.settings.language, { order_num: order.order_num, status: req.body.status }),
             created_at: formatDateTime(new Date())
           };
           user.notifications.push(orderStatusNotification);
@@ -565,7 +565,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: translate(`Order Progress Update`,user.settings.language),
-        message: translate(`We have received your order #${order.order_num} and it is being processed.`,user.settings.language),
+        message: translate(`We have received your order #{order_num} and it is being processed.`,user.settings.language, { order_num: order.order_num }),
         created_at: new Date()
       };
     }
@@ -574,7 +574,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: translate(`Order Progress Update`,user.settings.language),
-        message: translate(`Your order #${order.order_num} has been received at our warehouse.`,user.settings.language),
+        message: translate(`Your order #{order_num} has been received at our warehouse.`,user.settings.language, { order_num: order.order_num }),
         created_at: new Date()
       };
     }
@@ -583,7 +583,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: translate(`Order Progress Update`,user.settings.language),
-        message: translate(`Your order #${order.order_num} has been shipped.`,user.settings.language),
+        message: translate(`Your order #{order_num} has been shipped.`,user.settings.language, { order_num: order.order_num }),
         created_at: new Date()
       };
     }
@@ -592,7 +592,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: translate(`Order Progress Update`,user.settings.language),
-        message: translate(`Your order #${order.order_num} has arrived at the destination country.`,user.settings.language),
+        message: translate(`Your order #{order_num} has arrived at the destination country.`,user.settings.language, { order_num: order.order_num }),
         created_at: new Date()
       };
     }
@@ -601,7 +601,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: translate(`Order Progress Update`,user.settings.language),
-        message: translate(`Your order #${order.order_num} is ready for pickup.`,user.settings.language),
+        message: translate(`Your order #{order_num} is ready for pickup.`,user.settings.language, { order_num: order.order_num }),
         created_at: new Date()
       };
     }
