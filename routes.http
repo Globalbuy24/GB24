@@ -723,7 +723,7 @@ Content-Type: application/json
 
 {
   "category": "service fee",
-   "percentage": 10,
+   "percentage": 5,
    "maxValue": 100.00
 }
 
