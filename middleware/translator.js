@@ -38,10 +38,14 @@ const translations = {
         "If you didn't request this code, please ignore this email.": "If you didn't request this code, please ignore this email.",
         "Thank you for using our service!": "Thank you for using our service!",
         "Order Status Update": "Order Status Update",
-        "Your order {order_id} status has been updated to {status}.": "Your order {order_id} status has been updated to {status}."
+        "Your order {order_id} status has been updated to {status}.": "Your order {order_id} status has been updated to {status}.",
+        "Order Progress Update": "Order Progress Update",
+        "Your order {order_id} progress for {progress_item} has been updated to {status}.": "Your order {order_id} progress for {progress_item} has been updated to {status}."
     },
     fr: {
         "welcome": "Bienvenue",
+        "Order Progress Update": "Mise à jour de la progression de la commande",
+        "Your order {order_id} progress for {progress_item} has been updated to {status}.": "La progression de votre commande {order_id} pour {progress_item} a été mise à jour à {status}.",
         "Order Status Update": "Mise à jour du statut de la commande",
         "Your order {order_id} status has been updated to {status}.": "Le statut de votre commande {order_id} a été mis à jour à {status}.",
         "Basket Created": "Panier créé",

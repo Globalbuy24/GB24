@@ -558,7 +558,13 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
     }
 
     order.progress[progressItem] = status;
-    
+    const orderProgressNotification = {
+      _id: new mongoose.Types.ObjectId(),
+      type: 'Order Progress Update',
+      message: `Your order ${order.id} progress for ${progressItem} has been updated to ${status}.`,
+      created_at: formatDateTime(new Date())
+    };
+    user.notifications.push(orderProgressNotification);
     await user.save();
 
     res.json(order);
