@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 import authenticate from '../middleware/currentUser.js';
 import authenticateAdmin from '../middleware/currentAdminOnWeb.js';
 import axios from 'axios';
+import { translate } from '../middleware/translator.js';
 // currency converter
 const CC_API_KEY = '1e06667412357fb0c88dacd6'; // Replace with your API key
 const CC_BASE_URL = 'https://v6.exchangerate-api.com/v6'; // Modify this based on the API service you choose
@@ -508,7 +509,7 @@ router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
           const orderStatusNotification = {
             _id: new mongoose.Types.ObjectId(),
             type: 'Order Status Update',
-            message: `Your order ${order.id} status has been updated to ${req.body.status}.`,
+            message: translate(`Your order ${order.id} status has been updated to ${req.body.status}.`),
             created_at: formatDateTime(new Date())
           };
           user.notifications.push(orderStatusNotification);
@@ -558,16 +559,61 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
     }
 
     order.progress[progressItem] = status;
-    const orderProgressNotification = {
-      _id: new mongoose.Types.ObjectId(),
-      type: 'Order Progress Update',
-      message: `Your order ${order.id} progress for ${progressItem} has been updated to ${status}.`,
-      created_at: formatDateTime(new Date())
-    };
-    user.notifications.push(orderProgressNotification);
+    var orderProgressNotification = []
+    if(progressItem=="items_ordered" && status==true)
+    {
+      var orderProgressNotification = {
+        _id: new mongoose.Types.ObjectId(),
+        type: 'Order Progress Update',
+        message: translate(`We have received your order #${order.id} and it is being processed.`),
+        created_at: new Date()
+      };
+    }
+    else if(progressItem=="items_received" && status==true)
+    {
+      var orderProgressNotification = {
+        _id: new mongoose.Types.ObjectId(),
+        type: 'Order Progress Update',
+        message: translate(`Your order #${order.id} has been received at our warehouse.`),
+        created_at: new Date()
+      };
+    }
+    else if(progressItem=="items_shipped" && status==true)
+    {
+      var orderProgressNotification = {
+        _id: new mongoose.Types.ObjectId(),
+        type: 'Order Progress Update',
+        message: translate(`Your order #${order.id} has been shipped.`),
+        created_at: new Date()
+      };
+    }
+    else if(progressItem=="arrived_destination" && status==true)
+    {
+      var orderProgressNotification = {
+        _id: new mongoose.Types.ObjectId(),
+        type: 'Order Progress Update',
+        message: translate(`Your order #${order.id} has arrived at the destination country.`),
+        created_at: new Date()
+      };
+    }
+    else if(progressItem=="ready_for_pickup" && status==true)
+    {
+      var orderProgressNotification = {
+        _id: new mongoose.Types.ObjectId(),
+        type: 'Order Progress Update',
+        message: translate(`Your order #${order.id} is ready for pickup.`),
+        created_at: new Date()
+      };
+    }
+    if(orderProgressNotification && Object.keys(orderProgressNotification).length > 0)
+    {
+      user.notifications.push(orderProgressNotification);
+    }
+    
     await user.save();
 
     res.json(order);
+    
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
