@@ -270,8 +270,12 @@ router.post('/system_default', authenticate, async (req, res) => {
         }
     else if(req.body.category.toLowerCase() === "service fee")
     {
-      system_default.service_fee.percentage = req.body.percentage || system_default.service_fee.percentage;
-      system_default.service_fee.maxValue = req.body.maxValue || system_default.service_fee.maxValue;
+      // Ensure service_fee is an object before assigning properties
+      if (!system_default.service_fee || typeof system_default.service_fee !== 'object') {
+        system_default.service_fee = {};
+      }
+      system_default.service_fee.percentage = parseFloat(req.body.percentage) || system_default.service_fee.percentage;
+      system_default.service_fee.maxValue = parseFloat(req.body.maxValue) || system_default.service_fee.maxValue;
     }
     else {
       return res.status(400).json({ message: "Invalid category provided" });
@@ -776,16 +780,20 @@ router.patch('/service_fee',authenticate, async (req, res) => {
     {
       const sysDef = new SystemDefault({
         service_fee:{
-          percentage:req.body.percentage || "0.00",
-          maxValue:req.body.maxValue || "0.00"
+          percentage: parseFloat(req.body.percentage) || 0.00,
+          maxValue: parseFloat(req.body.maxValue) || 0.00
         }
       })
       await sysDef.save()
       res.status(200).json({message:"service fees updated"})
 
     }
-    systemDefault.service_fee.percentage = req.body.percentage || systemDefault.service_fee.percentage;
-    systemDefault.service_fee.maxValue = req.body.maxValue || systemDefault.service_fee.maxValue;
+    // Ensure service_fee is an object before assigning properties
+    if (!systemDefault.service_fee || typeof systemDefault.service_fee !== 'object') {
+      systemDefault.service_fee = {};
+    }
+    systemDefault.service_fee.percentage = parseFloat(req.body.percentage) || systemDefault.service_fee.percentage;
+    systemDefault.service_fee.maxValue = parseFloat(req.body.maxValue) || systemDefault.service_fee.maxValue;
     await systemDefault.save()
     res.status(200).json({message:"service fees updated"})
 
