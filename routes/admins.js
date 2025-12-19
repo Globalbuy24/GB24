@@ -508,7 +508,7 @@ router.patch('/orderStatus/:oId', authenticate, async (req, res) => {
           order.status = req.body.status; // Use the status from the request body
           const orderStatusNotification = {
             _id: new mongoose.Types.ObjectId(),
-            type: 'Order Status Update',
+            type: translate(`Order Status Update`, user.settings.language),
             message: translate(`Your order {order_num} status has been updated to {status}.`, user.settings.language, { order_num: order.order_num, status: req.body.status }),
             created_at: formatDateTime(new Date())
           };
