@@ -229,6 +229,18 @@ router.post('/:uId/updateUserBasket/:bId',authenticate,async(req,res)=>{
 /**
  *  Adding system defaults
  */
+router.get('/system_default', authenticate, async (req, res) => {
+  try {
+    const system_default = await SystemDefault.findOne({});
+    if (!system_default) {
+      return res.status(404).json({ message: "System defaults not found" });
+    }
+    res.json(system_default);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post('/system_default', authenticate, async (req, res) => {
   try {
     let system_default = await SystemDefault.findOne({}); // Use findOne instead of find for a single document
