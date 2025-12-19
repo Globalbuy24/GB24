@@ -716,6 +716,9 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
             
             // Update order total price
             let system_default = await SystemDefault.findOne({});
+
+            item.delivery_fee=system_default.delivery_fee.air_freight || item.delivery_fee;
+
             let price = 0;
             // let extra = 0;
             let delivery_period = 0;
