@@ -270,12 +270,17 @@ router.post('/system_default', authenticate, async (req, res) => {
         }
     else if(req.body.category.toLowerCase() === "service fee")
     {
-      // Ensure service_fee is an object before assigning properties
-      if (!system_default.service_fee || typeof system_default.service_fee !== 'object') {
-        system_default.service_fee = {};
-      }
-      system_default.service_fee.percentage = parseFloat(req.body.percentage) || system_default.service_fee.percentage;
-      system_default.service_fee.maxValue = parseFloat(req.body.maxValue) || system_default.service_fee.maxValue;
+      const percentage = parseFloat(req.body.percentage);
+      const maxValue = parseFloat(req.body.maxValue);
+
+      // Create a new service_fee object
+      const newServiceFee = {
+        percentage: isNaN(percentage) ? (system_default.service_fee && system_default.service_fee.percentage || 0.00) : percentage,
+        maxValue: isNaN(maxValue) ? (system_default.service_fee && system_default.service_fee.maxValue || 0.00) : maxValue,
+      };
+
+      // Use Mongoose's set method to replace the entire service_fee field
+      system_default.set('service_fee', newServiceFee);
     }
     else {
       return res.status(400).json({ message: "Invalid category provided" });
@@ -788,12 +793,17 @@ router.patch('/service_fee',authenticate, async (req, res) => {
       res.status(200).json({message:"service fees updated"})
 
     }
-    // Ensure service_fee is an object before assigning properties
-    if (!systemDefault.service_fee || typeof systemDefault.service_fee !== 'object') {
-      systemDefault.service_fee = {};
-    }
-    systemDefault.service_fee.percentage = parseFloat(req.body.percentage) || systemDefault.service_fee.percentage;
-    systemDefault.service_fee.maxValue = parseFloat(req.body.maxValue) || systemDefault.service_fee.maxValue;
+    const percentage = parseFloat(req.body.percentage);
+    const maxValue = parseFloat(req.body.maxValue);
+
+    // Create a new service_fee object
+    const newServiceFee = {
+      percentage: isNaN(percentage) ? (systemDefault.service_fee && systemDefault.service_fee.percentage || 0.00) : percentage,
+      maxValue: isNaN(maxValue) ? (systemDefault.service_fee && systemDefault.service_fee.maxValue || 0.00) : maxValue,
+    };
+
+    // Use Mongoose's set method to replace the entire service_fee field
+    systemDefault.set('service_fee', newServiceFee);
     await systemDefault.save()
     res.status(200).json({message:"service fees updated"})
 

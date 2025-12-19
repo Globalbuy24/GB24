@@ -580,8 +580,8 @@ POST http://localhost:3000/admin/login
 Content-Type: application/json
 
 {
-     "credential":"ee@gmail.com",
-     "password":"12345678"
+     "credential":"admin@globalbuy24.com",
+     "password":"GB24-admin-access@24"
 }
 ###
 POST http://localhost:3000/admin/66969f7c30c89bd31c453035/updateUserBasket/6696a00130c89bd31c45303c
@@ -716,18 +716,20 @@ Content-Type: application/json
             "img":"https://seeklogo.com/images/S/shopping-cart-logo-FDD62BF737-seeklogo.com.png"
 
 }
-### Add service fees
-PATCH http://localhost:3000/admin/service_fee
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+### Add service fees (Test Endpoint)
+POST http://localhost:3000/admin/system_default
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNjc4ZTI4NWZkNTU5NjY1ODMwYzdmZjFhIiwiaWF0IjoxNzY2MTU1NzgyLCJleHAiOjE3NjYxOTg5ODJ9.SKUy2U7LypcHfyIF2DvQ7rbuOdP42C9KqSRBAxo33HI
 Content-Type: application/json
 
 {
-   "amount":"5290"
+  "category": "service fee",
+   "percentage": 10,
+   "maxValue": 100.00
 }
 
-### Get service fees
+### Get service fees (Test Endpoint)
 GET http://localhost:3000/admin/service_fee
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiQWRtaW4iLCJpYXQiOjE3MzAzNjUyNjgsImV4cCI6MTczMDQwODQ2OH0.-3BHJjsMNxcdAXKmrCSLNZhiA5jAbq3-3k3BGWQuhzc
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNjc4ZTI4NWZkNTU5NjY1ODMwYzdmZjFhIiwiaWF0IjoxNzY2MTU1NzgyLCJleHAiOjE3NjYxOTg5ODJ9.SKUy2U7LypcHfyIF2DvQ7rbuOdP42C9KqSRBAxo33HI
 Content-Type: application/json
 
 {
