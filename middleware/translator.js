@@ -40,7 +40,7 @@ const translations = {
         "Order Status Update": "Order Status Update",
         "Your order {order_id} status has been updated to {status}.": "Your order {order_id} status has been updated to {status}.",
         "Order Progress Update": "Order Progress Update",
-        
+        "Order Progress Update": "Order Progress Update",
         "We have received your order #{order_id} and it is being processed.": "We have received your order #{order_id} and it is being processed.",
         "Your order #{order_id} has been received at our warehouse.": "Your order #{order_id} has been received at our warehouse.",
         "Your order #{order_id} has been shipped.": "Your order #{order_id} has been shipped.",
@@ -93,7 +93,8 @@ const translations = {
         "We can’t wait to help you shop the world.": "Nous avons hâte de vous aider à acheter dans le monde entier.",
         "Happy shopping!": "Bon shopping !",
         "The GlobalBuy Team": "L'équipe GlobalBuy",
-        "2025 GlobalBuy. All rights reserved.": "2025 GlobalBuy. Tous droits réservés."
+        "2025 GlobalBuy. All rights reserved.": "2025 GlobalBuy. Tous droits réservés.",
+        "Order Progress Update": "Mise à jour de la progression de la commande",
     }
 };
 
