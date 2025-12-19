@@ -45,7 +45,8 @@ const translations = {
         "Your order #{order_num} has been received at our warehouse.": "Your order #{order_num} has been received at our warehouse.",
         "Your order #{order_num} has been shipped.": "Your order #{order_num} has been shipped.",
         "Your order #{order_num} has arrived at the destination country.": "Your order #{order_num} has arrived at the destination country.",
-        "Your order #{order_num} is ready for pickup.": "Your order #{order_num} is ready for pickup."
+        "Your order #{order_num} is ready for pickup.": "Your order #{order_num} is ready for pickup.",
+        "Your order {order_num} progress for {progress_item} has been updated to {status}.": "Your order {order_num} progress for {progress_item} has been updated to {status}."
     },
     fr: {
         "welcome": "Bienvenue",
@@ -54,7 +55,7 @@ const translations = {
         "Order Status Update": "Mise à jour du statut de la commande",
         "Your order {order_num} status has been updated to {status}.": "Le statut de votre commande {order_num} a été mis à jour à {status}.",
         "We have received your order #{order_num} and it is being processed.": "Nous avons reçu votre commande #{order_num} et elle est en cours de traitement.",
-        "Your order #{order_num} has been received at our entrepôt.": "Votre commande #{order_num} a été reçue à notre entrepôt.",
+        "Your order #{order_num} has been received at our warehouse.": "Votre commande #{order_num} a été reçue à notre entrepôt.",
         "Your order #{order_num} has been shipped.": "Votre commande #{order_num} a été expédiée.",
         "Your order #{order_num} has arrived at the destination country.": "Votre commande #{order_num} est arrivée dans le pays de destination.",
         "Your order #{order_num} is ready for pickup.": "Votre commande #{order_num} est prête à être récupérée.",
@@ -62,7 +63,7 @@ const translations = {
         "Your OTP Code": "Votre code OTP",
         "Hello,": "Bonjour,",
         "To complete your GlobalBuy24 sign-up, please enter the following verification code in the app:": "Pour finaliser votre inscription à GlobalBuy24, veuillez saisir le code de vérification suivant dans l'application :",
-        "This OTP is valid for <strong>5 minutes</strong>. Please do not share this code with anyone.": "Cet OTP est valable <strong>5 minutes</strong>. Veuillez ne pas partager ce code avec qui que ce soit.",
+        "This OTP is valid for <strong>5 minutes</strong>. Veuillez ne pas partager ce code avec qui que ce soit.": "Cet OTP est valable <strong>5 minutes</strong>. Veuillez ne pas partager ce code avec qui que ce soit.",
         "If you didn't request this code, please ignore this email.": "Si vous n'avez pas demandé ce code, veuillez ignorer cet e-mail.",
         "Thank you for using our service!": "Merci d'utiliser notre service !",
         "Your basket has been created successfully": "Votre panier a été créé avec succès",
@@ -76,7 +77,7 @@ const translations = {
         "Payment Failed": "Paiement échoué",
         "Your payment of {amount}XAF has failed": "Votre paiement de {amount}XAF a échoué",
         "Payment Expired": "Paiement expiré",
-        "Your payment of {amount}XAF a expired": "Votre paiement de {amount}XAF a expiré",
+        "Your payment of {amount}XAF has expired": "Votre paiement de {amount}XAF a expiré",
         "Welcome to GlobalBuy": "Bienvenue chez GlobalBuy",
         "Thank you for registering with GlobalBuy. We're excited to have you on board!": "Merci de vous être inscrit sur GlobalBuy. Nous sommes ravis de vous compter parmi nous !",
         "GB welcomes you, {first_name} {last_name}. Enjoy your ride with us.": "GB vous souhaite la bienvenue, {first_name} {last_name}. Profitez de votre expérience avec nous.",
@@ -93,14 +94,15 @@ const translations = {
         "We can’t wait to help you shop the world.": "Nous avons hâte de vous aider à acheter dans le monde entier.",
         "Happy shopping!": "Bon shopping !",
         "The GlobalBuy Team": "L'équipe GlobalBuy",
-        "2025 GlobalBuy. All rights reserved.": "2025 GlobalBuy. Tous droits réservés.",
-        "Order Progress Update": "Mise à jour de la progression de la commande",
+        "2025 GlobalBuy. All rights reserved.": "2025 GlobalBuy. Tous droits réservés."
     }
 };
 
 const translate = (key, lang, replacements = {}) => {
-    const language = lang && translations[lang] ? lang : 'en'; // Default to English if language is not supported
-    let message = translations[language][key] || translations['en'][key] || key; // Fallback to English, then to key itself
+    const requestedLanguage = lang && translations[lang] ? lang : 'en'; // Default to English if language is not supported
+    const otherLanguage = requestedLanguage === 'en' ? 'fr' : 'en';
+
+    let message = translations[requestedLanguage][key] || translations[otherLanguage][key] || key;
 
     for (const placeholder in replacements) {
         message = message.replace(`{${placeholder}}`, replacements[placeholder]);
