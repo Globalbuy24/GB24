@@ -709,7 +709,6 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
             item.canRecolour = req.body.canRecolour || item.canRecolour;
             // item.extra_cost = req.body.extra_cost || item.extra_cost;
             item.isRejected = req.body.isRejected || item.isRejected;
-            item.delivery_fee=system_default.delivery_fee.air_freight || item.delivery_fee;
 
             // Save the user
             await user.save(); // Ensure you have the correct user reference
