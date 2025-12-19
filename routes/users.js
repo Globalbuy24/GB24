@@ -3,6 +3,7 @@ const router = express.Router();
 import User from '../models/user.js';
 import bcrypt from 'bcrypt';
 import Admin from '../models/admin.js';
+import SystemDefault from '../models/system_default.js'; // Added import
 import authenticate from '../middleware/currentUser.js';
 import mongoose from 'mongoose';
 import mailer from '../middleware/mailer.js';
@@ -1272,21 +1273,43 @@ router.post('/:id/updateOrder/:oId/quantity/:pId',authenticate,getUser,async(req
       }
     
     // Recompute order total
-    var orderTotal=0
+    let orderTotal = 0;
+    let delivery_period = 0;
+    const system_default = await SystemDefault.findOne({});
 
-    res.user.orders.forEach((item)=>{
-      if(item.id==orderId)
-      {
-        if(item.products)
-        {
-          item.products.forEach((item2)=>{
-            orderTotal+=parseInt(item2.quantity)*parseFloat(item2.price)+parseFloat(item2.extra_cost)
-          })
+    for (const orderItem of res.user.orders) {
+      if (orderItem.id === orderId) {
+        if (orderItem.products) {
+          for (const product of orderItem.products) {
+            if (product.id === productId) {
+              product.quantity = quantity;
+            }
+            if (product.isRejected === false && product.price) {
+              delivery_period += parseInt(product.delivery_time);
+              orderTotal += parseFloat(product.price) * parseFloat(product.quantity);
+            }
+          }
         }
-        item.total_amount=orderTotal+parseFloat(item.service_fee)
+        orderItem.estimated_delivery = 2 + Math.ceil(delivery_period / 7);
+
+        const serviceFeePercentage = parseFloat(system_default.service_fee.percentage);
+        const serviceFeeMaxValue = parseFloat(system_default.service_fee.maxValue);
+        let calculatedServiceFee = orderTotal * (serviceFeePercentage / 100);
+
+        // Apply the maximum value cap
+        if (calculatedServiceFee > serviceFeeMaxValue) {
+          calculatedServiceFee = serviceFeeMaxValue;
+        }
+
+        orderItem.service_fee = calculatedServiceFee.toFixed(1);
+        orderItem.sub_total = orderTotal.toFixed(1);
+        orderItem.total_amount = parseFloat((
+          parseFloat(orderTotal) +
+          parseFloat(orderItem.service_fee) +
+          parseFloat(system_default.delivery_fee.air_freight)
+        ).toFixed(1));
       }
-       
-    })
+    }
 
     const updatedUser=await res.user.save()
     const newOrder= await updatedUser.orders.filter((order)=>order.id==orderId)
@@ -2525,5 +2548,26 @@ const formatDateTime = (date) => {
 
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 };
+
+// currency converter
+const CC_API_KEY = '1e06667412357fb0c88dacd6'; // Replace with your API key
+const CC_BASE_URL = 'https://v6.exchangerate-api.com/v6'; // Modify this based on the API service you choose
+
+async function convertCurrency(amount, fromCurrency, toCurrency) {
+  try {
+      const response = await axios.get(`${CC_BASE_URL}/${CC_API_KEY}/latest/${fromCurrency}`);
+      const rates = response.data.conversion_rates;
+
+      if (rates[toCurrency]) {
+          const conversionRate = rates[toCurrency];
+          const convertedAmount = amount * conversionRate;
+          return parseFloat(convertedAmount.toFixed(2))
+      } else {
+          return null
+      }
+  } catch (error) {
+          return null
+  }
+}
 
 export default router;
