@@ -565,7 +565,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'Order Progress Update',
-        message: translate(`We have received your order #${order.id} and it is being processed.`),
+        message: translate(`We have received your order #${order.order_num} and it is being processed.`),
         created_at: new Date()
       };
     }
@@ -574,7 +574,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'Order Progress Update',
-        message: translate(`Your order #${order.id} has been received at our warehouse.`),
+        message: translate(`Your order #${order.or} has been received at our warehouse.`),
         created_at: new Date()
       };
     }
@@ -583,7 +583,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'Order Progress Update',
-        message: translate(`Your order #${order.id} has been shipped.`),
+        message: translate(`Your order #${order.order_num} has been shipped.`),
         created_at: new Date()
       };
     }
@@ -592,7 +592,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'Order Progress Update',
-        message: translate(`Your order #${order.id} has arrived at the destination country.`),
+        message: translate(`Your order #${order.order_num} has arrived at the destination country.`),
         created_at: new Date()
       };
     }
@@ -601,7 +601,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       var orderProgressNotification = {
         _id: new mongoose.Types.ObjectId(),
         type: 'Order Progress Update',
-        message: translate(`Your order #${order.id} is ready for pickup.`),
+        message: translate(`Your order #${order.order_num} is ready for pickup.`),
         created_at: new Date()
       };
     }
