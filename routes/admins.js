@@ -544,7 +544,7 @@ router.patch('/order/:oId/progress', authenticate, async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ "orders._id": oId });
+    const user = await User.findOne({ "orders._id": oId }).select('settings.language orders.order_num');
 
     if (!user) {
       return res.status(404).json({ message: "Order not found" });
