@@ -313,7 +313,7 @@ router.post('/forgot-pwd-verify-otp/:id', async(req, res) => {
        <p>${translate('Thank you for using our service!', language)}</p>
      </div>
      <div class="footer">
-       &copy; ${translate('2025 GlobalBuy (GB24). All rights reserved.', language)}
+       &copy; ${translate('2025 GlobalBuy (GB). All rights reserved.', language)}
      </div>
    </div>
  </body>
