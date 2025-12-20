@@ -1891,7 +1891,16 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
     //  console.log(resp) 
 
     // direct payment
-    let phone_number = Number(userPaymentDetails.phone_number.toString().slice(3));
+ 
+    let rawPhone = userPaymentDetails?.account_number;
+
+    if (!rawPhone) {
+      throw new Error("Phone number is missing");
+    }
+
+    let phone_number = Number(String(rawPhone).slice(3));
+
+
     const message='Payment for order number #'+ order.order_num + ' with amount '+ order.total_amount + 'XAF'  
     
     const direct_payment={
