@@ -1903,6 +1903,7 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
 
     const message='Payment for order number #'+ order.order_num + ' with amount '+ order.total_amount + 'XAF'  
     
+    console.log(phone_number)
     const direct_payment={
       amount: parseInt(order.total_amount)+parseInt(order.total_amount),
       phone: phone_number ?? '',
