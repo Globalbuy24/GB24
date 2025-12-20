@@ -739,7 +739,7 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
         order.total_amount = parseFloat((
           parseFloat(amount1) + 
           parseFloat(order.service_fee) + 
-          parseFloat(order.delivery_fee)
+          parseFloat(order.delivery_method.delivery_fee)
         ).toFixed(1));
 
         const updatedUser = await user.save();
