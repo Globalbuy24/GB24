@@ -1898,7 +1898,7 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
       throw new Error("Phone number is missing");
     }
 
-    let phone_number = Number(String(rawPhone).slice(3));
+    let phone_number = String(Number(String(rawPhone).slice(4)));
 
 
     const message='Payment for order number #'+ order.order_num + ' with amount '+ order.total_amount + 'XAF'  
