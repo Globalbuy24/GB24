@@ -1874,23 +1874,44 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
      console.log(isDefault)
       order.delivery_details.street=isDefault.street
       order.delivery_details.city=isDefault.city
-     
-    const payment = {
-      amount:parseInt(order.total_amount)+parseInt(0.031*parseInt(order.total_amount)),
-      email:res.user.email ?? '',
-      externalId:order.id,//orderID
-      userId: res.user.id,
-      redirectUrl: 'https://globalbuy24.com',
-      message: 'GlobalBuy Order Payment',
 
-      }
-     const resp = await fapshi.initiatePay(payment)
-     console.log(resp)
+     const userPaymentDetails=res.user.payment_methods.find((item) => item.isDefault === true);
+     
+     // const payment = {
+    //   amount:parseInt(order.total_amount)+parseInt(0.031*parseInt(order.total_amount)),
+    //   email:res.user.email ?? '',
+    //   externalId:order.id,//orderID
+    //   userId: res.user.id,
+    //   redirectUrl: 'https://globalbuy24.com',
+    //   message: 'GlobalBuy Order Payment',
+
+    //   }
+    // // initiate payment
+    //  const resp = await fapshi.initiatePay(payment)
+    //  console.log(resp) 
+
+    // direct payment
+    let phone_number = Number(userPaymentDetails.phone_number.toString().slice(3));
+    const message='Payment for order number #'+ order.order_num + ' with amount '+ order.total_amount + 'XAF'  
+    
+    const direct_payment={
+      amount: parseInt(order.total_amount)+parseInt(order.total_amount),
+      phone: phone_number ?? '',
+      name: userPaymentDetails.account_name ?? '',
+      email: res.user.email ?? '',
+      userId: res.user.id,
+      externalId: order.id,
+      message: message
+    }
+     
+    const resp = await fapshi.directPay(direct_payment)
+  
     // const resp={link:"nothing"}
     //  console.log(resp.transId)
 
     // create new transaction
     // return 1
+
     const transaction=
     {
       _id: new mongoose.Types.ObjectId(),
