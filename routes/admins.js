@@ -720,7 +720,7 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
         }
 
         const deliveryFee = parseFloat(order.delivery_method.name === "Air Freight" ? system_default.delivery_fee.air_freight * totalWeight : system_default.delivery_fee.sea_freight * totalWeight);
-        order.delivery_fee = deliveryFee.toFixed(1);
+        order.delivery_method.delivery_fee = deliveryFee.toFixed(1);
 
         order.estimated_delivery = 2 + Math.ceil(delivery_period / 7);
 
