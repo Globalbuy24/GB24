@@ -688,14 +688,17 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
         }
       }
     }
+    let system_default = await SystemDefault.findOne({});
 
     if (new_order.length > 0) {
       for (const { user, order } of new_order) {
+        let price = 0;
+        let delivery_period = 0;
+        let totalWeight = 0;
+
         for (const item of order.products) {
           if (item.id === productId) {
-            // Update item properties with provided data
             const itemPrice = await convertCurrency(req.body.price, 'EUR', 'XAF');
-
             item.source = req.body.source || item.source;
             item.name = req.body.name || item.name;
             item.length = req.body.length || item.length;
@@ -707,63 +710,40 @@ router.patch('/order/:oId/product/:pId', authenticate, async (req, res) => {
             item.delivery_time = req.body.delivery_time || item.delivery_time;
             item.canResize = req.body.canResize || item.canResize;
             item.canRecolour = req.body.canRecolour || item.canRecolour;
-            // item.extra_cost = req.body.extra_cost || item.extra_cost;
             item.isRejected = req.body.isRejected || item.isRejected;
-
-            // Save the user
-            await user.save(); // Ensure you have the correct user reference
-            
-            // Update order total price
-            let system_default = await SystemDefault.findOne({});
-
-            order.delivery_fee=system_default.delivery_fee.air_freight ;
-
-            let price = 0;
-            // let extra = 0;
-            let delivery_period = 0;
-
-            for (const order of user.orders) {
-              if (order.id === orderId) {
-                for (const item of order.products) {
-                  if(item.isRejected==false && item.price)
-                  {
-                    delivery_period +=parseInt(item.delivery_time)
-                    price += parseFloat(item.price)*parseFloat(item.quantity);
-                    // extra += parseInt(item.extra_cost);
-                  }
-                 
-                }
-                order.estimated_delivery=2+Math.ceil(delivery_period/7)
-
-                const amount1 = price
-                // const amount2 = await convertCurrency(extra, 'EUR', 'XAF');
-                
-                const serviceFeePercentage = parseFloat(system_default.service_fee.percentage);
-                const serviceFeeMaxValue = parseFloat(system_default.service_fee.maxValue);
-                let calculatedServiceFee = amount1 * (serviceFeePercentage / 100);
-                
-                // Apply the maximum value cap
-                if (calculatedServiceFee > serviceFeeMaxValue) {
-                  calculatedServiceFee = serviceFeeMaxValue;
-                }
-
-                order.service_fee = calculatedServiceFee.toFixed(1);
-
-                order.sub_total=amount1.toFixed(1)
-                order.total_amount = parseFloat((
-                  parseFloat(amount1) + 
-                  parseFloat(order.service_fee) + 
-                  parseFloat(system_default.delivery_fee.air_freight)
-              ).toFixed(1));
-
-                
-              }
-            }
-
-            const updatedUser = await user.save();
-            return res.status(200).json(updatedUser);
+          }
+          if(item.isRejected==false && item.price) {
+            delivery_period += parseInt(item.delivery_time);
+            price += parseFloat(item.price) * parseFloat(item.quantity);
+            totalWeight += parseFloat(item.weight || 0);
           }
         }
+
+        const deliveryFee = parseFloat(order.delivery_method.name === "Air Freight" ? system_default.delivery_fee.air_freight * totalWeight : system_default.delivery_fee.sea_freight * totalWeight);
+        order.delivery_fee = deliveryFee.toFixed(1);
+
+        order.estimated_delivery = 2 + Math.ceil(delivery_period / 7);
+
+        const amount1 = price;
+        
+        const serviceFeePercentage = parseFloat(system_default.service_fee.percentage);
+        const serviceFeeMaxValue = parseFloat(system_default.service_fee.maxValue);
+        let calculatedServiceFee = amount1 * (serviceFeePercentage / 100);
+        
+        if (calculatedServiceFee > serviceFeeMaxValue) {
+          calculatedServiceFee = serviceFeeMaxValue;
+        }
+
+        order.service_fee = calculatedServiceFee.toFixed(1);
+        order.sub_total = amount1.toFixed(1);
+        order.total_amount = parseFloat((
+          parseFloat(amount1) + 
+          parseFloat(order.service_fee) + 
+          parseFloat(order.delivery_fee)
+        ).toFixed(1));
+
+        const updatedUser = await user.save();
+        return res.status(200).json(updatedUser);
       }
     }
 
