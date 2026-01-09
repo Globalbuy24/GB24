@@ -16,8 +16,8 @@ const AdminSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: false,
-        sparse: true,
+        required: true,
+        unique: true,
         validate: {
             validator: function (value) {
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,11 +37,22 @@ const AdminSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    status: {
+        type: String,
+        default: 'active'
+    },
     notifications: [{
         _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
         type: { type: String },
         message: { type: String },
         created_at: { type: String}
+    }],
+    activities: [{
+        _id: { type: mongoose.Schema.Types.ObjectId, default: mongoose.Types.ObjectId },
+        action: { type: String },
+        details: { type: String },
+        targetId: { type: String },
+        created_at: { type: Date, default: Date.now }
     }]
 });
 

@@ -125,6 +125,11 @@ Content-Type: application/json
 ### Delete user
 DELETE http://localhost:3000/users/68baf6f88b40471dc1d9d942
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3NTcwODI2MjEsImV4cCI6MTc1NzY4NzQyMX0.1pq5Gs9DCaO8MVTIW2R-vJwaRSMJ6HiuKyA0Vd7rG2E
+
+### Bulk delete users except admins
+DELETE http://localhost:3000/users/bulk/delete-all-except-admins
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3NTcwODI2MjEsImV4cCI6MTc1NzY4NzQyMX0.1pq5Gs9DCaO8MVTIW2R-vJwaRSMJ6HiuKyA0Vd7rG2E
+
 ### week 2
 
 ### get new user pin
