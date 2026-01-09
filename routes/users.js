@@ -1877,44 +1877,45 @@ router.post('/initiate-payment/:id/payfor/:oId', authenticate, getUser, async (r
 
      const userPaymentDetails=res.user.payment_methods.find((item) => item.isDefault === true);
      
-     // const payment = {
-    //   amount:parseInt(order.total_amount)+parseInt(0.031*parseInt(order.total_amount)),
-    //   email:res.user.email ?? '',
-    //   externalId:order.id,//orderID
-    //   userId: res.user.id,
-    //   redirectUrl: 'https://globalbuy24.com',
-    //   message: 'GlobalBuy Order Payment',
+     const payment = {
+      amount:parseInt(order.total_amount)+parseInt(0.031*parseInt(order.total_amount)),
+      email:res.user.email ?? '',
+      externalId:order.id,//orderID
+      userId: res.user.id,
+      redirectUrl: 'https://globalbuy24.com',
+      message: 'GlobalBuy Order Payment',
 
-    //   }
-    // // initiate payment
-    //  const resp = await fapshi.initiatePay(payment)
-    //  console.log(resp) 
+      }
+    // initiate payment
+     const resp = await fapshi.initiatePay(payment)
+     console.log(resp) 
 
     // direct payment
  
-    let rawPhone = userPaymentDetails?.account_number;
+    // let rawPhone = userPaymentDetails?.account_number;
 
-    if (!rawPhone) {
-      throw new Error("Phone number is missing");
-    }
+    // if (!rawPhone) {
+    //   throw new Error("Phone number is missing");
+    // }
 
-    let phone_number = String(Number(String(rawPhone).slice(4)));
+    // let phone_number = String(Number(String(rawPhone).slice(4)));
 
 
-    const message='Payment for order number #'+ order.order_num + ' with amount '+ order.total_amount + 'XAF'  
+    // const message='Payment for order number #'+ order.order_num + ' with amount '+ order.total_amount + 'XAF'  
     
-    console.log(phone_number)
-    const direct_payment={
-      amount: parseInt(order.total_amount)+parseInt(order.total_amount),
-      phone: phone_number ?? '',
-      name: userPaymentDetails.account_name ?? '',
-      email: res.user.email ?? '',
-      userId: res.user.id,
-      externalId: order.id,
-      message: message
-    }
+    // console.log(phone_number)
+    // const direct_payment={
+    //   amount: parseInt(order.total_amount)+parseInt(order.total_amount),
+    //   phone: phone_number ?? '',
+    //   name: userPaymentDetails.account_name ?? '',
+    //   email: res.user.email ?? '',
+    //   userId: res.user.id,
+    //   externalId: order.id,
+    //   message: message
+    // }
+   
      
-    const resp = await fapshi.directPay(direct_payment)
+    // const resp = await fapshi.directPay(direct_payment)
   
     // const resp={link:"nothing"}
     //  console.log(resp.transId)

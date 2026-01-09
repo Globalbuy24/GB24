@@ -800,8 +800,9 @@ Content-Type: application/json
 
 ### payments
 
-POST http://localhost:3000/users/initiate-payment/68bd99917a546fff59317558/payfor/69457768106fc7253d5923d9
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2NTkwNzM0NiwiZXhwIjoxNzY2NTEyMTQ2fQ.w5RpFKDhnPZBLtistVttYrqZ5EYYj0d14bWRBdTyoDk
+POST http://localhost:3000/users/initiate-payment/68bd99917a546fff59317558/payfor/695462d4650efb61b322861c
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2NzEzNzk2NiwiZXhwIjoxNzY3NzQyNzY2fQ.nuDaw_EDfXJXn0_eZbOYE4uBVbrP3VBOxJ7BmdkNBOE
+Content-Type: application/json
 
 {
     
@@ -816,8 +817,8 @@ Content-Type: application/json
     "transId":"BbTsi7dMuV"
 }
 ###
-POST https://globalbuy24-a3348f9c2173.herokuapp.com/users/initiate-payment/68bd99917a546fff59317558/payfor/68f24d05d5969ff5606f29b7
-Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2MDcxMzI3NiwiZXhwIjoxNzYxMzE4MDc2fQ.JK5x9xMJDp-NOSgMklOy9F3PpJhVdBi-l1i2QZxjElc
+POST https://globalbuy24-a3348f9c2173.herokuapp.com/users/initiate-payment/68bd99917a546fff59317558/payfor/695462d4650efb61b322861c
+Authorization:Bearer yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2NzEzNzk2NiwiZXhwIjoxNzY3NzQyNzY2fQ.nuDaw_EDfXJXn0_eZbOYE4uBVbrP3VBOxJ7BmdkNBOE
 Content-Type: application/json
 
 {
