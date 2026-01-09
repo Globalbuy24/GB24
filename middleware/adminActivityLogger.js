@@ -6,16 +6,17 @@ import Admin from '../models/admin.js';
 export const logAdminActivity = async (adminId, action, details, targetId = null) => {
   try {
     if (!adminId) return;
-    const admin = await Admin.findById(adminId);
-    if (admin) {
-      admin.activities.push({
-        action,
-        details,
-        targetId,
-        created_at: new Date()
-      });
-      await admin.save();
-    }
+    
+    await Admin.findByIdAndUpdate(adminId, {
+      $push: {
+        activities: {
+          action,
+          details,
+          targetId,
+          created_at: new Date()
+        }
+      }
+    });
   } catch (error) {
     console.error('Error logging admin activity:', error);
   }

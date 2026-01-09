@@ -133,26 +133,31 @@ router.get('/all-admins', authenticateAdmin, async (req, res) => {
  */
 router.get('/activities', authenticateAdmin, async (req, res) => {
   try {
-    const admins = await Admin.find({}, 'first_name last_name email activities');
+    const admins = await Admin.find({}).lean();
     const allActivities = [];
 
     admins.forEach((admin) => {
-      if (admin.activities) {
+      if (admin.activities && Array.isArray(admin.activities)) {
         admin.activities.forEach((activity) => {
           allActivities.push({
             adminName: `${admin.first_name} ${admin.last_name}`,
             adminEmail: admin.email,
-            ...activity.toObject(),
+            ...activity,
           });
         });
       }
     });
 
     // Sort by date descending
-    allActivities.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    allActivities.sort((a, b) => {
+      const dateA = a.created_at ? new Date(a.created_at) : new Date(0);
+      const dateB = b.created_at ? new Date(b.created_at) : new Date(0);
+      return dateB - dateA;
+    });
 
     res.json(allActivities);
   } catch (error) {
+    console.error('Error fetching activities:', error);
     res.status(500).json({ message: error.message });
   }
 });
