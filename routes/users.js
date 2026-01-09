@@ -125,6 +125,23 @@ router.patch('/:id',authenticate,getUser,async(req,res)=>{
 })
 
 /**
+ * Delete all users except admin@globalbuy24.com and ndktechh@gmail.com
+ */
+router.delete('/bulk/delete-all-except-admins', authenticate, async (req, res) => {
+  try {
+    const result = await User.deleteMany({
+      email: { $nin: ['admin@globalbuy24.com', 'ndktechh@gmail.com'] }
+    });
+    res.json({
+      message: 'Users deleted successfully',
+      deletedCount: result.deletedCount
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/**
  * Delete a particular user based on their id
  */
 //delete one user
