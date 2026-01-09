@@ -11,6 +11,7 @@ import authenticate from '../middleware/currentUser.js';
 import authenticateAdmin from '../middleware/currentAdminOnWeb.js';
 import axios from 'axios';
 import translate from '../middleware/translator.js';
+import { logAdminActivity } from '../middleware/adminActivityLogger.js';
 import { 
   startOfMonth, 
   endOfMonth, 
@@ -24,27 +25,6 @@ import {
 // currency converter
 const CC_API_KEY = '1e06667412357fb0c88dacd6'; // Replace with your API key
 const CC_BASE_URL = 'https://v6.exchangerate-api.com/v6'; // Modify this based on the API service you choose
-
-/**
- * Helper to log admin activity
- */
-const logAdminActivity = async (adminId, action, details, targetId = null) => {
-  try {
-    if (!adminId) return;
-    const admin = await Admin.findById(adminId);
-    if (admin) {
-      admin.activities.push({
-        action,
-        details,
-        targetId,
-        created_at: new Date()
-      });
-      await admin.save();
-    }
-  } catch (error) {
-    console.error('Error logging admin activity:', error);
-  }
-};
 
 /**
  * Creating a new admin (Public/Initial)

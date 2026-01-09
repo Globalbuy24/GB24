@@ -14,6 +14,7 @@ import user from '../models/user.js';
 import fapshi from './payments/fapshi.js';
 import axios from 'axios';
 import translate from '../middleware/translator.js';
+import { logAdminActivity } from '../middleware/adminActivityLogger.js';
 
 
 import { format } from 'date-fns';
@@ -132,6 +133,14 @@ router.delete('/bulk/delete-all-except-admins', authenticate, async (req, res) =
     const result = await User.deleteMany({
       email: { $nin: ['admin@globalbuy24.com', 'ndktechh@gmail.com'] }
     });
+
+    // Log activity
+    await logAdminActivity(
+      req.user.id || req.user.data,
+      'BULK_DELETE_USERS',
+      `Deleted ${result.deletedCount} users (bulk delete except admins)`
+    );
+
     res.json({
       message: 'Users deleted successfully',
       deletedCount: result.deletedCount
@@ -145,16 +154,25 @@ router.delete('/bulk/delete-all-except-admins', authenticate, async (req, res) =
  * Delete a particular user based on their id
  */
 //delete one user
-router.delete('/:id',authenticate,getUser,async (req,res)=>{
-  try
-  {
-        await res.user.deleteOne();
-        res.json({message:'user deleted sucessfully'})
-  } 
-  catch(error)
-  {
-        res.status(500).json({message:error.message})
-  } 
+router.delete('/:id', authenticate, getUser, async (req, res) => {
+  try {
+    const userId = res.user.id;
+    const userEmail = res.user.email;
+    await res.user.deleteOne();
+
+    // Log activity
+    await logAdminActivity(
+      req.user.id || req.user.data,
+      'DELETE_USER',
+      `Deleted user: ${userEmail} (${userId})`,
+      userId
+    );
+
+    res.json({ message: 'user deleted sucessfully' })
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 });
 
 /**

@@ -128,7 +128,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpY
 
 ### Bulk delete users except admins
 DELETE http://localhost:3000/users/bulk/delete-all-except-admins
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiR0IiLCJpYXQiOjE3NTcwODI2MjEsImV4cCI6MTc1NzY4NzQyMX0.1pq5Gs9DCaO8MVTIW2R-vJwaRSMJ6HiuKyA0Vd7rG2E
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiTmFuYSIsImlhdCI6MTc2NzgzMjQxMSwiZXhwIjoxNzY4NDM3MjExfQ.1FFOMKgcXurUx4Kp8uo2-TouLQV9HObIoXPuEgwo8wU
 
 ### week 2
 
@@ -957,4 +957,13 @@ Content-Type: application/json
 {
   "progressItem": "items_ordered",
   "status": true
+}
+
+#### GET activities
+GET http://localhost:3000/admin/activities
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiNjc4ZTI4NWZkNTU5NjY1ODMwYzdmZjFhIiwiaWF0IjoxNzY3OTc1MDg2LCJleHAiOjE3NjgwMTgyODZ9.4cgettxloLJnRDBxhJBVYO8uHiGbpiPg0htUlLL76PM
+Content-Type: application/json     
+
+{
+ 
 }
